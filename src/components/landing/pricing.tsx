@@ -5,6 +5,21 @@ import Link from "next/link";
 
 const pricingPlans = [
   {
+    title: "Free",
+    price: "₹0",
+    period: "/forever",
+    description: "Ideal for trying out the basic features.",
+    features: [
+      "10,000 AI Words/month",
+      "20 AI Images/month",
+      "Access to 10+ Templates",
+      "Standard AI Models",
+      "Community Support",
+    ],
+    cta: "Start For Free",
+    href: "/generate"
+  },
+  {
     title: "Monthly",
     price: "₹29",
     period: "/month",
@@ -64,7 +79,7 @@ export function Pricing() {
             Simple, transparent pricing. No hidden fees. Choose the plan that scales with you.
           </p>
         </div>
-        <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3 items-start">
+        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 items-start">
           {pricingPlans.map((plan) => (
             <Card key={plan.title} className={`flex flex-col ${plan.popular ? 'border-primary ring-2 ring-primary' : ''}`}>
               {plan.popular && (
@@ -89,7 +104,7 @@ export function Pricing() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button asChild className="w-full" variant={plan.popular ? "default" : "outline"}>
+                <Button asChild className="w-full" variant={plan.title === 'Free' ? 'default' : plan.popular ? 'default' : 'outline'}>
                   <Link href={plan.href}>{plan.cta}</Link>
                 </Button>
               </CardFooter>

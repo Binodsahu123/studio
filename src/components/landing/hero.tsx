@@ -14,14 +14,14 @@ export function Hero() {
       </p>
       <div className="mt-8 flex gap-4">
         <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-          <Link href="#pricing">
+          <Link href="/generate">
             Start for Free
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </Button>
         <Button asChild size="lg" variant="outline">
           <Link href="#features">
-            See a Demo
+            See Features
           </Link>
         </Button>
       </div>
