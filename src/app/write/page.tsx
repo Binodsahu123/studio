@@ -12,7 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Copy, Check, ThumbsUp, Sparkles } from 'lucide-react';
+import { Loader2, Copy, Check, ThumbsUp, Sparkles, HelpCircle } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
@@ -182,6 +182,40 @@ export default function WritePage() {
                 </Button>
               </form>
             </Form>
+          </CardContent>
+        </Card>
+
+        <Card className="max-w-4xl mx-auto mt-8">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <HelpCircle className="h-8 w-8 text-primary" />
+              <div>
+                <CardTitle>How to Use the Content Writer</CardTitle>
+                <CardDescription>Follow these tips to get the best possible results.</CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4 text-muted-foreground">
+              <p>
+                To get the best results from our AI Content Writer, please follow these guidelines when filling out the form:
+              </p>
+              <ul className="list-disc pl-6 space-y-3">
+                <li>
+                  <strong>Topic / Main Title:</strong> Be as specific as possible. Instead of "new phone," use "Samsung Galaxy S24 Ultra vs iPhone 15 Pro Max camera comparison." The more details you provide (like model names, features), the better the AI can tailor the content.
+                </li>
+                <li>
+                  <strong>Short Description:</strong> Briefly explain the main goal of your article. For example, "An article comparing the camera quality of two flagship phones to help users decide which is better for photography."
+                </li>
+                <li>
+                  <strong>Language:</strong> Choose the language for your article. We currently support English and Hindi.
+                </li>
+                <li>
+                  <strong>Additional Topic/Keyword:</strong> Enter a related keyword you want the AI to focus on. For instance, if your main topic is about a phone, you could add "low-light photography" or "battery life" here. This helps the AI to include specific sections in the article.
+                </li>
+              </ul>
+              <p>
+                The AI will generate a complete article, 10 SEO-friendly titles, a meta description, relevant tags, and even titles for images to use in your post.
+              </p>
           </CardContent>
         </Card>
 
