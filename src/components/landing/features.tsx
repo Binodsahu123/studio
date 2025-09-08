@@ -13,6 +13,7 @@ const features = [
     icon: <ImageIcon className="h-8 w-8 text-primary" />,
     title: "AI Image Generation",
     description: "Create breathtaking visuals with Stable Diffusion & DALL-E, from text-to-image to image upscaling.",
+    href: "/image",
   },
   {
     icon: <LayoutTemplate className="h-8 w-8 text-primary" />,
