@@ -6,7 +6,7 @@ import Link from "next/link";
 const pricingPlans = [
   {
     title: "Monthly",
-    price: "$29",
+    price: "₹29",
     period: "/month",
     description: "Perfect for individuals and small projects.",
     features: [
@@ -17,10 +17,11 @@ const pricingPlans = [
       "Standard AI Models",
     ],
     cta: "Choose Monthly",
+    href: "/payment?plan=monthly"
   },
   {
     title: "Yearly",
-    price: "$299",
+    price: "₹299",
     period: "/year",
     description: "Best value for professionals and teams.",
     features: [
@@ -32,10 +33,11 @@ const pricingPlans = [
     ],
     cta: "Choose Yearly",
     popular: true,
+    href: "/payment?plan=yearly"
   },
   {
     title: "Lifetime",
-    price: "$999",
+    price: "₹999",
     period: "one-time",
     description: "Pay once, use forever. The ultimate deal.",
     features: [
@@ -46,6 +48,7 @@ const pricingPlans = [
       "Dedicated Account Manager",
     ],
     cta: "Choose Lifetime",
+    href: "/payment?plan=lifetime"
   },
 ];
 
@@ -87,14 +90,14 @@ export function Pricing() {
               </CardContent>
               <CardFooter>
                 <Button asChild className="w-full" variant={plan.popular ? "default" : "outline"}>
-                  <Link href="#cta">{plan.cta}</Link>
+                  <Link href={plan.href}>{plan.cta}</Link>
                 </Button>
               </CardFooter>
             </Card>
           ))}
         </div>
         <p className="mt-8 text-center text-sm text-muted-foreground">
-          Payment Gateways Supported: PayPal, Stripe, PayTM, Razorpay, and more.
+          Payment Gateways Supported: UPI, QR Code, and more.
         </p>
       </div>
     </section>
