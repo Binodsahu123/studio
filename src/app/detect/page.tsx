@@ -68,7 +68,7 @@ export default function DetectPage() {
                         <div className="flex items-center gap-3">
                         <ShieldCheck className="h-8 w-8 text-primary" />
                         <div>
-                            <CardTitle className="text-3xl">AI Content Detector</CardTitle>
+                            <CardTitle className="text-3xl">AI & Originality Content Detector</CardTitle>
                             <CardDescription>Paste your text below to check for AI-generated content and originality.</CardDescription>
                         </div>
                         </div>
@@ -158,7 +158,7 @@ export default function DetectPage() {
                           <strong>AI Detection Score:</strong> This is an estimated probability. A low score (e.g., 0-40) suggests the text is likely human-written. A high score (e.g., 70-100) suggests a high probability of AI generation. Scores in the middle can be ambiguous.
                         </li>
                         <li>
-                          <strong>Originality Warning:</strong> This is NOT a formal plagiarism check. It simply flags if the text seems overly generic or uses common phrases, which might indicate a lack of originality. Always use a dedicated plagiarism checker for academic or professional work.
+                          <strong>Originality Warning:</strong> This is NOT a formal plagiarism check. It simply flags if the text seems overly generic or uses common phrases, which might indicate a lack of originality or potential duplicate content. Always use a dedicated plagiarism checker for academic or professional work.
                         </li>
                         <li>
                           <strong>For Best Results:</strong> Analyze texts of at least 50 words. The AI looks for patterns, and very short texts may not provide enough data for an accurate analysis.
