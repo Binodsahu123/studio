@@ -12,12 +12,13 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Copy, Check } from 'lucide-react';
+import { Loader2, Copy, Check, ThumbsUp } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
   title: z.string().min(1, 'Please enter a title.'),
@@ -31,6 +32,7 @@ export default function WritePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isHtmlCopied, setIsHtmlCopied] = useState(false);
   const [isContentCopied, setIsContentCopied] = useState(false);
+  const [selectedTitle, setSelectedTitle] = useState<string | null>(null);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -46,10 +48,14 @@ export default function WritePage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setGeneratedOutput(null);
+    setSelectedTitle(null);
     try {
       const input: GenerateWrittenContentInput = values;
       const result: GenerateWrittenContentOutput = await generateWrittenContent(input);
       setGeneratedOutput(result);
+      if (result.titles && result.titles.length > 0) {
+        setSelectedTitle(result.titles[0]);
+      }
     } catch (error) {
       console.error('Error generating content:', error);
       toast({
@@ -62,15 +68,18 @@ export default function WritePage() {
     }
   }
   
-  const handleCopyHtml = () => {
-    if (!generatedOutput) return;
-    navigator.clipboard.writeText(generatedOutput.content).then(() => {
-      setIsHtmlCopied(true);
+  const handleCopy = (text: string, type: 'HTML' | 'Content' | 'Meta') => {
+    navigator.clipboard.writeText(text).then(() => {
+      if (type === 'HTML') setIsHtmlCopied(true);
+      if (type === 'Content') setIsContentCopied(true);
+      
       toast({
         title: "Copied to clipboard!",
-        description: "The HTML content has been copied.",
+        description: `The ${type} has been copied.`,
       });
-      setTimeout(() => setIsHtmlCopied(false), 2000);
+      
+      if (type === 'HTML') setTimeout(() => setIsHtmlCopied(false), 2000);
+      if (type === 'Content') setTimeout(() => setIsContentCopied(false), 2000);
     });
   };
   
@@ -79,15 +88,16 @@ export default function WritePage() {
     const el = document.createElement('div');
     el.innerHTML = generatedOutput.content;
     const plainText = el.textContent || el.innerText || "";
-    navigator.clipboard.writeText(plainText).then(() => {
-      setIsContentCopied(true);
-      toast({
-        title: "Copied to clipboard!",
-        description: "The content text has been copied.",
-      });
-      setTimeout(() => setIsContentCopied(false), 2000);
-    });
+    handleCopy(plainText, 'Content');
   };
+  
+  const handleSelectTitle = (title: string) => {
+    setSelectedTitle(title);
+    if(generatedOutput){
+        const updatedContent = generatedOutput.content.replace(/<h1[^>]*>.*?<\/h1>/, `<h1>${title}</h1>`);
+        setGeneratedOutput({...generatedOutput, content: updatedContent});
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -106,9 +116,9 @@ export default function WritePage() {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Title</FormLabel>
+                      <FormLabel>Topic / Main Title</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., 'The Future of Artificial Intelligence'" {...field} />
+                        <Input placeholder="e.g., 'The Future of Artificial Intelligence' or 'Samsung Galaxy S24 Ultra Review'" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -184,54 +194,93 @@ export default function WritePage() {
         {generatedOutput && (
           <Card className="max-w-4xl mx-auto mt-8">
             <CardHeader>
-              <CardTitle>Generated Content</CardTitle>
+              <CardTitle>Generated Assets</CardTitle>
+              <CardDescription>Review and use the generated content and SEO assets below.</CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4 mb-8">
+            <CardContent className="space-y-8">
+              <div>
+                  <h3 className="text-xl font-semibold mb-3">Title Suggestions</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {generatedOutput.titles.map((title, index) => (
+                      <Card 
+                        key={index}
+                        onClick={() => handleSelectTitle(title)}
+                        className={`p-4 cursor-pointer transition-all ${selectedTitle === title ? 'ring-2 ring-primary bg-primary/10' : 'hover:bg-secondary'}`}
+                      >
+                        <div className="flex items-start gap-3">
+                           {selectedTitle === title ? <ThumbsUp className="h-5 w-5 text-primary mt-1" /> : <ThumbsUp className="h-5 w-5 text-muted-foreground mt-1" />}
+                           <p className="flex-1">{title}</p>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-2">Title</h3>
-                  <p className="p-4 bg-secondary rounded-md">{generatedOutput.title}</p>
+                    <h3 className="text-lg font-semibold mb-2">Meta Description</h3>
+                    <div className="p-4 bg-secondary rounded-md relative group">
+                      <p className="text-sm">{generatedOutput.description}</p>
+                      <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleCopy(generatedOutput.description, 'Meta')}>
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Description</h3>
-                  <p className="p-4 bg-secondary rounded-md">{generatedOutput.description}</p>
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Tags</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {generatedOutput.tags.map(tag => <Badge key={tag} variant="secondary">{tag}</Badge>)}
+                 <div>
+                  <h3 className="text-lg font-semibold mb-2">Focus Keywords</h3>
+                  <div className="p-4 bg-secondary rounded-md relative group">
+                    <p className="text-sm">{generatedOutput.tags}</p>
+                    <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleCopy(generatedOutput.tags, 'Meta')}>
+                      <Copy className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               </div>
-              <Tabs defaultValue="preview">
-                <div className="flex justify-between items-center mb-4">
-                  <TabsList>
-                    <TabsTrigger value="preview">Preview</TabsTrigger>
-                    <TabsTrigger value="html">HTML</TabsTrigger>
-                  </TabsList>
-                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" onClick={handleCopyContent} disabled={isContentCopied}>
-                      {isContentCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
-                      Copy Content
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={handleCopyHtml} disabled={isHtmlCopied}>
-                      {isHtmlCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
-                      Copy HTML
-                    </Button>
+              
+               <div>
+                  <h3 className="text-lg font-semibold mb-2">Image Titles / Alt Text</h3>
+                  <div className="p-4 bg-secondary rounded-md">
+                    <ul className="list-disc list-inside space-y-2 text-sm">
+                      {generatedOutput.imageTitles.map((title, index) => <li key={index}>{title}</li>)}
+                    </ul>
                   </div>
-                </div>
-                <TabsContent value="preview" className="border rounded-md p-6">
-                  <div
-                    className="prose dark:prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: generatedOutput.content }}
-                  />
-                </TabsContent>
-                <TabsContent value="html">
-                  <pre className="p-4 bg-secondary rounded-md overflow-x-auto text-sm">
-                    <code>{generatedOutput.content}</code>
-                  </pre>
-                </TabsContent>
-              </Tabs>
+              </div>
+              
+              <Separator />
+
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Generated Content</h3>
+                 <Tabs defaultValue="preview">
+                  <div className="flex justify-between items-center mb-4">
+                    <TabsList>
+                      <TabsTrigger value="preview">Preview</TabsTrigger>
+                      <TabsTrigger value="html">HTML</TabsTrigger>
+                    </TabsList>
+                     <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={handleCopyContent} disabled={isContentCopied}>
+                        {isContentCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                        Copy Content
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => handleCopy(generatedOutput.content, 'HTML')} disabled={isHtmlCopied}>
+                        {isHtmlCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                        Copy HTML
+                      </Button>
+                    </div>
+                  </div>
+                  <TabsContent value="preview" className="border rounded-md p-6">
+                    <div
+                      className="prose dark:prose-invert max-w-none"
+                      dangerouslySetInnerHTML={{ __html: generatedOutput.content }}
+                    />
+                  </TabsContent>
+                  <TabsContent value="html">
+                    <pre className="p-4 bg-secondary rounded-md overflow-x-auto text-sm">
+                      <code>{generatedOutput.content}</code>
+                    </pre>
+                  </TabsContent>
+                </Tabs>
+              </div>
+
             </CardContent>
           </Card>
         )}
