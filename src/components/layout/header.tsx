@@ -21,9 +21,11 @@ export function Header() {
                 <Link href="#pricing">Pricing</Link>
             </Button>
             <Button asChild variant="ghost">
-                <Link href="#">Support</Link>
+                <Link href="#faq">Support</Link>
             </Button>
-            <Button className="bg-accent text-accent-foreground hover:bg-accent/90">Start Creating Today</Button>
+            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
+              <Link href="#cta">Start Creating Today</Link>
+            </Button>
           </nav>
         </div>
       </div>

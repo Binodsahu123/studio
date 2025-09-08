@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -12,12 +13,16 @@ export function Hero() {
         Unleash your creativity with WriteBot. Our advanced AI platform helps you craft compelling articles, generate stunning visuals, and write clean code in seconds. Supercharge your content strategy today.
       </p>
       <div className="mt-8 flex gap-4">
-        <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
-          Start for Free
-          <ArrowRight className="ml-2 h-5 w-5" />
+        <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+          <Link href="#pricing">
+            Start for Free
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Link>
         </Button>
-        <Button size="lg" variant="outline">
-          See a Demo
+        <Button asChild size="lg" variant="outline">
+          <Link href="#features">
+            See a Demo
+          </Link>
         </Button>
       </div>
       <div className="relative mt-16 w-full max-w-5xl">

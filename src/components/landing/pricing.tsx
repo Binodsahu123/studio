@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Check } from "lucide-react";
+import Link from "next/link";
 
 const pricingPlans = [
   {
@@ -85,8 +86,8 @@ export function Pricing() {
                 </ul>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" variant={plan.popular ? "default" : "outline"}>
-                  {plan.cta}
+                <Button asChild className="w-full" variant={plan.popular ? "default" : "outline"}>
+                  <Link href="#cta">{plan.cta}</Link>
                 </Button>
               </CardFooter>
             </Card>
