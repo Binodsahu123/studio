@@ -1,11 +1,13 @@
 import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, Globe } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import Link from "next/link";
 
 const features = [
   {
     icon: <BotMessageSquare className="h-8 w-8 text-primary" />,
     title: "AI Content Generation",
     description: "Leverage cutting-edge models like GPT-4o to produce high-quality articles, marketing copy, and more.",
+    href: "/write",
   },
   {
     icon: <ImageIcon className="h-8 w-8 text-primary" />,
@@ -47,17 +49,29 @@ export function Features() {
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <Card key={feature.title} className="flex flex-col items-start p-6 text-left">
-              <CardHeader className="p-0">
-                {feature.icon}
-                <CardTitle className="mt-4">{feature.title}</CardTitle>
-              </CardHeader>
-              <CardDescription className="mt-2 text-base">
-                {feature.description}
-              </CardDescription>
-            </Card>
-          ))}
+          {features.map((feature) => {
+            const card = (
+              <Card className="flex h-full flex-col items-start p-6 text-left">
+                <CardHeader className="p-0">
+                  {feature.icon}
+                  <CardTitle className="mt-4">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardDescription className="mt-2 text-base">
+                  {feature.description}
+                </CardDescription>
+              </Card>
+            );
+
+            if (feature.href) {
+              return (
+                <Link href={feature.href} key={feature.title} className="block transition-transform duration-200 hover:scale-105">
+                  {card}
+                </Link>
+              );
+            }
+
+            return <div key={feature.title}>{card}</div>;
+          })}
         </div>
       </div>
     </section>
