@@ -1,3 +1,4 @@
+import React from "react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
@@ -24,8 +25,8 @@ export function Workflow() {
         </div>
         <div className="mt-16 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-0">
           {workflowSteps.map((step, index) => (
-            <>
-              <div key={step.name} className="flex flex-col items-center text-center max-w-[150px]">
+            <React.Fragment key={step.name}>
+              <div className="flex flex-col items-center text-center max-w-[150px]">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary bg-primary/10 text-primary">
                   <span className="text-xl font-bold">{index + 1}</span>
                 </div>
@@ -35,7 +36,7 @@ export function Workflow() {
               {index < workflowSteps.length - 1 && (
                 <ArrowRight className="h-8 w-8 text-muted-foreground/50 mx-4 my-4 md:my-0 rotate-90 md:rotate-0" />
               )}
-            </>
+            </React.Fragment>
           ))}
         </div>
         <Card className="mt-16 w-full max-w-4xl mx-auto shadow-xl">
