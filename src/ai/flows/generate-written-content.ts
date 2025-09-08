@@ -19,7 +19,7 @@ const GenerateWrittenContentInputSchema = z.object({
 export type GenerateWrittenContentInput = z.infer<typeof GenerateWrittenContentInputSchema>;
 
 const GenerateWrittenContentOutputSchema = z.object({
-  content: z.string().describe('The generated written content in HTML format (at least 500 words).'),
+  content: z.string().describe('The generated written content in HTML format (at least 500 words). It MUST NOT include an <h1> tag.'),
   titles: z.array(z.string()).describe('An array of 10 catchy, SEO-friendly, and click-worthy title options for the article. The titles should incorporate specifications from the input title.'),
   description: z.string().describe('A meta description for SEO purposes, under 160 characters.'),
   tags: z.string().describe('A comma-separated string of up to 50 relevant focus keywords for Rank Math SEO plugin.'),
@@ -45,10 +45,10 @@ const prompt = ai.definePrompt({
 - **Tone:** Conversational yet expert and informative.
 - **Structure:**
   - The article MUST be in HTML format.
-  - Start with an <h1> tag for the main title within the content.
+  - DO NOT include an <h1> tag or a main title inside the content itself. The content should start directly with the first section heading.
   - Use multiple <h2> tags for main section headings and <h3> for sub-headings.
   - Use <p> for paragraphs, <strong> for important keywords, and at least one <ul> with <li> tags for a bulleted list.
-  - Ensure the content flows logically with a proper introduction, detailed body sections, and a strong conclusion.
+  - Ensure the content flows logically. Do not start with generic headings like "Introduction" or "Parichay".
 - **Credibility:** Break down complex concepts into simple terms. Include relevant statistics, examples, or credible opinions.
 - **Engagement:** Keep sentences varied and engaging to maintain reader interest. The final article should feel like it was written by a human expert, not AI.
 

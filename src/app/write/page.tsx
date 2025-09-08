@@ -12,12 +12,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Copy, Check, ThumbsUp } from 'lucide-react';
+import { Loader2, Copy, Check, ThumbsUp, Sparkles } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
@@ -85,19 +84,20 @@ export default function WritePage() {
   
   const handleCopyContent = () => {
     if (!generatedOutput) return;
+    const finalContent = `<h1>${selectedTitle}</h1>\n${generatedOutput.content}`;
     const el = document.createElement('div');
-    el.innerHTML = generatedOutput.content;
+    el.innerHTML = finalContent;
     const plainText = el.textContent || el.innerText || "";
     handleCopy(plainText, 'Content');
   };
   
   const handleSelectTitle = (title: string) => {
     setSelectedTitle(title);
-    if(generatedOutput){
-        const updatedContent = generatedOutput.content.replace(/<h1[^>]*>.*?<\/h1>/, `<h1>${title}</h1>`);
-        setGeneratedOutput({...generatedOutput, content: updatedContent});
-    }
   }
+  
+  const finalHtmlContent = generatedOutput && selectedTitle 
+    ? `<h1>${selectedTitle}</h1>\n${generatedOutput.content}`
+    : generatedOutput?.content || '';
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -105,8 +105,13 @@ export default function WritePage() {
       <main className="flex-1 container mx-auto px-4 py-12">
         <Card className="max-w-4xl mx-auto">
           <CardHeader>
-            <CardTitle>Generate Written Content</CardTitle>
-            <CardDescription>Fill out the form below to generate high-quality content with AI.</CardDescription>
+            <div className="flex items-center gap-3">
+              <Sparkles className="h-8 w-8 text-primary" />
+              <div>
+                <CardTitle className="text-3xl">AI Content Writer</CardTitle>
+                <CardDescription>Fill out the form below to generate high-quality, SEO-optimized content.</CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -171,7 +176,7 @@ export default function WritePage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" disabled={isLoading}>
+                <Button type="submit" disabled={isLoading} size="lg">
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Generate Content
                 </Button>
@@ -208,8 +213,8 @@ export default function WritePage() {
                         className={`p-4 cursor-pointer transition-all ${selectedTitle === title ? 'ring-2 ring-primary bg-primary/10' : 'hover:bg-secondary'}`}
                       >
                         <div className="flex items-start gap-3">
-                           {selectedTitle === title ? <ThumbsUp className="h-5 w-5 text-primary mt-1" /> : <ThumbsUp className="h-5 w-5 text-muted-foreground mt-1" />}
-                           <p className="flex-1">{title}</p>
+                           {selectedTitle === title ? <ThumbsUp className="h-5 w-5 text-primary mt-1 flex-shrink-0" /> : <ThumbsUp className="h-5 w-5 text-muted-foreground mt-1 flex-shrink-0" />}
+                           <p className="flex-1 font-semibold text-lg">{title}</p>
                         </div>
                       </Card>
                     ))}
@@ -219,7 +224,7 @@ export default function WritePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <h3 className="text-lg font-semibold mb-2">Meta Description</h3>
-                    <div className="p-4 bg-secondary rounded-md relative group">
+                    <div className="p-4 bg-secondary rounded-md relative group h-full">
                       <p className="text-sm">{generatedOutput.description}</p>
                       <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleCopy(generatedOutput.description, 'Meta')}>
                         <Copy className="h-4 w-4" />
@@ -228,7 +233,7 @@ export default function WritePage() {
                 </div>
                  <div>
                   <h3 className="text-lg font-semibold mb-2">Focus Keywords</h3>
-                  <div className="p-4 bg-secondary rounded-md relative group">
+                  <div className="p-4 bg-secondary rounded-md relative group h-full">
                     <p className="text-sm">{generatedOutput.tags}</p>
                     <Button variant="ghost" size="icon" className="absolute top-2 right-2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity" onClick={() => handleCopy(generatedOutput.tags, 'Meta')}>
                       <Copy className="h-4 w-4" />
@@ -251,7 +256,7 @@ export default function WritePage() {
               <div>
                 <h3 className="text-xl font-semibold mb-4">Generated Content</h3>
                  <Tabs defaultValue="preview">
-                  <div className="flex justify-between items-center mb-4">
+                  <div className="flex justify-between items-center mb-4 flex-wrap gap-4">
                     <TabsList>
                       <TabsTrigger value="preview">Preview</TabsTrigger>
                       <TabsTrigger value="html">HTML</TabsTrigger>
@@ -261,7 +266,7 @@ export default function WritePage() {
                         {isContentCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                         Copy Content
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleCopy(generatedOutput.content, 'HTML')} disabled={isHtmlCopied}>
+                      <Button variant="outline" size="sm" onClick={() => handleCopy(finalHtmlContent, 'HTML')} disabled={isHtmlCopied}>
                         {isHtmlCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                         Copy HTML
                       </Button>
@@ -270,12 +275,12 @@ export default function WritePage() {
                   <TabsContent value="preview" className="border rounded-md p-6">
                     <div
                       className="prose dark:prose-invert max-w-none"
-                      dangerouslySetInnerHTML={{ __html: generatedOutput.content }}
+                      dangerouslySetInnerHTML={{ __html: finalHtmlContent }}
                     />
                   </TabsContent>
                   <TabsContent value="html">
                     <pre className="p-4 bg-secondary rounded-md overflow-x-auto text-sm">
-                      <code>{generatedOutput.content}</code>
+                      <code>{finalHtmlContent}</code>
                     </pre>
                   </TabsContent>
                 </Tabs>
