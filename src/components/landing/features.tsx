@@ -34,6 +34,7 @@ const features = [
     icon: <ShieldCheck className="h-8 w-8 text-primary" />,
     title: "Plagiarism & AI Detection",
     description: "Ensure content originality and authenticity with our advanced AI-powered plagiarism and content detectors.",
+    href: "/detect",
   },
 ];
 

@@ -27,6 +27,9 @@ export function Header() {
                 <Link href="/seo">SEO Tools</Link>
             </Button>
             <Button asChild variant="ghost">
+                <Link href="/detect">AI Detector</Link>
+            </Button>
+            <Button asChild variant="ghost">
                 <Link href="/#faq">Support</Link>
             </Button>
             <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
