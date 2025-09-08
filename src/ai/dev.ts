@@ -1,1 +1,7 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/summarize-pdf-content.ts';
+import '@/ai/flows/generate-improved-seo-keywords.ts';
+import '@/ai/flows/generate-image-from-prompt.ts';
+import '@/ai/flows/generate-blog-topic-from-prompt.ts';
