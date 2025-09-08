@@ -44,7 +44,7 @@ const generateImageFromPromptFlow = ai.defineFlow(
   },
   async input => {
     const {media} = await ai.generate({
-      model: 'googleai/imagen-4.0-fast-generate-001',
+      model: 'googleai/gemini-1.5-pro-latest',
       prompt: input.promptText,
     });
 
