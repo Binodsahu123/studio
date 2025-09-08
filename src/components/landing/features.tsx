@@ -28,6 +28,7 @@ const features = [
     icon: <TrendingUp className="h-8 w-8 text-primary" />,
     title: "SEO Optimization",
     description: "Boost your search rankings with built-in tools that analyze and suggest improvements for your content.",
+    href: "/seo",
   },
   {
     icon: <ShieldCheck className="h-8 w-8 text-primary" />,
@@ -50,8 +51,8 @@ export function Features() {
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => {
-            const card = (
-              <Card className="flex h-full flex-col items-start p-6 text-left">
+            const cardContent = (
+              <Card className="flex h-full flex-col items-start p-6 text-left transition-all duration-300 hover:border-primary/50 hover:shadow-lg">
                 <CardHeader className="p-0">
                   {feature.icon}
                   <CardTitle className="mt-4">{feature.title}</CardTitle>
@@ -64,13 +65,13 @@ export function Features() {
 
             if (feature.href) {
               return (
-                <Link href={feature.href} key={feature.title} className="block transition-transform duration-200 hover:scale-105">
-                  {card}
+                <Link href={feature.href} key={feature.title} className="block transition-transform duration-300 hover:-translate-y-2">
+                  {cardContent}
                 </Link>
               );
             }
 
-            return <div key={feature.title}>{card}</div>;
+            return <div key={feature.title} className="cursor-not-allowed">{cardContent}</div>;
           })}
         </div>
       </div>

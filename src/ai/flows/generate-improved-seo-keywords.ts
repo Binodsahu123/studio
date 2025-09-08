@@ -22,8 +22,8 @@ export type GenerateImprovedSeoKeywordsInput = z.infer<
 
 const GenerateImprovedSeoKeywordsOutputSchema = z.object({
   improvedKeywords: z
-    .string()
-    .describe('The improved SEO keywords for better content discoverability.'),
+    .array(z.string())
+    .describe('An array of improved SEO keywords for better content discoverability.'),
 });
 export type GenerateImprovedSeoKeywordsOutput = z.infer<
   typeof GenerateImprovedSeoKeywordsOutputSchema
@@ -39,12 +39,12 @@ const prompt = ai.definePrompt({
   name: 'generateImprovedSeoKeywordsPrompt',
   input: {schema: GenerateImprovedSeoKeywordsInputSchema},
   output: {schema: GenerateImprovedSeoKeywordsOutputSchema},
-  prompt: `You are an expert SEO consultant. Your task is to improve the given SEO keywords so they can rank high for the topic.
+  prompt: `You are an expert SEO consultant. Your task is to improve the given SEO keywords so they can rank high for the topic. Provide a list of 10-15 improved keywords.
 
 Original Keywords: {{{originalKeywords}}}
 Content Topic: {{{contentTopic}}}
 
-Improved Keywords:`,
+Return the improved keywords as a JSON array of strings.`,
 });
 
 const generateImprovedSeoKeywordsFlow = ai.defineFlow(
