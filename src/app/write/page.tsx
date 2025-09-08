@@ -72,7 +72,7 @@ export default function WritePage() {
     defaultValues: {
       title: '',
       shortDescription: '',
-      language: 'English',
+      language: 'Hindi',
       additionalTopic: '',
       customPrompt: defaultPromptTemplate,
     },
@@ -163,28 +163,8 @@ export default function WritePage() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                            <SelectItem value="English">English</SelectItem>
                             <SelectItem value="Hindi">Hindi</SelectItem>
-                            <SelectItem value="Spanish">Spanish</SelectItem>
-                            <SelectItem value="French">French</SelectItem>
-                            <SelectItem value="German">German</SelectItem>
-                            <SelectItem value="Italian">Italian</SelectItem>
-                            <SelectItem value="Portuguese">Portuguese</SelectItem>
-                            <SelectItem value="Russian">Russian</SelectItem>
-                            <SelectItem value="Japanese">Japanese</SelectItem>
-                            <SelectItem value="Korean">Korean</SelectItem>
-                            <SelectItem value="Chinese">Chinese</SelectItem>
-                            <SelectItem value="Arabic">Arabic</SelectItem>
-                            <SelectItem value="Bengali">Bengali</SelectItem>
-                            <SelectItem value="Marathi">Marathi</SelectItem>
-                            <SelectItem value="Telugu">Telugu</SelectItem>
-                            <SelectItem value="Tamil">Tamil</SelectItem>
-                            <SelectItem value="Gujarati">Gujarati</SelectItem>
-                            <SelectItem value="Urdu">Urdu</SelectItem>
-                            <SelectItem value="Kannada">Kannada</SelectItem>
-                            <SelectItem value="Odia">Odia</SelectItem>
-                            <SelectItem value="Malayalam">Malayalam</SelectItem>
-                            <SelectItem value="Punjabi">Punjabi</SelectItem>
+                            <SelectItem value="English">English</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
