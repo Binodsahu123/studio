@@ -11,19 +11,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, TrendingUp } from 'lucide-react';
+import { Loader2, TrendingUp, CheckCircle, Flame, BarChart } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const formSchema = z.object({
   originalKeywords: z.string().min(1, 'Please enter some keywords.'),
   contentTopic: z.string().min(1, 'Please enter a content topic.'),
 });
 
+type KeywordAnalysis = GenerateImprovedSeoKeywordsOutput['improvedKeywords'][0];
+
 export default function SeoPage() {
-  const [generatedKeywords, setGeneratedKeywords] = useState<string[]>([]);
+  const [analysisResult, setAnalysisResult] = useState<GenerateImprovedSeoKeywordsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -37,15 +41,15 @@ export default function SeoPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    setGeneratedKeywords([]);
+    setAnalysisResult(null);
     try {
       const input: GenerateImprovedSeoKeywordsInput = values;
-      const result: GenerateImprovedSeoKeywordsOutput = await generateImprovedSeoKeywords(input);
-      setGeneratedKeywords(result.improvedKeywords);
+      const result = await generateImprovedSeoKeywords(input);
+      setAnalysisResult(result);
     } catch (error) {
-      console.error('Error generating SEO keywords:', error);
+      console.error('Error generating SEO analysis:', error);
       toast({
-        title: "Error Generating Keywords",
+        title: "Error Generating Analysis",
         description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
@@ -54,17 +58,30 @@ export default function SeoPage() {
     }
   }
 
+  const getBadgeVariant = (level: 'Low' | 'Medium' | 'High'): 'default' | 'secondary' | 'destructive' => {
+    switch (level) {
+      case 'Low':
+        return 'secondary';
+      case 'Medium':
+        return 'default';
+      case 'High':
+        return 'destructive';
+      default:
+        return 'secondary';
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12">
-        <Card className="max-w-2xl mx-auto">
+        <Card className="max-w-4xl mx-auto">
           <CardHeader>
             <div className="flex items-center gap-3">
               <TrendingUp className="h-8 w-8 text-primary" />
               <div>
-                <CardTitle className="text-3xl">SEO Keyword Generator</CardTitle>
-                <CardDescription>Enter your topic and current keywords to get improved, high-ranking suggestions.</CardDescription>
+                <CardTitle className="text-3xl">Advanced SEO Keyword Analyzer</CardTitle>
+                <CardDescription>Get detailed insights, difficulty analysis, and title suggestions for your keywords.</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -99,7 +116,7 @@ export default function SeoPage() {
                 />
                 <Button type="submit" disabled={isLoading} size="lg">
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Generate Keywords
+                  Analyze Keywords
                 </Button>
               </form>
             </Form>
@@ -107,9 +124,9 @@ export default function SeoPage() {
         </Card>
 
         {isLoading && (
-            <Card className="max-w-2xl mx-auto mt-8">
+            <Card className="max-w-4xl mx-auto mt-8">
               <CardHeader>
-                <CardTitle>Generating...</CardTitle>
+                <CardTitle>Analyzing...</CardTitle>
               </CardHeader>
               <CardContent className="flex justify-center items-center py-12">
                   <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -117,20 +134,50 @@ export default function SeoPage() {
             </Card>
         )}
 
-        {generatedKeywords.length > 0 && (
-          <Card className="max-w-2xl mx-auto mt-8">
+        {analysisResult && analysisResult.improvedKeywords.length > 0 && (
+          <Card className="max-w-4xl mx-auto mt-8">
             <CardHeader>
-              <CardTitle>Improved SEO Keywords</CardTitle>
-              <CardDescription>Here are the AI-suggested keywords to boost your content's ranking.</CardDescription>
+              <CardTitle>Keyword Analysis Report</CardTitle>
+              <CardDescription>Here are the AI-suggested keywords and their strategic analysis.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {generatedKeywords.map((keyword, index) => (
-                  <Badge key={index} variant="secondary" className="text-base px-3 py-1">
-                    {keyword}
-                  </Badge>
-                ))}
-              </div>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                        <TableHead className="w-[30%]">Keyword</TableHead>
+                        <TableHead className="text-center">Difficulty</TableHead>
+                        <TableHead className="text-center">Virality Potential</TableHead>
+                        <TableHead className="text-right">Title Ideas</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {analysisResult.improvedKeywords.map((item: KeywordAnalysis) => (
+                        <TableRow key={item.keyword}>
+                            <TableCell className="font-medium">{item.keyword}</TableCell>
+                            <TableCell className="text-center">
+                                <Badge variant={getBadgeVariant(item.difficulty)}>{item.difficulty}</Badge>
+                            </TableCell>
+                            <TableCell className="text-center">
+                                <Badge variant={getBadgeVariant(item.viralityPotential)}>{item.viralityPotential}</Badge>
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <Collapsible>
+                                    <CollapsibleTrigger asChild>
+                                        <Button variant="ghost" size="sm">View</Button>
+                                    </CollapsibleTrigger>
+                                    <CollapsibleContent>
+                                        <Card className="mt-2 p-3 text-left">
+                                            <ul className="space-y-2 list-disc list-inside">
+                                                {item.suggestedTitles.map(title => <li key={title}>{title}</li>)}
+                                            </ul>
+                                        </Card>
+                                    </CollapsibleContent>
+                                </Collapsible>
+                            </TableCell>
+                        </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </CardContent>
           </Card>
         )}
