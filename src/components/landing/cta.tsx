@@ -13,9 +13,9 @@ export function Cta() {
           Join thousands of creators, marketers, and developers who are saving time and scaling their content with WriteBot AI.
         </p>
         <div className="mt-8">
-          <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90">
+          <Button asChild size="default" className="bg-accent text-accent-foreground hover:bg-accent/90">
             <Link href="/generate">
-              Start Generating Content in Seconds
+              Start Generating
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
