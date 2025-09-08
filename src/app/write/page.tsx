@@ -16,6 +16,7 @@ import { Loader2, Copy, Check } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const formSchema = z.object({
   title: z.string().min(1, 'Please enter a title.'),
@@ -74,7 +75,7 @@ export default function WritePage() {
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12">
-        <Card className="max-w-2xl mx-auto">
+        <Card className="max-w-4xl mx-auto">
           <CardHeader>
             <CardTitle>Generate Written Content</CardTitle>
             <CardDescription>Fill out the form below to generate high-quality content with AI.</CardDescription>
@@ -152,19 +153,34 @@ export default function WritePage() {
         </Card>
 
         {generatedContent && (
-          <Card className="max-w-2xl mx-auto mt-8">
-            <CardHeader className="flex flex-row items-center justify-between">
+          <Card className="max-w-4xl mx-auto mt-8">
+            <CardHeader>
               <CardTitle>Generated Content</CardTitle>
-              <Button variant="outline" size="icon" onClick={handleCopy}>
-                {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                <span className="sr-only">Copy HTML</span>
-              </Button>
             </CardHeader>
             <CardContent>
-              <div
-                className="prose dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: generatedContent }}
-              />
+              <Tabs defaultValue="preview">
+                <div className="flex justify-between items-center mb-4">
+                  <TabsList>
+                    <TabsTrigger value="preview">Preview</TabsTrigger>
+                    <TabsTrigger value="html">HTML</TabsTrigger>
+                  </TabsList>
+                  <Button variant="outline" size="sm" onClick={handleCopy} disabled={isCopied}>
+                    {isCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                    Copy HTML
+                  </Button>
+                </div>
+                <TabsContent value="preview" className="border rounded-md p-6">
+                  <div
+                    className="prose dark:prose-invert max-w-none"
+                    dangerouslySetInnerHTML={{ __html: generatedContent }}
+                  />
+                </TabsContent>
+                <TabsContent value="html">
+                  <pre className="p-4 bg-secondary rounded-md overflow-x-auto text-sm">
+                    <code>{generatedContent}</code>
+                  </pre>
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         )}
