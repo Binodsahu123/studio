@@ -33,6 +33,11 @@ const AnalyzeContentOriginalityOutputSchema = z.object({
     .describe(
       "A warning about potential plagiarism if the text is too generic or seems unoriginal. This is not a formal plagiarism check."
     ),
+  highlightedText: z
+    .string()
+    .describe(
+      'The original text with parts suspected to be AI-generated wrapped in <ai-detected> tags. For example: "This is human text. <ai-detected>This part seems AI-written.</ai-detected>"'
+    ),
 });
 export type AnalyzeContentOriginalityOutput = z.infer<
   typeof AnalyzeContentOriginalityOutputSchema
@@ -59,6 +64,7 @@ Based on your analysis, provide the following:
 1.  **aiScore**: An integer score between 0 and 100. A score of 0 means it is certainly human-written, while 100 means it is certainly AI-generated.
 2.  **analysis**: A brief, 1-2 sentence explanation of your reasoning for the score. Be concise and clear.
 3.  **plagiarismWarning**: If the text seems highly generic or lacks originality, provide a brief warning like "The text appears generic and may lack originality." Otherwise, state "No major originality concerns detected."
+4.  **highlightedText**: Return the original text. For every sentence or phrase that you strongly suspect is AI-generated, wrap it in <ai-detected> XML tags. For example: "This is human text. <ai-detected>This part seems AI-written.</ai-detected>". If no part is detected as AI-written, return the original text without any tags.
 `,
 });
 

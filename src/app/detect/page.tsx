@@ -20,6 +20,27 @@ const formSchema = z.object({
   text: z.string().min(50, 'Please enter at least 50 characters to analyze.'),
 });
 
+// Function to parse the highlighted text and render it as JSX
+const renderHighlightedText = (text: string) => {
+  const parts = text.split(/<\/?ai-detected>/g);
+  return (
+      <p className="p-4 bg-secondary rounded-md text-sm leading-relaxed">
+          {parts.map((part, index) => {
+              // Parts at odd indices are wrapped in the tag
+              if (index % 2 === 1) {
+                  return (
+                      <span key={index} className="bg-blue-200 dark:bg-blue-900/50 p-1 rounded-md">
+                          {part}
+                      </span>
+                  );
+              }
+              return part;
+          })}
+      </p>
+  );
+};
+
+
 export default function DetectPage() {
   const [analysisResult, setAnalysisResult] = useState<AnalyzeContentOriginalityOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -126,6 +147,13 @@ export default function DetectPage() {
                                     <span className="text-2xl font-bold text-primary">{analysisResult.aiScore}%</span>
                                 </div>
                             </div>
+                             {analysisResult.highlightedText && (
+                              <div>
+                                <h3 className="text-lg font-semibold mb-2">Highlighted Text Analysis</h3>
+                                <p className="text-sm text-muted-foreground mb-3">Parts of the text suspected to be AI-generated are highlighted in blue.</p>
+                                {renderHighlightedText(analysisResult.highlightedText)}
+                              </div>
+                            )}
                             <div>
                                 <h3 className="text-lg font-semibold mb-2">Summary</h3>
                                 <p className="p-4 bg-secondary rounded-md text-sm">{analysisResult.analysis}</p>
@@ -156,6 +184,9 @@ export default function DetectPage() {
                       <ul className="list-disc pl-6 space-y-3">
                         <li>
                           <strong>AI Detection Score:</strong> This is an estimated probability. A low score (e.g., 0-40) suggests the text is likely human-written. A high score (e.g., 70-100) suggests a high probability of AI generation. Scores in the middle can be ambiguous.
+                        </li>
+                        <li>
+                          <strong>Highlighted Text:</strong> Our AI highlights sentences and phrases that match common AI writing patterns. This helps you identify specific areas to rewrite for a more human touch.
                         </li>
                         <li>
                           <strong>Originality Warning:</strong> This is NOT a formal plagiarism check. It simply flags if the text seems overly generic or uses common phrases, which might indicate a lack of originality or potential duplicate content. Always use a dedicated plagiarism checker for academic or professional work.
