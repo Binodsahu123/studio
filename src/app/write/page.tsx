@@ -116,6 +116,47 @@ export default function WritePage() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                 <FormField
+                  control={form.control}
+                  name="language"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Language</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a language" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            <SelectItem value="English">English</SelectItem>
+                            <SelectItem value="Hindi">Hindi</SelectItem>
+                            <SelectItem value="Spanish">Spanish</SelectItem>
+                            <SelectItem value="French">French</SelectItem>
+                            <SelectItem value="German">German</SelectItem>
+                            <SelectItem value="Italian">Italian</SelectItem>
+                            <SelectItem value="Portuguese">Portuguese</SelectItem>
+                            <SelectItem value="Russian">Russian</SelectItem>
+                            <SelectItem value="Japanese">Japanese</SelectItem>
+                            <SelectItem value="Korean">Korean</SelectItem>
+                            <SelectItem value="Chinese">Chinese</SelectItem>
+                            <SelectItem value="Arabic">Arabic</SelectItem>
+                            <SelectItem value="Bengali">Bengali</SelectItem>
+                            <SelectItem value="Marathi">Marathi</SelectItem>
+                            <SelectItem value="Telugu">Telugu</SelectItem>
+                            <SelectItem value="Tamil">Tamil</SelectItem>
+                            <SelectItem value="Gujarati">Gujarati</SelectItem>
+                            <SelectItem value="Urdu">Urdu</SelectItem>
+                            <SelectItem value="Kannada">Kannada</SelectItem>
+                            <SelectItem value="Odia">Odia</SelectItem>
+                            <SelectItem value="Malayalam">Malayalam</SelectItem>
+                            <SelectItem value="Punjabi">Punjabi</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="title"
@@ -138,27 +179,6 @@ export default function WritePage() {
                       <FormControl>
                         <Textarea placeholder="Briefly describe what the content is about." {...field} />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="language"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Language</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a language" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="English">English</SelectItem>
-                          <SelectItem value="Hindi">Hindi</SelectItem>
-                        </SelectContent>
-                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -201,13 +221,13 @@ export default function WritePage() {
               </p>
               <ul className="list-disc pl-6 space-y-3">
                 <li>
+                  <strong>Language:</strong> Choose the language for your article. We now support a wide range of global languages.
+                </li>
+                <li>
                   <strong>Topic / Main Title:</strong> Be as specific as possible. Instead of "new phone," use "Samsung Galaxy S24 Ultra vs iPhone 15 Pro Max camera comparison." The more details you provide (like model names, features), the better the AI can tailor the content.
                 </li>
                 <li>
                   <strong>Short Description:</strong> Briefly explain the main goal of your article. For example, "An article comparing the camera quality of two flagship phones to help users decide which is better for photography."
-                </li>
-                <li>
-                  <strong>Language:</strong> Choose the language for your article. We currently support English and Hindi.
                 </li>
                 <li>
                   <strong>Additional Topic/Keyword:</strong> Enter a related keyword you want the AI to focus on. For instance, if your main topic is about a phone, you could add "low-light photography" or "battery life" here. This helps the AI to include specific sections in the article.
@@ -328,3 +348,5 @@ export default function WritePage() {
     </div>
   );
 }
+
+    
