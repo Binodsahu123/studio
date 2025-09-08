@@ -12,9 +12,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Copy, Check } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   title: z.string().min(1, 'Please enter a title.'),
@@ -26,6 +27,8 @@ const formSchema = z.object({
 export default function WritePage() {
   const [generatedContent, setGeneratedContent] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,10 +49,26 @@ export default function WritePage() {
       setGeneratedContent(result.content);
     } catch (error) {
       console.error('Error generating content:', error);
+      toast({
+        title: "Error Generating Content",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
   }
+  
+  const handleCopy = () => {
+    navigator.clipboard.writeText(generatedContent).then(() => {
+      setIsCopied(true);
+      toast({
+        title: "Copied to clipboard!",
+        description: "The HTML content has been copied.",
+      });
+      setTimeout(() => setIsCopied(false), 2000);
+    });
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -134,13 +153,18 @@ export default function WritePage() {
 
         {generatedContent && (
           <Card className="max-w-2xl mx-auto mt-8">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Generated Content</CardTitle>
+              <Button variant="outline" size="icon" onClick={handleCopy}>
+                {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                <span className="sr-only">Copy HTML</span>
+              </Button>
             </CardHeader>
             <CardContent>
-              <div className="prose dark:prose-invert max-w-none whitespace-pre-wrap">
-                {generatedContent}
-              </div>
+              <div
+                className="prose dark:prose-invert max-w-none"
+                dangerouslySetInnerHTML={{ __html: generatedContent }}
+              />
             </CardContent>
           </Card>
         )}
