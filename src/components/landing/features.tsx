@@ -1,4 +1,4 @@
-import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, Globe } from "lucide-react";
+import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, Globe, Construction } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import Link from "next/link";
 
@@ -10,8 +10,8 @@ const features = [
     href: "/write",
   },
   {
-    icon: <ImageIcon className="h-8 w-8 text-primary" />,
-    title: "AI Image Generation",
+    icon: <Construction className="h-8 w-8 text-primary" />,
+    title: "AI Image Generation (Coming Soon)",
     description: "Create breathtaking visuals with Stable Diffusion & DALL-E, from text-to-image to image upscaling.",
     href: "/image",
   },
@@ -53,8 +53,9 @@ export function Features() {
         </div>
         <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => {
+            const isComingSoon = feature.title.includes("Coming Soon");
             const cardContent = (
-              <Card className="flex h-full flex-col items-start p-6 text-left transition-all duration-300 hover:border-primary/50 hover:shadow-lg">
+              <Card className={`flex h-full flex-col items-start p-6 text-left transition-all duration-300 ${isComingSoon ? 'opacity-60' : 'hover:border-primary/50 hover:shadow-lg'}`}>
                 <CardHeader className="p-0">
                   {feature.icon}
                   <CardTitle className="mt-4">{feature.title}</CardTitle>
@@ -65,7 +66,7 @@ export function Features() {
               </Card>
             );
 
-            if (feature.href) {
+            if (feature.href && !isComingSoon) {
               return (
                 <Link href={feature.href} key={feature.title} className="block transition-transform duration-300 hover:-translate-y-2">
                   {cardContent}
