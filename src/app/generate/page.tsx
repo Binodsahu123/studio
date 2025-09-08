@@ -67,7 +67,7 @@ export default function GeneratePage() {
                   <CardDescription className="text-base mb-4">
                     {tool.description}
                   </CardDescription>
-                  <div className="flex items-center font-semibold text-primary group-hover:text-accent">
+                  <div className="flex items-center font-semibold text-primary group-hover:text-primary/80">
                     {tool.cta} <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </CardContent>
