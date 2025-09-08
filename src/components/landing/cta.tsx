@@ -14,7 +14,7 @@ export function Cta() {
         </p>
         <div className="mt-8">
           <Button asChild size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 text-lg h-auto py-4 px-8">
-            <Link href="#pricing">
+            <Link href="/generate">
               Start Generating Content in Seconds
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>

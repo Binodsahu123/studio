@@ -15,16 +15,16 @@ export function Header() {
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="hidden items-center space-x-2 md:flex">
             <Button asChild variant="ghost">
-                <Link href="#features">Features</Link>
+                <Link href="/#features">Features</Link>
             </Button>
             <Button asChild variant="ghost">
-                <Link href="#pricing">Pricing</Link>
+                <Link href="/#pricing">Pricing</Link>
             </Button>
             <Button asChild variant="ghost">
-                <Link href="#faq">Support</Link>
+                <Link href="/#faq">Support</Link>
             </Button>
             <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <Link href="#cta">Start Creating Today</Link>
+              <Link href="/generate">Start Creating Today</Link>
             </Button>
           </nav>
         </div>
