@@ -12,18 +12,51 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Loader2, Copy, Check, ThumbsUp, Sparkles, HelpCircle } from 'lucide-react';
+import { Loader2, Copy, Check, ThumbsUp, Sparkles, HelpCircle, ChevronsUpDown } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from '@/components/ui/separator';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+
+
+const defaultPromptTemplate = `You are an expert SEO content writer. Your task is to write an in-depth, well-researched, and Google Discover-friendly article of AT LEAST 1000 WORDS in {{language}} on the topic: "{{title}}". Also generate all the required SEO assets.
+
+**Article Content Guidelines:**
+- **Topic:** {{{title}}}
+- **Base Description:** {{{shortDescription}}}
+- **Additional Keyword:** {{{additionalTopic}}}
+- **Language:** {{language}}. If Hindi, use clear and accessible general Hindi.
+- **Tone & Style:**
+  - Write it like a human would. Use simple, conversational English. Avoid complex words and AI-like phrasing. The article should feel personal and authentic.
+  - Readability is crucial. Start with two introductory paragraphs that include searchable keywords.
+  - The article must be fully SEO optimized. The main title "{{title}}" should appear at least 10 times naturally within the content.
+- **Structure:**
+  - The article MUST be in HTML format.
+  - DO NOT include an <h1> tag or a main title inside the content itself. The content should start directly with the first section heading.
+  - Use multiple catchy <h2> tags for main section headings and <h3> for sub-headings. All headings must be followed.
+  - Use <p> for paragraphs and <strong> for important keywords.
+  - DO NOT use bullet points excessively. Only use them where it is essential to list items.
+  - Include one table (<table>) within one of the sections where it makes sense to present data.
+- **Credibility:** Break down complex concepts into simple terms. Include relevant statistics, examples, or credible opinions.
+- **Engagement:** Keep sentences varied and engaging to maintain reader interest. The final article should feel like it was written by a human expert, not AI.
+
+**SEO Asset Generation:**
+Based on the generated article and the input title ("{{{title}}}"), create the following assets:
+
+1.  **Titles:** Provide 10 SEO-friendly and click-worthy title options. These titles should incorporate any specifications mentioned in the input title.
+2.  **Meta Description:** Create a compelling meta description (under 160 characters).
+3.  **Meta Tags:** Provide a comma-separated string of up to 50 relevant focus keywords, suitable for the Rank Math SEO plugin.
+4.  **Image Titles:** Create 8 SEO-friendly titles for images that would be used in the article. These titles should be relevant to the content and also include specifications from the input title.
+`;
 
 const formSchema = z.object({
   title: z.string().min(1, 'Please enter a title.'),
   shortDescription: z.string().min(1, 'Please enter a short description.'),
   language: z.string().min(1, 'Please select a language.'),
   additionalTopic: z.string().min(1, 'Please enter an additional topic.'),
+  customPrompt: z.string().optional(),
 });
 
 export default function WritePage() {
@@ -41,6 +74,7 @@ export default function WritePage() {
       shortDescription: '',
       language: 'English',
       additionalTopic: '',
+      customPrompt: defaultPromptTemplate,
     },
   });
 
@@ -200,6 +234,37 @@ export default function WritePage() {
                   {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Generate Content
                 </Button>
+
+                <Collapsible>
+                  <CollapsibleTrigger asChild>
+                    <Button variant="outline" size="sm" className="w-full">
+                       <ChevronsUpDown className="w-4 h-4 mr-2" />
+                       Advanced Prompt Editor (Optional)
+                    </Button>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-4">
+                     <FormField
+                        control={form.control}
+                        name="customPrompt"
+                        render={({ field }) => (
+                            <FormItem>
+                            <FormLabel>Custom AI Prompt</FormLabel>
+                            <FormControl>
+                                <Textarea 
+                                    placeholder="Enter your custom prompt here. Leave blank to use the default." 
+                                    {...field}
+                                    rows={20}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                         <Button type="button" variant="secondary" size="sm" className="mt-2" onClick={() => form.setValue('customPrompt', defaultPromptTemplate)}>
+                            Reset to Default
+                        </Button>
+                  </CollapsibleContent>
+                </Collapsible>
               </form>
             </Form>
           </CardContent>
@@ -231,6 +296,9 @@ export default function WritePage() {
                 </li>
                 <li>
                   <strong>Additional Topic/Keyword:</strong> Enter a related keyword you want the AI to focus on. For instance, if your main topic is about a phone, you could add "low-light photography" or "battery life" here. This helps the AI to include specific sections in the article.
+                </li>
+                <li>
+                  <strong>Advanced Prompt Editor:</strong> For maximum control, you can edit the prompt that we send to the AI. Modify the instructions to change the tone, style, or structure of the generated content.
                 </li>
               </ul>
               <p>
