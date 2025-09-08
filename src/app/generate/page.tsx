@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction } from "lucide-react";
+import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText } from "lucide-react";
 
 const tools = [
   {
@@ -14,6 +14,14 @@ const tools = [
     description: "Generate high-quality articles, blog posts, and marketing copy in various languages.",
     href: "/write",
     cta: "Start Writing",
+    active: true,
+  },
+  {
+    icon: <FileText className="h-8 w-8 text-primary" />,
+    title: "Full Blog Post Workflow",
+    description: "A step-by-step wizard to generate keywords, titles, outlines, and a full article.",
+    href: "/blog",
+    cta: "Start Workflow",
     active: true,
   },
   {
@@ -64,7 +72,7 @@ export default function GeneratePage() {
           </p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-2">
+        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {tools.map((tool) => (
             <CardWrapper tool={tool} key={tool.title}>
               <Card className={`flex flex-col h-full transition-all duration-300 ${tool.active ? 'group-hover:border-primary/50 group-hover:shadow-lg group-hover:-translate-y-1' : ''}`}>
