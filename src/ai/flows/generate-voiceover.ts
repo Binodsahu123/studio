@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview A flow to generate a voiceover from text.
+ * @fileOverview A flow to generate a voiceover from text using a specific voice.
  *
  * - generateVoiceover - A function that generates an audio file from text.
  * - GenerateVoiceoverInput - The input type for the function.
@@ -13,7 +13,7 @@ import wav from 'wav';
 
 const GenerateVoiceoverInputSchema = z.object({
   text: z.string().describe('The text to be converted to speech.'),
-  voice: z.string().optional().describe('The voice to use for the speech. Defaults to Algenib.'),
+  voice: z.string().describe('The voice to use for the speech.'),
 });
 export type GenerateVoiceoverInput = z.infer<
   typeof GenerateVoiceoverInputSchema
@@ -72,7 +72,7 @@ const generateVoiceoverFlow = ai.defineFlow(
         responseModalities: ['AUDIO'],
         speechConfig: {
           voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: input.voice || 'Algenib' },
+            prebuiltVoiceConfig: { voiceName: input.voice },
           },
         },
       },
