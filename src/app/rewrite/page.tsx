@@ -9,18 +9,22 @@ import { rewriteContent, RewriteContentInput, RewriteContentOutput } from '@/ai/
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Wand2, Copy, Check } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
-import { Separator } from '@/components/ui/separator';
+
+const toneCategories = [
+    { value: 'Casual Blog Post', label: 'Casual Blog Post' },
+    { value: 'Professional Email', label: 'Professional Email' },
+    { value: 'News Report', label: 'News Report' },
+];
 
 const formSchema = z.object({
   originalText: z.string().min(20, 'Please enter at least 20 characters to rewrite.'),
-  rewriteInstruction: z.string().min(5, 'Please provide a clear instruction.'),
+  toneCategory: z.string().min(1, 'Please select a tone and style.'),
   language: z.string().min(1, 'Please select a language.'),
 });
 
@@ -34,7 +38,7 @@ export default function RewritePage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       originalText: '',
-      rewriteInstruction: '',
+      toneCategory: 'Casual Blog Post',
       language: 'English',
     },
   });
@@ -43,7 +47,10 @@ export default function RewritePage() {
     setIsLoading(true);
     setRewrittenContent(null);
     try {
-      const input: RewriteContentInput = values;
+      const input: RewriteContentInput = {
+        ...values,
+        toneCategory: values.toneCategory as "Casual Blog Post" | "Professional Email" | "News Report",
+      };
       const result: RewriteContentOutput = await rewriteContent(input);
       setRewrittenContent(result.rewrittenText);
     } catch (error) {
@@ -79,7 +86,7 @@ export default function RewritePage() {
                   <Wand2 className="h-8 w-8 text-primary" />
                   <div>
                     <CardTitle className="text-3xl">Advanced Content Rewriter</CardTitle>
-                    <CardDescription>Refine, rephrase, or completely change the tone of your existing content.</CardDescription>
+                    <CardDescription>Refine your text by adopting the tone and style of professional examples.</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -91,7 +98,7 @@ export default function RewritePage() {
                       name="originalText"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Original Content</FormLabel>
+                          <FormLabel>Your Original Content</FormLabel>
                           <FormControl>
                             <Textarea placeholder="Paste the content you want to rewrite here..." {...field} rows={10} />
                           </FormControl>
@@ -100,18 +107,29 @@ export default function RewritePage() {
                       )}
                     />
                     <FormField
-                      control={form.control}
-                      name="rewriteInstruction"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Rewrite Instruction</FormLabel>
-                          <FormControl>
-                            <Input placeholder="e.g., 'Make this sound more professional' or 'Simplify for a beginner'" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        control={form.control}
+                        name="toneCategory"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Choose Tone & Style</FormLabel>
+                             <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a tone..." />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {toneCategories.map(category => (
+                                    <SelectItem key={category.value} value={category.value}>
+                                        {category.label}
+                                    </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                      <FormField
                         control={form.control}
                         name="language"
