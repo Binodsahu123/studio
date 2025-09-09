@@ -24,11 +24,11 @@ const formSchema = z.object({
 // A selection of voices available in the Gemini TTS model
 const voices = [
     { name: 'Algenib', description: 'Male, Calm' },
-    { name: 'Sirius', description: 'Male, Calm' },
-    { name: 'Antares', description: 'Male, Calm' },
-    { name: 'Spica', description: 'Female, Calm' },
-    { name: 'Vega', description: 'Female, Calm' },
-    { name: 'Rigel', description: 'Male, Calm' },
+    { name: 'Achernar', description: 'Male, Calm' },
+    { name: 'Umbriel', description: 'Male, Calm' },
+    { name: 'Leda', description: 'Female, Calm' },
+    { name: 'Erinome', description: 'Female, Calm' },
+    { name: 'Schedar', description: 'Male, Calm' },
 ];
 
 export default function VoiceoverGeneratorPage() {
