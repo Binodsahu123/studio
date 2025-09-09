@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic } from "lucide-react";
+import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2 } from "lucide-react";
 
 const tools = [
   {
@@ -14,6 +14,14 @@ const tools = [
     description: "Generate high-quality articles, blog posts, and marketing copy in various languages.",
     href: "/write",
     cta: "Start Writing",
+    active: true,
+  },
+  {
+    icon: <Wand2 className="h-8 w-8 text-primary" />,
+    title: "Content Rewriter",
+    description: "Rephrase, shorten, or change the tone of your existing text to make it fresh.",
+    href: "/rewrite",
+    cta: "Rewrite Content",
     active: true,
   },
   {
