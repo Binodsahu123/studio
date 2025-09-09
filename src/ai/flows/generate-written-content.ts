@@ -42,9 +42,9 @@ Based on the generated article and the input title ("{{{title}}}"), create the f
 
 const GenerateWrittenContentInputSchema = z.object({
   title: z.string().describe('The main title or topic of the content. Include phone specifications here if applicable.'),
-  shortDescription: z.string().describe('A short description of the content.'),
+  shortDescription: z.string().optional().describe('A short description of the content.'),
   language: z.string().describe('The language for the generated content (e.g., "English" or "Hindi").'),
-  additionalTopic: z.string().describe('An additional topic or keyword to focus on.'),
+  additionalTopic: z.string().optional().describe('An additional topic or keyword to focus on.'),
   customPrompt: z.string().optional().describe('An optional custom prompt to override the default.'),
 });
 export type GenerateWrittenContentInput = z.infer<typeof GenerateWrittenContentInputSchema>;
@@ -76,9 +76,9 @@ const generateWrittenContentFlow = ai.defineFlow(
     const finalPrompt = promptTemplate
         .replace(/{{title}}/g, input.title)
         .replace(/{{{title}}}/g, input.title)
-        .replace(/{{{shortDescription}}}/g, input.shortDescription)
+        .replace(/{{{shortDescription}}}/g, input.shortDescription || 'Not provided')
         .replace(/{{language}}/g, input.language)
-        .replace(/{{{additionalTopic}}}/g, input.additionalTopic);
+        .replace(/{{{additionalTopic}}}/g, input.additionalTopic || 'Not provided');
 
 
     const aiprompt = ai.definePrompt({
@@ -87,7 +87,7 @@ const generateWrittenContentFlow = ai.defineFlow(
       prompt: finalPrompt,
     });
     
-    const {output} = await aiprompt();
+    const {output} = await aiprom-pt();
 
     // Fallback for titles if the model doesn't generate them
     if (!output!.titles || output!.titles.length === 0) {

@@ -53,9 +53,9 @@ Based on the generated article and the input title ("{{{title}}}"), create the f
 
 const formSchema = z.object({
   title: z.string().min(1, 'Please enter a title.'),
-  shortDescription: z.string().min(1, 'Please enter a short description.'),
+  shortDescription: z.string().optional(),
   language: z.string().min(1, 'Please select a language.'),
-  additionalTopic: z.string().min(1, 'Please enter an additional topic.'),
+  additionalTopic: z.string().optional(),
   customPrompt: z.string().optional(),
 });
 
@@ -189,7 +189,7 @@ export default function WritePage() {
                   name="shortDescription"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Short Description</FormLabel>
+                      <FormLabel>Short Description (Optional)</FormLabel>
                       <FormControl>
                         <Textarea placeholder="Briefly describe what the content is about." {...field} />
                       </FormControl>
@@ -202,7 +202,7 @@ export default function WritePage() {
                   name="additionalTopic"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Additional Topic/Keyword</FormLabel>
+                      <FormLabel>Additional Topic/Keyword (Optional)</FormLabel>
                       <FormControl>
                         <Input placeholder="e.g., 'Machine Learning'" {...field} />
                       </FormControl>
