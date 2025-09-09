@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PenTool, Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 const navLinks = [
     { href: "/#features", label: "Features" },
@@ -45,7 +45,10 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
-                <div className="flex flex-col space-y-4">
+                 <SheetHeader>
+                    <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
+                  </SheetHeader>
+                <div className="flex flex-col space-y-4 mt-4">
                   <Link href="/" className="mr-6 flex items-center space-x-2">
                      <PenTool className="h-6 w-6 text-primary" />
                      <span className="font-bold">WriteBot AI</span>
