@@ -7,16 +7,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 
-const features = [
-  "Generate high-quality articles, marketing copy, and more with our advanced AI Content Writer.",
-  "Rephrase, shorten, or completely change the tone of your text with the powerful Content Rewriter.",
-  "Go from a simple idea to a full article with our guided Full Blog Post Workflow.",
-  "Boost your search engine rankings with the Advanced SEO Analyzer for keywords and titles.",
-  "Create stunning visuals from text descriptions using the AI Image Generator.",
-  "Convert text into natural-sounding speech with the AI Voiceover Generator.",
-  "Ensure content originality with the built-in AI & Originality Detector.",
-];
-
 export default function BlogIntroducingWriteBotAI() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -117,6 +107,13 @@ export default function BlogIntroducingWriteBotAI() {
                         <Mic className="h-8 w-8 text-primary mb-3" />
                         <h3 className="text-xl font-semibold">AI Voiceover Generator</h3>
                         <p className="text-muted-foreground mt-2">Convert your written content into natural-sounding audio for podcasts, videos, and presentations in multiple languages and accents.</p>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardContent className="p-6">
+                        <ShieldCheck className="h-8 w-8 text-primary mb-3" />
+                        <h3 className="text-xl font-semibold">AI & Originality Detector</h3>
+                        <p className="text-muted-foreground mt-2">Ensure your content is authentic by checking for AI patterns and potential unoriginal text before you publish.</p>
                     </CardContent>
                 </Card>
             </div>
