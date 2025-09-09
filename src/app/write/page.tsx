@@ -358,30 +358,30 @@ export default function WritePage() {
               <div>
                 <h3 className="text-xl font-semibold mb-4">Generated Content</h3>
                  <Tabs defaultValue="preview">
-                  <div className="flex justify-between items-center mb-4 flex-wrap gap-4">
+                  <div className="flex flex-col sm:flex-row justify-between items-center mb-4 flex-wrap gap-4">
                     <TabsList>
                       <TabsTrigger value="preview">Preview</TabsTrigger>
                       <TabsTrigger value="html">HTML</TabsTrigger>
                     </TabsList>
-                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={handleCopyContent} disabled={isContentCopied}>
+                     <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                      <Button variant="outline" size="sm" onClick={handleCopyContent} disabled={isContentCopied} className="w-full">
                         {isContentCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                         Copy Content
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleCopy(finalHtmlContent, 'HTML')} disabled={isHtmlCopied}>
+                      <Button variant="outline" size="sm" onClick={() => handleCopy(finalHtmlContent, 'HTML')} disabled={isHtmlCopied} className="w-full">
                         {isHtmlCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                         Copy HTML
                       </Button>
                     </div>
                   </div>
-                  <TabsContent value="preview" className="border rounded-md p-6">
+                  <TabsContent value="preview" className="border rounded-md p-2 sm:p-6">
                     <div
                       className="prose dark:prose-invert max-w-none"
                       dangerouslySetInnerHTML={{ __html: finalHtmlContent }}
                     />
                   </TabsContent>
                   <TabsContent value="html">
-                    <pre className="p-4 bg-secondary rounded-md overflow-x-auto text-sm">
+                    <pre className="p-2 sm:p-4 bg-secondary rounded-md overflow-x-auto text-sm">
                       <code>{finalHtmlContent}</code>
                     </pre>
                   </TabsContent>
