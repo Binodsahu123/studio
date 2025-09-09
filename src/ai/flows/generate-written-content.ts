@@ -87,7 +87,7 @@ const generateWrittenContentFlow = ai.defineFlow(
       prompt: finalPrompt,
     });
     
-    const {output} = await aiprom-pt();
+    const {output} = await aiprompt();
 
     // Fallback for titles if the model doesn't generate them
     if (!output!.titles || output!.titles.length === 0) {
