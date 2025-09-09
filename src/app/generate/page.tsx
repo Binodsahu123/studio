@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText } from "lucide-react";
+import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic } from "lucide-react";
 
 const tools = [
   {
@@ -38,6 +38,14 @@ const tools = [
     description: "Create stunning visuals and art from a simple text description.",
     href: "/image",
     cta: "Generate Images",
+    active: true,
+  },
+  {
+    icon: <Mic className="h-8 w-8 text-primary" />,
+    title: "AI Voiceover Generator",
+    description: "Convert text into natural-sounding speech for your projects.",
+    href: "/voiceover",
+    cta: "Create Voiceover",
     active: true,
   },
   {

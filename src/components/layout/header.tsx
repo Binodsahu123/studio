@@ -26,6 +26,9 @@ export function Header() {
             <Button asChild variant="ghost">
                 <Link href="/image">Image Generation</Link>
             </Button>
+            <Button asChild variant="ghost">
+                <Link href="/voiceover">Voiceover</Link>
+            </Button>
              <Button asChild variant="ghost">
                 <Link href="/seo">SEO Tools</Link>
             </Button>
