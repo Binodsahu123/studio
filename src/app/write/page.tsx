@@ -30,8 +30,8 @@ const defaultPromptTemplate = `You are an expert SEO content writer. Your task i
 - **Language:** {{language}}. If Hindi, use clear and accessible general Hindi.
 - **Tone & Style:**
   - Write it like a human would. Use simple, conversational English. Avoid complex words and AI-like phrasing. The article should feel personal and authentic.
-  - Readability is crucial. Start with two introductory paragraphs that include searchable keywords.
-  - The article must be fully SEO optimized. The main title "{{title}}" should appear at least 10 times naturally within the content.
+- **Readability is crucial.** Start with two introductory paragraphs that include searchable keywords.
+- The article must be fully SEO optimized. The main title "{{title}}" should appear at least 10 times naturally within the content.
 - **Structure:**
   - The article MUST be in HTML format.
   - DO NOT include an <h1> tag or a main title inside the content itself. The content should start directly with the first section heading.
@@ -57,7 +57,6 @@ const formSchema = z.object({
   language: z.string().min(1, 'Please select a language.'),
   additionalTopic: z.string().optional(),
   customPrompt: z.string().optional(),
-  toneCategory: z.string().optional(),
 });
 
 export default function WritePage() {
@@ -76,7 +75,6 @@ export default function WritePage() {
       language: 'Hindi',
       additionalTopic: '',
       customPrompt: defaultPromptTemplate,
-      toneCategory: 'default',
     },
   });
 
@@ -152,52 +150,27 @@ export default function WritePage() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField
-                    control={form.control}
-                    name="language"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Language</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a language" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                              <SelectItem value="Hindi">Hindi</SelectItem>
-                              <SelectItem value="English">English</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                   <FormField
-                    control={form.control}
-                    name="toneCategory"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tone & Style</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a tone..." />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                              <SelectItem value="default">Default</SelectItem>
-                              <SelectItem value="tech-review">Tech Review</SelectItem>
-                              <SelectItem value="news-report">News Report</SelectItem>
-                              <SelectItem value="casual-blog-post">Casual Blog Post</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="language"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Language</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a language" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            <SelectItem value="Hindi">Hindi</SelectItem>
+                            <SelectItem value="English">English</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="title"
@@ -294,9 +267,6 @@ export default function WritePage() {
               <ul className="list-disc pl-6 space-y-3">
                 <li>
                   <strong>Language:</strong> Choose the language for your article. We now support a wide range of global languages.
-                </li>
-                 <li>
-                  <strong>Tone & Style:</strong> Select a style to guide the AI. Choosing 'Tech Review' will make the AI write in a more analytical, feature-focused tone, while 'Casual Blog Post' will result in a more personal and friendly tone. 'Default' is a general-purpose style.
                 </li>
                 <li>
                   <strong>Topic / Main Title:</strong> Be as specific as possible. Instead of "new phone," use "Samsung Galaxy S24 Ultra vs iPhone 15 Pro Max camera comparison." The more details you provide (like model names, features), the better the AI can tailor the content.
