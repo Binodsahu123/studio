@@ -12,12 +12,15 @@ const LICENSE_FILE_PATH = path.join(process.cwd(), '.license');
  */
 export async function activateLicense(formData: FormData) {
   const providedKey = formData.get('licenseKey') as string;
-  const secretKey = process.env.LICENSE_KEY;
+  const encodedKey = process.env.LICENSE_KEY;
 
-  if (!secretKey) {
+  if (!encodedKey) {
     // This is a server-side configuration error.
     throw new Error('LICENSE_KEY is not set in the environment variables.');
   }
+
+  // Decode the base64 key from environment variables
+  const secretKey = Buffer.from(encodedKey, 'base64').toString('utf-8');
 
   if (providedKey && providedKey.trim() === secretKey.trim()) {
     try {
