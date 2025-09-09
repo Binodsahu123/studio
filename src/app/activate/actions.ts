@@ -34,12 +34,12 @@ export async function activateLicense(formData: FormData) {
       console.error('Failed to write license file:', error);
       throw new Error('Could not activate the license. Please check file permissions.');
     }
-    // Redirect to the home page after successful activation.
-    redirect('/');
   } else {
     // This is not a server error, but a user error. We should handle this gracefully.
     // For simplicity, we'll throw an error, but a real app might redirect back with a query param.
     // NOTE: In a real app, you would redirect back to /activate?error=invalid_key
     throw new Error('The provided secret code is incorrect.');
   }
+
+  redirect('/');
 }
