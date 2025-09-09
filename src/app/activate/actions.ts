@@ -7,22 +7,17 @@ import { redirect } from 'next/navigation';
 
 const LICENSE_FILE_PATH = path.join(process.cwd(), '.license');
 
+// The secret key is defined directly here. It's safe because this is a server action
+// and this code will not be sent to the client.
+const SECRET_KEY = 'bbbbbhhhhhhhzzzzz007804888';
+
 /**
  * Verifies the submitted license key and creates a lock file upon success.
  */
 export async function activateLicense(formData: FormData) {
   const providedKey = formData.get('licenseKey') as string;
-  const encodedKey = process.env.LICENSE_KEY;
 
-  if (!encodedKey) {
-    // This is a server-side configuration error.
-    throw new Error('LICENSE_KEY is not set in the environment variables.');
-  }
-
-  // Decode the base64 key from environment variables
-  const secretKey = Buffer.from(encodedKey, 'base64').toString('utf-8');
-
-  if (providedKey && providedKey.trim() === secretKey.trim()) {
+  if (providedKey && providedKey.trim() === SECRET_KEY) {
     try {
       // Create a simple license file to indicate activation.
       const licenseData = JSON.stringify({
@@ -35,8 +30,7 @@ export async function activateLicense(formData: FormData) {
       throw new Error('Could not activate the license. Please check file permissions.');
     }
   } else {
-    // This is not a server error, but a user error. We should handle this gracefully.
-    // For simplicity, we'll throw an error, but a real app might redirect back with a query param.
+    // This is not a server error, but a user error.
     // NOTE: In a real app, you would redirect back to /activate?error=invalid_key
     throw new Error('The provided secret code is incorrect.');
   }
