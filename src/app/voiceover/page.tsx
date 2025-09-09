@@ -68,7 +68,7 @@ export default function VoiceoverGeneratorPage() {
     // Voices may load asynchronously.
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       loadVoices();
-      window.speechhSynthesis.onvoiceschanged = loadVoices;
+      window.speechSynthesis.onvoiceschanged = loadVoices;
     }
 
     // Cleanup: cancel any ongoing speech when the component unmounts.
