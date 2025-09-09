@@ -1,117 +1,78 @@
 // src/app/voiceover/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { generateVoiceover, GenerateVoiceoverInput, GenerateVoiceoverOutput } from '@/ai/flows/generate-voiceover';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Mic, Play, Pause, Square, Volume2 } from 'lucide-react';
+import { Loader2, Volume2, Download, Wand2 } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
 
 const formSchema = z.object({
   text: z.string().min(10, 'Please enter at least 10 characters.'),
   voice: z.string().min(1, 'Please select a voice.'),
-  rate: z.number().min(0.5).max(2),
-  pitch: z.number().min(0).max(2),
 });
 
+// Using only the allowed voice names from the error message.
+const voices = [
+    { value: 'gacrux', label: 'Hindi (India) - Female 1' },
+    { value: 'schedar', label: 'Hindi (India) - Male 1' },
+    { value: 'achernar', label: 'English (India) - Female' },
+    { value: 'algenib', label: 'English (India) - Male' },
+    { value: 'autonoe', label: 'English (US) - Female' },
+    { value: 'charon', label: 'English (US) - Male' },
+    { value: 'erinome', label: 'English (Australia) - Female' },
+    { value: 'iapetus', label: 'English (Australia) - Male' },
+    { value: 'despina', label: 'English (UK) - Male 1' },
+    { value: 'kore', label: 'English (UK) - Male 2' },
+    { value: 'laomedeia', label: 'English (UK) - Female 1' },
+    { value: 'leda', label: 'English (UK) - Female 2' },
+];
+
+
 export default function VoiceoverGeneratorPage() {
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [generatedAudio, setGeneratedAudio] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      text: '',
-      voice: '',
-      rate: 1,
-      pitch: 1,
+      text: 'Hello, this is a test of the text-to-speech voiceover generation system.',
+      voice: 'gacrux',
     },
   });
 
-  const loadVoices = () => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-        const availableVoices = window.speechSynthesis.getVoices();
-        const filteredVoices = availableVoices.filter(v => v.lang.startsWith('en') || v.lang.startsWith('hi'));
-        setVoices(filteredVoices);
-        if (filteredVoices.length > 0 && !form.getValues('voice')) {
-            // Set a default Hindi or English voice if available
-            const defaultVoice = filteredVoices.find(v => v.lang === 'hi-IN') || filteredVoices.find(v => v.lang === 'en-US') || filteredVoices[0];
-            form.setValue('voice', defaultVoice.voiceURI);
-        }
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    setGeneratedAudio(null);
+    try {
+      const input: GenerateVoiceoverInput = values;
+      const result: GenerateVoiceoverOutput = await generateVoiceover(input);
+      setGeneratedAudio(result.audioDataUri);
+      toast({
+        title: "Voiceover Generated!",
+        description: "Your audio is ready to be played or downloaded.",
+      });
+    } catch (error) {
+      console.error('Error generating voiceover:', error);
+      toast({
+        title: "Error Generating Voiceover",
+        description: "The AI model might be busy or an error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    // Load voices when the component mounts and when they change.
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      loadVoices();
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-    }
-
-    // Cleanup: cancel any ongoing speech when the component unmounts.
-    return () => {
-      if (typeof window !== 'undefined' && window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
-
-  const handleSpeech = (values: z.infer<typeof formSchema>) => {
-    if (typeof window === 'undefined' || !window.speechSynthesis) {
-        toast({ title: "Speech Synthesis not supported in this browser.", variant: "destructive"});
-        return;
-    }
-
-    if (isSpeaking) {
-        window.speechSynthesis.pause();
-        setIsSpeaking(false);
-        return;
-    }
-    
-    window.speechSynthesis.cancel(); // Clear any previous speech
-
-    const utterance = new SpeechSynthesisUtterance(values.text);
-    const selectedVoice = voices.find(v => v.voiceURI === values.voice);
-
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-    } else {
-      toast({ title: "Selected voice not found.", description: "Please select another voice.", variant: "destructive"});
-      return;
-    }
-
-    utterance.pitch = values.pitch;
-    utterance.rate = values.rate;
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => {
-        setIsSpeaking(false);
-        toast({ title: "An error occurred during speech.", variant: "destructive"});
-    };
-    
-    window.speechSynthesis.speak(utterance);
-  };
-  
-  const handleStop = () => {
-      if (typeof window !== 'undefined' && window.speechSynthesis) {
-          window.speechSynthesis.cancel();
-          setIsSpeaking(false);
-      }
   }
-
-  const englishVoices = voices.filter(v => v.lang.startsWith('en'));
-  const hindiVoices = voices.filter(v => v.lang.startsWith('hi'));
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -124,14 +85,14 @@ export default function VoiceoverGeneratorPage() {
                 <div className="flex items-center gap-3">
                   <Volume2 className="h-8 w-8 text-primary" />
                   <div>
-                    <CardTitle className="text-3xl">Browser-Based Voiceover</CardTitle>
-                    <CardDescription>Convert text to speech using your browser's built-in engine. No API needed.</CardDescription>
+                    <CardTitle className="text-3xl">AI Voiceover Generator</CardTitle>
+                    <CardDescription>Convert text into high-quality, natural-sounding speech.</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(handleSpeech)} className="space-y-6">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField
                       control={form.control}
                       name="text"
@@ -151,93 +112,73 @@ export default function VoiceoverGeneratorPage() {
                         render={({ field }) => (
                             <FormItem>
                             <FormLabel>Select a Voice</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
-                                <SelectTrigger disabled={voices.length === 0}>
-                                    <SelectValue placeholder={voices.length > 0 ? "Choose a voice..." : "No voices available"} />
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Choose a voice..." />
                                 </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    {hindiVoices.length > 0 && (
-                                        <SelectGroup>
-                                            <SelectLabel>Hindi Voices</SelectLabel>
-                                            {hindiVoices.map(voice => (
-                                                <SelectItem key={voice.voiceURI} value={voice.voiceURI}>
-                                                    {`${voice.name} (${voice.lang})`}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    )}
-                                     {englishVoices.length > 0 && (
-                                        <SelectGroup>
-                                            <SelectLabel>English Voices</SelectLabel>
-                                            {englishVoices.map(voice => (
-                                                <SelectItem key={voice.voiceURI} value={voice.voiceURI}>
-                                                    {`${voice.name} (${voice.lang})`}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectGroup>
-                                    )}
+                                    {voices.map(voice => (
+                                        <SelectItem key={voice.value} value={voice.value}>
+                                            {voice.label}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                             <FormMessage />
                             </FormItem>
                         )}
                     />
-
-                    <FormField
-                        control={form.control}
-                        name="rate"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Speed (Rate): {field.value.toFixed(1)}</FormLabel>
-                                <FormControl>
-                                    <Slider
-                                        min={0.5}
-                                        max={2}
-                                        step={0.1}
-                                        defaultValue={[field.value]}
-                                        onValueChange={(values) => field.onChange(values[0])}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-
-                    <FormField
-                        control={form.control}
-                        name="pitch"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Pitch (Tone): {field.value.toFixed(1)}</FormLabel>
-                                <FormControl>
-                                    <Slider
-                                        min={0}
-                                        max={2}
-                                        step={0.1}
-                                        defaultValue={[field.value]}
-                                        onValueChange={(values) => field.onChange(values[0])}
-                                    />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-
-                    <div className="flex gap-4">
-                        <Button type="submit" size="lg">
-                            {isSpeaking ? <Pause className="mr-2 h-4 w-4" /> : <Play className="mr-2 h-4 w-4" />}
-                            {isSpeaking ? 'Pause' : 'Play'}
-                        </Button>
-                         <Button type="button" variant="outline" size="lg" onClick={handleStop} disabled={!isSpeaking}>
-                            <Square className="mr-2 h-4 w-4" />
-                            Stop
-                        </Button>
-                    </div>
+                    <Button type="submit" disabled={isLoading} size="lg">
+                      {isLoading ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Wand2 className="mr-2 h-4 w-4" />
+                      )}
+                      {isLoading ? 'Generating...' : 'Generate Voiceover'}
+                    </Button>
                   </form>
                 </Form>
               </CardContent>
             </Card>
           </div>
+          
+          {(isLoading || generatedAudio) && (
+            <div className="md:col-span-2">
+                <Card>
+                <CardHeader>
+                    <CardTitle>Your Audio</CardTitle>
+                    <CardDescription>Listen to the generated voiceover below.</CardDescription>
+                </CardHeader>
+                <CardContent className="min-h-[100px] flex items-center justify-center bg-secondary rounded-md">
+                    {isLoading && (
+                    <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                        <p>Generating your audio...</p>
+                    </div>
+                    )}
+                    {!isLoading && generatedAudio && (
+                        <div className="w-full space-y-4">
+                            <audio controls src={generatedAudio} className="w-full">
+                                Your browser does not support the audio element.
+                            </audio>
+                             <a
+                                href={generatedAudio}
+                                download={`writebot-ai-voiceover-${Date.now()}.wav`}
+                                className="inline-block w-full"
+                            >
+                                <Button className="w-full" variant="outline">
+                                    <Download className="mr-2 h-4 w-4" />
+                                    Download WAV File
+                                </Button>
+                            </a>
+                        </div>
+                    )}
+                </CardContent>
+                </Card>
+            </div>
+            )}
         </div>
       </main>
       <Footer />
