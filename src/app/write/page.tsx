@@ -26,7 +26,6 @@ const formSchema = z.object({
   shortDescription: z.string().optional(),
   language: z.string().min(1, 'Please select a language.'),
   additionalTopic: z.string().optional(),
-  toneCategory: z.string().min(1, 'Please select a tone.'),
 });
 
 export default function WritePage() {
@@ -44,7 +43,6 @@ export default function WritePage() {
       shortDescription: '',
       language: 'English',
       additionalTopic: '',
-      toneCategory: 'Casual Blog Post',
     },
   });
 
@@ -120,51 +118,27 @@ export default function WritePage() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <FormField
-                    control={form.control}
-                    name="language"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Language</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a language" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                              <SelectItem value="English">English</SelectItem>
-                              <SelectItem value="Hindi">Hindi</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="toneCategory"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tone & Style</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a tone..." />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                              <SelectItem value="Casual Blog Post">Casual Blog Post</SelectItem>
-                              <SelectItem value="Tech Review">Tech Review</SelectItem>
-                              <SelectItem value="News Report">News Report</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="language"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Language</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a language" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            <SelectItem value="English">English</SelectItem>
+                            <SelectItem value="Hindi">Hindi</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="title"
@@ -228,9 +202,6 @@ export default function WritePage() {
                 To get the best results from our AI Content Writer, please follow these guidelines when filling out the form:
               </p>
               <ul className="list-disc pl-6 space-y-3">
-                <li>
-                  <strong>Tone & Style:</strong> Choose a style that matches your needs. The AI will use a pre-written, human-quality article as a guide to replicate the tone, voice, and structure.
-                </li>
                 <li>
                   <strong>Topic / Main Title:</strong> Be as specific as possible. Instead of "new phone," use "Samsung Galaxy S24 Ultra vs iPhone 15 Pro Max camera comparison." The more details you provide, the better the AI can tailor the content.
                 </li>
