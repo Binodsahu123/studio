@@ -1,7 +1,7 @@
 // src/app/voiceover/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -9,80 +9,133 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Mic, Play, Download, Volume2 } from 'lucide-react';
+import { Loader2, Mic, Play, Pause, Volume2 } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { generateVoiceover, GenerateVoiceoverInput, GenerateVoiceoverOutput } from '@/ai/flows/generate-voiceover';
+import { Slider } from "@/components/ui/slider";
+
 
 const formSchema = z.object({
   text: z.string().min(10, 'Please enter at least 10 characters.'),
-  voice: z.string().min(1, 'Please select a voice.'),
+  voice: z.string().optional(),
+  rate: z.number().min(0.5).max(2),
+  pitch: z.number().min(0).max(2),
 });
 
-// High-quality voices available from the Google AI API
-const voices = [
-    { name: 'Algenib', description: 'English (US), Male' },
-    { name: 'Achernar', description: 'English (US), Female' },
-    { name: 'Umbriel', description: 'English (UK), Male' },
-    { name: 'Rasalgethi', description: 'English (UK), Female' },
-    { name: 'Sadalmelik', description: 'English (India), Female' },
-    { name: 'Male-IN-1', description: 'Hindi (India), Male' },
-    { name: 'Female-IN-1', description: 'Hindi (India), Female' },
-    { name: 'Female-IN-2', description: 'Hindi (India), Female 2' },
-];
-
+interface VoiceOption {
+  name: string;
+  lang: string;
+  voice: SpeechSynthesisVoice;
+}
 
 export default function VoiceoverGeneratorPage() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [audioDataUri, setAudioDataUri] = useState<string | null>(null);
+  const [voices, setVoices] = useState<VoiceOption[]>([]);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: '',
-      voice: 'Female-IN-1', // Default to a high-quality Hindi voice
+      voice: '',
+      rate: 1,
+      pitch: 1,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    setAudioDataUri(null);
-    try {
-      const input: GenerateVoiceoverInput = values;
-      const result: GenerateVoiceoverOutput = await generateVoiceover(input);
-      setAudioDataUri(result.audioDataUri);
+  useEffect(() => {
+    function loadVoices() {
+      const availableVoices = window.speechSynthesis.getVoices();
+      if (availableVoices.length > 0) {
+        const filteredVoices = availableVoices
+          .filter(v => v.lang.startsWith('en') || v.lang.startsWith('hi'))
+          .map(v => ({ name: `${v.name} (${v.lang})`, lang: v.lang, voice: v }));
+        
+        setVoices(filteredVoices);
+        
+        // Set a default Hindi voice if available
+        const defaultHindiVoice = filteredVoices.find(v => v.lang === 'hi-IN');
+        if (defaultHindiVoice) {
+            form.setValue('voice', defaultHindiVoice.name);
+        } else if (filteredVoices.length > 0) {
+            form.setValue('voice', filteredVoices[0].name);
+        }
+      }
+    }
+
+    // Voices may load asynchronously.
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      loadVoices();
+      window.speechhSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    // Cleanup: cancel any ongoing speech when the component unmounts.
+    return () => {
+        if (typeof window !== 'undefined' && window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+    };
+  }, [form]);
+  
+  function handlePlayPause() {
+    if (isSpeaking) {
+        window.speechSynthesis.pause();
+        setIsSpeaking(false);
+    } else {
+        if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+            setIsSpeaking(true);
+        } else {
+            onSubmit(form.getValues());
+        }
+    }
+  }
+  
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!window.speechSynthesis) {
       toast({
-        title: "Voiceover Generated!",
-        description: "Your audio is ready to be played or downloaded.",
-      });
-    } catch (error) {
-      console.error('Error generating voiceover:', error);
-      toast({
-        title: "Error Generating Voiceover",
-        description: "The AI model might be busy. Please try again in a moment.",
+        title: "Browser Not Supported",
+        description: "Your browser does not support the Web Speech API.",
         variant: "destructive",
       });
-    } finally {
-      setIsLoading(false);
+      return;
     }
+    
+    // Cancel any previous speech
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(values.text);
+    const selectedVoice = voices.find(v => v.name === values.voice);
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice.voice;
+    }
+    
+    utterance.rate = values.rate;
+    utterance.pitch = values.pitch;
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onpause = () => setIsSpeaking(false);
+    utterance.onresume = () => setIsSpeaking(true);
+
+    window.speechSynthesis.speak(utterance);
   }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div className="md:col-span-2">
+        <div className="max-w-4xl mx-auto">
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <Mic className="h-8 w-8 text-primary" />
                   <div>
                     <CardTitle className="text-3xl">AI Voiceover Generator</CardTitle>
-                    <CardDescription>Convert text into high-quality, natural-sounding speech using AI.</CardDescription>
+                    <CardDescription>Convert text into speech directly in your browser. No API key needed.</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -102,77 +155,102 @@ export default function VoiceoverGeneratorPage() {
                         </FormItem>
                       )}
                     />
-                    <FormField
-                      control={form.control}
-                      name="voice"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Voice Selection</FormLabel>
-                           <Select onValueChange={field.onChange} value={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a voice" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                                {voices.map(v => (
-                                    <SelectItem key={v.name} value={v.name}>
-                                        {v.description}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit" size="lg" disabled={isLoading}>
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...
-                        </>
-                      ) : (
-                        <>
-                          <Play className="mr-2 h-4 w-4" /> Generate Voiceover
-                        </>
-                      )}
-                    </Button>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <FormField
+                            control={form.control}
+                            name="voice"
+                            render={({ field }) => (
+                                <FormItem className="md:col-span-2">
+                                <FormLabel>Voice Selection</FormLabel>
+                                <Select onValueChange={field.onChange} value={field.value}>
+                                    <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a voice..." />
+                                    </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {voices.length > 0 ? voices.map(v => (
+                                            <SelectItem key={v.name} value={v.name}>
+                                                {v.name}
+                                            </SelectItem>
+                                        )) : <SelectItem value="loading" disabled>Loading voices...</SelectItem>}
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="button" size="lg" onClick={handlePlayPause} className="self-end h-16 text-xl">
+                            {isSpeaking ? (
+                            <>
+                                <Pause className="mr-2 h-6 w-6" /> Pause
+                            </>
+                            ) : (
+                            <>
+                                <Play className="mr-2 h-6 w-6" /> Play
+                            </>
+                            )}
+                        </Button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                        <FormField
+                            control={form.control}
+                            name="rate"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Speed (Rate): {field.value}</FormLabel>
+                                    <FormControl>
+                                        <Slider
+                                            min={0.5}
+                                            max={2}
+                                            step={0.1}
+                                            defaultValue={[field.value]}
+                                            onValueChange={(vals) => field.onChange(vals[0])}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="pitch"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Tone (Pitch): {field.value}</FormLabel>
+                                    <FormControl>
+                                        <Slider
+                                            min={0}
+                                            max={2}
+                                            step={0.1}
+                                            defaultValue={[field.value]}
+                                            onValueChange={(vals) => field.onChange(vals[0])}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
                   </form>
                 </Form>
+                 <Card className="mt-8">
+                     <CardHeader>
+                        <CardTitle>Important Notes</CardTitle>
+                     </CardHeader>
+                     <CardContent className="text-sm text-muted-foreground space-y-2">
+                        <p>
+                           <Volume2 className="inline-block h-4 w-4 mr-2" />
+                           Voice quality and available voices (including Hindi Male/Female) depend entirely on your browser (Chrome, Safari, etc.) and Operating System (Windows, macOS, Android). This tool uses the voices installed on your device.
+                        </p>
+                        <p>
+                           <Volume2 className="inline-block h-4 w-4 mr-2" />
+                           For best results with Hindi voices, we recommend using the latest version of Google Chrome on a Windows or Android device.
+                        </p>
+                     </CardContent>
+                 </Card>
               </CardContent>
             </Card>
-          </div>
-          
-          <div className="md:col-span-2">
-             <Card>
-              <CardHeader>
-                <CardTitle>Your Generated Audio</CardTitle>
-                <CardDescription>Your generated voiceover will appear here.</CardDescription>
-              </CardHeader>
-              <CardContent className="min-h-[150px] flex flex-col items-center justify-center bg-secondary rounded-md p-6 text-center">
-                 {isLoading && <Loader2 className="h-12 w-12 animate-spin text-primary" />}
-                 {!isLoading && !audioDataUri && (
-                     <>
-                        <Volume2 className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-                        <p className="text-muted-foreground">Your audio will be available here once generated.</p>
-                     </>
-                 )}
-                 {audioDataUri && (
-                   <div className="w-full space-y-4">
-                     <audio controls src={audioDataUri} className="w-full">
-                       Your browser does not support the audio element.
-                     </audio>
-                     <Button asChild>
-                       <a href={audioDataUri} download={`writebot-voiceover-${Date.now()}.wav`}>
-                         <Download className="mr-2 h-4 w-4" />
-                         Download WAV
-                       </a>
-                     </Button>
-                   </div>
-                 )}
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </main>
       <Footer />
