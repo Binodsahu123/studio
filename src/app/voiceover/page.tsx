@@ -1,7 +1,7 @@
 // src/app/voiceover/page.tsx
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -9,95 +9,66 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, Mic, Play, Square, Volume2 } from 'lucide-react';
+import { Loader2, Mic, Play, Download, Volume2 } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { generateVoiceover, GenerateVoiceoverInput, GenerateVoiceoverOutput } from '@/ai/flows/generate-voiceover';
 
 const formSchema = z.object({
-  text: z.string().min(1, 'Please enter some text.'),
+  text: z.string().min(10, 'Please enter at least 10 characters.'),
   voice: z.string().min(1, 'Please select a voice.'),
 });
 
+// High-quality voices available from the Google AI API
+const voices = [
+    { name: 'Algenib', description: 'English (US), Male' },
+    { name: 'Achernar', description: 'English (US), Female' },
+    { name: 'Umbriel', description: 'English (UK), Male' },
+    { name: 'Rasalgethi', description: 'English (UK), Female' },
+    { name: 'Sadalmelik', description: 'English (India), Female' },
+    { name: 'Male-IN-1', description: 'Hindi (India), Male' },
+    { name: 'Female-IN-1', description: 'Hindi (India), Female' },
+    { name: 'Female-IN-2', description: 'Hindi (India), Female 2' },
+];
+
+
 export default function VoiceoverGeneratorPage() {
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [audioDataUri, setAudioDataUri] = useState<string | null>(null);
   const { toast } = useToast();
-
-  const populateVoiceList = useCallback(() => {
-    if (typeof window === 'undefined' || !window.speechSynthesis) return;
-    const availableVoices = window.speechSynthesis.getVoices();
-    const filteredVoices = availableVoices.filter(
-      (voice) => voice.lang.startsWith('en') || voice.lang.startsWith('hi')
-    );
-    setVoices(filteredVoices);
-  }, []);
-
-  useEffect(() => {
-    // speechSynthesis.getVoices() is often asynchronous.
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-        populateVoiceList();
-        if (window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = populateVoiceList;
-        }
-    }
-  }, [populateVoiceList]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: '',
-      voice: '',
+      voice: 'Female-IN-1', // Default to a high-quality Hindi voice
     },
   });
 
-  const handleSpeech = (values: z.infer<typeof formSchema>) => {
-    if (typeof window === 'undefined' || !window.speechSynthesis) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+    setAudioDataUri(null);
+    try {
+      const input: GenerateVoiceoverInput = values;
+      const result: GenerateVoiceoverOutput = await generateVoiceover(input);
+      setAudioDataUri(result.audioDataUri);
       toast({
-        title: "Speech Synthesis not supported",
-        description: "Your browser does not support this feature.",
+        title: "Voiceover Generated!",
+        description: "Your audio is ready to be played or downloaded.",
+      });
+    } catch (error) {
+      console.error('Error generating voiceover:', error);
+      toast({
+        title: "Error Generating Voiceover",
+        description: "The AI model might be busy. Please try again in a moment.",
         variant: "destructive",
       });
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-      return;
-    }
-    
-    const utterance = new SpeechSynthesisUtterance(values.text);
-    const selectedVoice = voices.find(v => v.name === values.voice);
-    
-    if (selectedVoice) {
-      utterance.voice = selectedVoice;
-      utterance.lang = selectedVoice.lang;
-    } else {
-        toast({ title: "Voice not found", variant: "destructive" });
-        return;
-    }
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = (event) => {
-        setIsSpeaking(false);
-        toast({ title: "An error occurred", description: event.error, variant: "destructive" });
-    };
-
-    window.speechSynthesis.speak(utterance);
-  };
-  
-  useEffect(() => {
-    // Set a default voice once voices are loaded
-    if (voices.length > 0 && !form.getValues('voice')) {
-        const hindiFemale = voices.find(v => v.lang === 'hi-IN' && v.name.includes('Google हिन्दी'));
-        const englishMale = voices.find(v => v.lang === 'en-US' && v.name.includes('Google US English'));
-        form.setValue('voice', hindiFemale?.name || englishMale?.name || voices[0].name);
-    }
-  }, [voices, form]);
-
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -110,14 +81,14 @@ export default function VoiceoverGeneratorPage() {
                 <div className="flex items-center gap-3">
                   <Mic className="h-8 w-8 text-primary" />
                   <div>
-                    <CardTitle className="text-3xl">Browser Text-to-Speech</CardTitle>
-                    <CardDescription>Convert text into speech using your browser's built-in engine. No API key needed.</CardDescription>
+                    <CardTitle className="text-3xl">AI Voiceover Generator</CardTitle>
+                    <CardDescription>Convert text into high-quality, natural-sounding speech using AI.</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(handleSpeech)} className="space-y-6">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField
                       control={form.control}
                       name="text"
@@ -137,16 +108,16 @@ export default function VoiceoverGeneratorPage() {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Voice Selection</FormLabel>
-                           <Select onValueChange={field.onChange} value={field.value} disabled={voices.length === 0}>
+                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder={voices.length > 0 ? "Select a voice" : "Loading voices..."} />
+                                <SelectValue placeholder="Select a voice" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
                                 {voices.map(v => (
                                     <SelectItem key={v.name} value={v.name}>
-                                        {v.name} ({v.lang})
+                                        {v.description}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -155,14 +126,14 @@ export default function VoiceoverGeneratorPage() {
                         </FormItem>
                       )}
                     />
-                    <Button type="submit" size="lg">
-                      {isSpeaking ? (
+                    <Button type="submit" size="lg" disabled={isLoading}>
+                      {isLoading ? (
                         <>
-                          <Square className="mr-2 h-4 w-4" /> Stop Speaking
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Generating...
                         </>
                       ) : (
                         <>
-                          <Play className="mr-2 h-4 w-4" /> Speak
+                          <Play className="mr-2 h-4 w-4" /> Generate Voiceover
                         </>
                       )}
                     </Button>
@@ -173,17 +144,32 @@ export default function VoiceoverGeneratorPage() {
           </div>
           
           <div className="md:col-span-2">
-            <Card>
+             <Card>
               <CardHeader>
-                <CardTitle>Important Note</CardTitle>
-                <CardDescription>Understanding the limitations of browser-based TTS.</CardDescription>
+                <CardTitle>Your Generated Audio</CardTitle>
+                <CardDescription>Your generated voiceover will appear here.</CardDescription>
               </CardHeader>
               <CardContent className="min-h-[150px] flex flex-col items-center justify-center bg-secondary rounded-md p-6 text-center">
-                 <Volume2 className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-                 <p className="text-muted-foreground">
-                    The voice quality and available languages depend entirely on your browser and operating system.
-                    This feature works offline but may sound more robotic than cloud-based AI voices.
-                 </p>
+                 {isLoading && <Loader2 className="h-12 w-12 animate-spin text-primary" />}
+                 {!isLoading && !audioDataUri && (
+                     <>
+                        <Volume2 className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+                        <p className="text-muted-foreground">Your audio will be available here once generated.</p>
+                     </>
+                 )}
+                 {audioDataUri && (
+                   <div className="w-full space-y-4">
+                     <audio controls src={audioDataUri} className="w-full">
+                       Your browser does not support the audio element.
+                     </audio>
+                     <Button asChild>
+                       <a href={audioDataUri} download={`writebot-voiceover-${Date.now()}.wav`}>
+                         <Download className="mr-2 h-4 w-4" />
+                         Download WAV
+                       </a>
+                     </Button>
+                   </div>
+                 )}
               </CardContent>
             </Card>
           </div>
