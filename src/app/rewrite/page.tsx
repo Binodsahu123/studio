@@ -20,6 +20,7 @@ const toneCategories = [
     { value: 'Casual Blog Post', label: 'Casual Blog Post' },
     { value: 'Professional Email', label: 'Professional Email' },
     { value: 'News Report', label: 'News Report' },
+    { value: 'Smartphone Review', label: 'Smartphone Review' },
 ];
 
 const formSchema = z.object({
@@ -49,7 +50,7 @@ export default function RewritePage() {
     try {
       const input: RewriteContentInput = {
         ...values,
-        toneCategory: values.toneCategory as "Casual Blog Post" | "Professional Email" | "News Report",
+        toneCategory: values.toneCategory as "Casual Blog Post" | "Professional Email" | "News Report" | "Smartphone Review",
       };
       const result: RewriteContentOutput = await rewriteContent(input);
       setRewrittenContent(result.rewrittenText);
