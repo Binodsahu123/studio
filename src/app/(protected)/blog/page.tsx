@@ -348,7 +348,7 @@ export default function BlogWorkflowPage() {
                                     </TabsContent>
                                     <TabsContent value="html">
                                         <pre className="p-4 bg-secondary rounded-md overflow-x-auto text-sm">
-                                            <code>{`<h1>${form.getVlues('selectedTitle')}</h1>\n${finalArticle}`}</code>
+                                            <code>{`<h1>${form.getValues('selectedTitle')}</h1>\n${finalArticle}`}</code>
                                         </pre>
                                     </TabsContent>
                                 </Tabs>
