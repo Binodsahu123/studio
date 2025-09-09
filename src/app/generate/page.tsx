@@ -33,12 +33,12 @@ const tools = [
     active: true,
   },
   {
-    icon: <Construction className="h-8 w-8 text-muted-foreground" />,
+    icon: <ImageIcon className="h-8 w-8 text-primary" />,
     title: "AI Image Generator",
-    description: "This feature is under construction. Create stunning visuals and art from a simple text description.",
+    description: "Create stunning visuals and art from a simple text description.",
     href: "/image",
-    cta: "Coming Soon",
-    active: false,
+    cta: "Generate Images",
+    active: true,
   },
   {
     icon: <ShieldCheck className="h-8 w-8 text-primary" />,

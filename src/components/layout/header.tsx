@@ -23,7 +23,7 @@ export function Header() {
             <Button asChild variant="ghost">
                 <Link href="/write">Write Content</Link>
             </Button>
-            <Button asChild variant="ghost" disabled>
+            <Button asChild variant="ghost">
                 <Link href="/image">Image Generation</Link>
             </Button>
              <Button asChild variant="ghost">
