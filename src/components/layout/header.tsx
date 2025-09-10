@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PenTool, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const navLinks = [
     { href: "/#features", label: "Features" },
@@ -47,28 +48,31 @@ export function Header() {
               </SheetTrigger>
               <SheetContent side="right">
                  <SheetHeader>
-                    <SheetTitle className="sr-only">Mobile Menu</SheetTitle>
+                    <SheetTitle>
+                        <Link href="/" className="flex items-center space-x-2">
+                            <PenTool className="h-6 w-6 text-primary" />
+                            <span className="font-bold">WriteBot AI</span>
+                        </Link>
+                    </SheetTitle>
                   </SheetHeader>
-                <div className="flex flex-col space-y-4 mt-4">
-                  <Link href="/" className="mr-6 flex items-center space-x-2">
-                     <PenTool className="h-6 w-6 text-primary" />
-                     <span className="font-bold">WriteBot AI</span>
-                  </Link>
-                  <div className="flex flex-col space-y-2">
-                    {navLinks.map((link) => (
-                        <SheetClose asChild key={link.href}>
-                            <Link href={link.href} className="block px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary rounded-md">
-                                {link.label}
-                            </Link>
-                        </SheetClose>
-                    ))}
+                  <ScrollArea className="h-[calc(100vh-8rem)]">
+                    <div className="flex flex-col space-y-2 px-4 py-6">
+                        {navLinks.map((link) => (
+                            <SheetClose asChild key={link.href}>
+                                <Link href={link.href} className="block px-4 py-2 text-base text-muted-foreground hover:text-foreground hover:bg-secondary rounded-md">
+                                    {link.label}
+                                </Link>
+                            </SheetClose>
+                        ))}
+                    </div>
+                  </ScrollArea>
+                  <div className="p-4 absolute bottom-0 w-[calc(100%-2rem)]">
+                    <SheetClose asChild>
+                        <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 w-full">
+                            <Link href="/generate">Start Creating Today</Link>
+                        </Button>
+                    </SheetClose>
                   </div>
-                  <SheetClose asChild>
-                    <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 w-full mt-4">
-                        <Link href="/generate">Start Creating Today</Link>
-                    </Button>
-                  </SheetClose>
-                </div>
               </SheetContent>
             </Sheet>
           </div>
