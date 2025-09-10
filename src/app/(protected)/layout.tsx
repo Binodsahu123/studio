@@ -1,28 +1,21 @@
 // src/app/(protected)/layout.tsx
-import { promises as fs } from 'fs';
-import path from 'path';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { ReactNode } from 'react';
 
-const LICENSE_FILE_PATH = path.join(process.cwd(), '.license');
-
-async function isActivated() {
-  try {
-    await fs.stat(LICENSE_FILE_PATH);
-    return true;
-  } catch (error) {
-    return false;
-  }
+function isActivated() {
+  const cookieStore = cookies();
+  const activationCookie = cookieStore.get('activation');
+  // Check if the cookie exists and has the expected value 'true'
+  return activationCookie?.value === 'true';
 }
 
-export default async function ProtectedLayout({
+export default function ProtectedLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const activated = await isActivated();
-
-  if (!activated) {
+  if (!isActivated()) {
     redirect('/activate');
   }
 
