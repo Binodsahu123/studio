@@ -14,10 +14,10 @@ export function Footer() {
             © {new Date().getFullYear()} WriteBot AI. All rights reserved.
           </p>
           <div className="flex space-x-4">
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="/privacy-policy" className="text-sm text-muted-foreground hover:text-foreground">
               Privacy Policy
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link href="/terms-of-service" className="text-sm text-muted-foreground hover:text-foreground">
               Terms of Service
             </Link>
           </div>
