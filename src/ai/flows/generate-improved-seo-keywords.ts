@@ -13,6 +13,7 @@ import {z} from 'genkit';
 const GenerateImprovedSeoKeywordsInputSchema = z.object({
   originalKeywords: z
     .string()
+    .optional()
     .describe('The original SEO keywords to be improved.'),
   contentTopic: z.string().describe('The main topic of the content.'),
 });
@@ -56,7 +57,7 @@ const prompt = ai.definePrompt({
   name: 'generateImprovedSeoKeywordsPrompt',
   input: {schema: GenerateImprovedSeoKeywordsInputSchema},
   output: {schema: GenerateImprovedSeoKeywordsOutputSchema},
-  prompt: `You are an expert SEO strategist and content analyst. Your task is to analyze the provided topic and keywords and generate a list of 10-15 improved, high-potential SEO keywords.
+  prompt: `You are an expert SEO strategist and content analyst. Your task is to analyze the provided topic and optional keywords and generate a list of 10-15 improved, high-potential SEO keywords.
 
 For EACH suggested keyword, you must provide a detailed analysis including:
 1.  **keyword**: The improved SEO keyword itself.
@@ -64,8 +65,10 @@ For EACH suggested keyword, you must provide a detailed analysis including:
 3.  **viralityPotential**: Estimate the potential for content about this keyword to go viral as 'Low', 'Medium', or 'High'.
 4.  **suggestedTitles**: Provide 2-3 catchy, click-worthy blog titles that would work well for an article targeting this keyword.
 
-Original Keywords: {{{originalKeywords}}}
 Content Topic: {{{contentTopic}}}
+{{#if originalKeywords}}
+Original Keywords (for context): {{{originalKeywords}}}
+{{/if}}
 
 Return the full analysis as a JSON object containing an array of keyword analysis objects.`,
 });
