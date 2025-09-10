@@ -95,25 +95,17 @@ export function Tools() {
           </p>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:max-w-4xl lg:mx-auto">
           {tools.map((tool) => (
-            <Link href={tool.href} key={tool.title} className="block group h-full">
-              <Card className="flex flex-col h-full transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-lg group-hover:-translate-y-1">
-                <CardHeader>
-                  <div className="flex items-center gap-4">
-                    {tool.icon}
-                    <CardTitle className="text-2xl">{tool.title}</CardTitle>
+             <Link href={tool.href} key={tool.title} className="block group h-full">
+              <Card className="flex flex-col md:flex-row h-full transition-all duration-300 group-hover:border-primary/50 group-hover:shadow-lg group-hover:-translate-y-1 p-6 items-start md:items-center gap-6">
+                  {tool.icon}
+                  <div className="flex-1">
+                    <CardTitle className="text-2xl mb-2">{tool.title}</CardTitle>
+                    <CardDescription className="text-base">
+                        {tool.description}
+                    </CardDescription>
                   </div>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col justify-between">
-                  <CardDescription className="text-base mb-4">
-                    {tool.description}
-                  </CardDescription>
-                   <div className="flex items-center font-semibold text-primary group-hover:text-primary/80">
-                    {tool.cta}
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </div>
-                </CardContent>
               </Card>
             </Link>
           ))}
