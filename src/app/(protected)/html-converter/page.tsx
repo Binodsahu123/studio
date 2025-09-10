@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, FileCode, Copy, Check } from 'lucide-react';
+import { Loader2, FileCode, Copy, Check, HelpCircle } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
@@ -104,7 +104,7 @@ export default function HtmlConverterPage() {
           </div>
           
           {(isLoading || convertedHtml) && (
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 space-y-8">
               <Card>
                 <CardHeader>
                   <div className="flex justify-between items-center">
@@ -148,6 +148,41 @@ export default function HtmlConverterPage() {
                   )}
                 </CardContent>
               </Card>
+               {convertedHtml && (
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center gap-3">
+                      <HelpCircle className="h-8 w-8 text-primary" />
+                      <div>
+                        <CardTitle>How to Use the HTML</CardTitle>
+                        <CardDescription>Follow these steps to publish your content.</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4 text-muted-foreground">
+                    <p>
+                      You can now use this generated HTML code in any Content Management System (CMS) like WordPress, Ghost, or even a custom-built website.
+                    </p>
+                    <ol className="list-decimal pl-6 space-y-3">
+                      <li>
+                        <strong>Copy the Code:</strong> Click the "Copy HTML" button above to copy the entire code block to your clipboard.
+                      </li>
+                      <li>
+                        <strong>Navigate to Your Editor:</strong> Open the post or page editor in your CMS (e.g., WordPress).
+                      </li>
+                      <li>
+                        <strong>Switch to Code/HTML View:</strong> Find the option to switch from the visual editor to the code, text, or HTML editor. In WordPress, this is often labeled as "Code editor" or found under an options menu (usually three vertical dots).
+                      </li>
+                      <li>
+                        <strong>Paste the Code:</strong> Paste the copied HTML directly into the code editor.
+                      </li>
+                      <li>
+                        <strong>Preview and Publish:</strong> Switch back to the visual editor to see how it looks. Once you're happy with the result, you can publish your post.
+                      </li>
+                    </ol>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
         </div>
