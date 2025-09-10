@@ -53,7 +53,7 @@ export default function TermsOfServicePage() {
             <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. We will provide notice of any changes by posting the new Terms on this page.</p>
 
             <h2>9. Contact Us</h2>
-            <p>If you have any questions about these Terms, please contact us at: support@writebotai.com</p>
+            <p>If you have any questions about these Terms, please contact us at: newtaqat@gmail.com</p>
           </CardContent>
         </Card>
       </main>
