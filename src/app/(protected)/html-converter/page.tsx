@@ -161,7 +161,7 @@ export default function HtmlConverterPage() {
                   </CardHeader>
                   <CardContent className="space-y-4 text-muted-foreground">
                     <p>
-                      You can now use this generated HTML code in any Content Management System (CMS) like WordPress, Ghost, or even a custom-built website.
+                      You can now use this generated HTML code in any Content Management System (CMS) like WordPress, Ghost, or even a custom-built website. This tool is special because it automatically adds SEO-friendly tags like `<h2>`, `<h3>`, and `<strong>` to structure your content for better search engine visibility.
                     </p>
                     <ol className="list-decimal pl-6 space-y-3">
                       <li>
@@ -173,7 +173,7 @@ export default function HtmlConverterPage() {
                       <li>
                         <strong>Switch to Code/HTML View:</strong> Find the option to switch from the visual editor to the code, text, or HTML editor. In WordPress, this is often labeled as "Code editor" or found under an options menu (usually three vertical dots).
                       </li>
-                      <li>
+<li>
                         <strong>Paste the Code:</strong> Paste the copied HTML directly into the code editor.
                       </li>
                       <li>
