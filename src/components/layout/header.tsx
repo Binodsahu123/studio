@@ -8,6 +8,7 @@ const navLinks = [
     { href: "/payment", label: "Pricing" },
     { href: "/write", label: "Write Content" },
     { href: "/rewrite", label: "Rewrite Content" },
+    { href: "/html-converter", label: "HTML Converter" },
     { href: "/image", label: "Image Generation" },
     { href: "/voiceover", label: "Voiceover" },
     { href: "/seo", label: "SEO Tools" },

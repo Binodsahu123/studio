@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2 } from "lucide-react";
+import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2, FileCode } from "lucide-react";
 
 const tools = [
   {
@@ -22,6 +22,14 @@ const tools = [
     description: "Rephrase, shorten, or change the tone of your existing text to make it fresh.",
     href: "/rewrite",
     cta: "Rewrite Content",
+    active: true,
+  },
+    {
+    icon: <FileCode className="h-8 w-8 text-primary" />,
+    title: "Text to HTML Converter",
+    description: "Convert your plain text into SEO-friendly HTML for your WordPress articles.",
+    href: "/html-converter",
+    cta: "Convert Now",
     active: true,
   },
   {
