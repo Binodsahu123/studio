@@ -1,3 +1,4 @@
+
 // src/app/html-converter/page.tsx
 'use client';
 
@@ -173,7 +174,7 @@ export default function HtmlConverterPage() {
                       <li>
                         <strong>Switch to Code/HTML View:</strong> Find the option to switch from the visual editor to the code, text, or HTML editor. In WordPress, this is often labeled as "Code editor" or found under an options menu (usually three vertical dots).
                       </li>
-<li>
+                      <li>
                         <strong>Paste the Code:</strong> Paste the copied HTML directly into the code editor.
                       </li>
                       <li>
