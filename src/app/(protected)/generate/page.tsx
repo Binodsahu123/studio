@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2, FileCode } from "lucide-react";
+import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2, FileCode, Hash } from "lucide-react";
 
 const tools = [
   {
@@ -62,6 +62,14 @@ const tools = [
     description: "Convert text into natural-sounding speech for your projects.",
     href: "/voiceover",
     cta: "Create Voiceover",
+    active: true,
+  },
+   {
+    icon: <Hash className="h-8 w-8 text-primary" />,
+    title: "AI Hashtag Generator",
+    description: "Generate viral and trending hashtags for Instagram, YouTube, and more.",
+    href: "/hashtag",
+    cta: "Get Hashtags",
     active: true,
   },
   {
