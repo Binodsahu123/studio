@@ -13,6 +13,7 @@ import { UiShowcase } from "@/components/landing/ui-showcase";
 import { Pricing } from "@/components/landing/pricing";
 import { Faq } from "@/components/landing/faq";
 import { Cta } from "@/components/landing/cta";
+import { Tools } from "@/components/landing/tools";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
         <Features />
         <Workflow />
         <Benefits />
+        <Tools />
         <UiShowcase />
         <Pricing />
         <Faq />
