@@ -27,9 +27,9 @@ export default function BlogIntroducingWriteBotAI() {
             {/* Hero Image */}
             <div className="relative my-8 h-96 w-full">
               <Image
-                src="https://picsum.photos/1200/800"
+                src="https://picsum.photos/seed/blog1/1200/800"
                 alt="AI powered content creation"
-                layout="fill"
+                fill
                 objectFit="cover"
                 className="rounded-lg shadow-xl"
                 data-ai-hint="futuristic writer desk"
@@ -84,9 +84,9 @@ export default function BlogIntroducingWriteBotAI() {
             
             <div className="relative my-8 h-80 w-full">
               <Image
-                src="https://picsum.photos/1024/768"
+                src="https://picsum.photos/seed/blog2/1024/768"
                 alt="AI Image Generator Showcase"
-                layout="fill"
+                fill
                 objectFit="cover"
                 className="rounded-lg shadow-lg"
                 data-ai-hint="digital art gallery"
@@ -118,18 +118,6 @@ export default function BlogIntroducingWriteBotAI() {
                 </Card>
             </div>
             
-            <h2 id="security">Secure, Private, and Ready for Business</h2>
-            <p>We understand that selling a script requires trust and security. That's why we've built-in a robust, one-time activation system.</p>
-             <div className="not-prose my-8 flex items-center gap-6 rounded-lg border bg-secondary p-6">
-                <ShieldCheck className="h-12 w-12 text-primary flex-shrink-0" />
-                <div>
-                    <h3 className="text-xl font-semibold">One-Time Script Activation</h3>
-                    <p className="text-muted-foreground mt-2">
-                        WriteBot AI includes a secure licensing system. When you set up the script on your hosting for the first time, you'll be prompted to enter a secret code. This one-time activation ensures that your purchase is secure, and after that, the application runs seamlessly without any interruptions for you or your end-users.
-                    </p>
-                </div>
-            </div>
-
             <h2 id="getting-started">Ready to Get Started?</h2>
             <p>
               WriteBot AI is more than just a set of tools—it's a complete ecosystem for modern content creation. Stop staring at a blank page and start bringing your ideas to life, faster than ever before.
