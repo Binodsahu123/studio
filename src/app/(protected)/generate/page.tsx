@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2, FileCode, Hash } from "lucide-react";
+import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2, FileCode, Hash, Search } from "lucide-react";
 
 const tools = [
   {
@@ -38,6 +38,14 @@ const tools = [
     description: "A step-by-step wizard to generate keywords, titles, outlines, and a full article.",
     href: "/blog",
     cta: "Start Workflow",
+    active: true,
+  },
+   {
+    icon: <Search className="h-8 w-8 text-primary" />,
+    title: "Keyword Ideas",
+    description: "Discover new keywords, analyze their competition, and check search volume.",
+    href: "/keywords",
+    cta: "Find Keywords",
     active: true,
   },
   {
