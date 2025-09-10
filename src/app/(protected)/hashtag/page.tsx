@@ -15,15 +15,23 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 const formSchema = z.object({
   topic: z.string().min(3, 'Please enter a topic with at least 3 characters.'),
 });
 
+const categories = [
+  'Food', 'Travel', 'Fashion', 'Fitness', 'Tech', 'Art', 
+  'Music', 'Photography', 'Marketing', 'Gaming', 'Beauty', 
+  'Lifestyle', 'DIY', 'Education', 'Finance', 'Health'
+];
+
 export default function HashtagGeneratorPage() {
   const [hashtags, setHashtags] = useState<string[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [currentPlatform, setCurrentPlatform] = useState<'Instagram' | 'YouTube' | null>(null);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,8 +42,13 @@ export default function HashtagGeneratorPage() {
   });
 
   const handleGenerate = async (topic: string, platform: 'Instagram' | 'YouTube') => {
+    if (!topic) {
+        toast({ title: "Please enter a topic first.", variant: "destructive" });
+        return;
+    }
     setIsLoading(true);
     setHashtags(null);
+    setCurrentPlatform(platform);
     try {
       const input: GenerateHashtagsInput = { topic, platform };
       const result: GenerateHashtagsOutput = await generateHashtags(input);
@@ -85,7 +98,7 @@ export default function HashtagGeneratorPage() {
             <Card className="bg-secondary/50">
               <CardHeader>
                 <CardTitle className="text-xl">Generate Hashtags from a Title</CardTitle>
-                <CardDescription>Enter a topic or title to get relevant hashtags.</CardDescription>
+                <CardDescription>Enter a topic or title to get relevant hashtags for a specific platform.</CardDescription>
               </CardHeader>
               <CardContent>
                 <Form {...form}>
@@ -105,11 +118,11 @@ export default function HashtagGeneratorPage() {
                     />
                     <div className="flex gap-4">
                         <Button type="submit" disabled={isLoading}>
-                          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                          {isLoading && currentPlatform === 'Instagram' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           <Instagram className="mr-2 h-4 w-4" /> Generate for Instagram
                         </Button>
                          <Button type="button" onClick={() => handleGenerate(form.getValues('topic'), 'YouTube')} disabled={isLoading || !form.getValues('topic')}>
-                          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                          {isLoading && currentPlatform === 'YouTube' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           <Youtube className="mr-2 h-4 w-4" /> Generate for YouTube
                         </Button>
                     </div>
@@ -118,21 +131,36 @@ export default function HashtagGeneratorPage() {
               </CardContent>
             </Card>
 
-            {/* Trending Hashtags */}
+            {/* Trending Hashtags by Category */}
             <Card>
                <CardHeader>
-                <CardTitle className="text-xl">Discover Trending Hashtags</CardTitle>
-                <CardDescription>Get a list of generally popular hashtags for different platforms.</CardDescription>
+                <CardTitle className="text-xl">Discover Trending Hashtags by Category</CardTitle>
+                <CardDescription>Get popular hashtags for different categories and platforms.</CardDescription>
               </CardHeader>
-              <CardContent>
-                 <div className="flex gap-4">
-                    <Button onClick={() => handleGenerate('trending', 'Instagram')} disabled={isLoading} variant="outline">
-                        <Instagram className="mr-2 h-4 w-4" /> Trending on Instagram
-                    </Button>
-                     <Button onClick={() => handleGenerate('trending', 'YouTube')} disabled={isLoading} variant="outline">
-                         <Youtube className="mr-2 h-4 w-4" /> Trending on YouTube
-                    </Button>
-                 </div>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center gap-2"><Instagram className="h-5 w-5" /> Instagram Categories</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map(category => (
+                        <Button key={`insta-${category}`} onClick={() => handleGenerate(category, 'Instagram')} disabled={isLoading} variant="outline" size="sm">
+                            {isLoading && currentPlatform === 'Instagram' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                            {category}
+                        </Button>
+                    ))}
+                  </div>
+                </div>
+                <Separator />
+                <div>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center gap-2"><Youtube className="h-5 w-5" /> YouTube Categories</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map(category => (
+                        <Button key={`yt-${category}`} onClick={() => handleGenerate(category, 'YouTube')} disabled={isLoading} variant="outline" size="sm">
+                            {isLoading && currentPlatform === 'YouTube' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                            {category}
+                        </Button>
+                    ))}
+                  </div>
+                </div>
               </CardContent>
             </Card>
           
@@ -169,6 +197,11 @@ export default function HashtagGeneratorPage() {
                                 ))}
                                 </div>
                             )}
+                             {!isLoading && hashtags?.length === 0 && (
+                                 <div className="flex flex-col items-center justify-center h-full py-12 text-muted-foreground">
+                                    <p>No hashtags were generated. Please try a different topic.</p>
+                                 </div>
+                             )}
                         </CardContent>
                     </Card>
                 </div>
