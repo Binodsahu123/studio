@@ -31,7 +31,7 @@ export async function generateWrittenContent(input: GenerateWrittenContentInput)
   return generateWrittenContentFlow(input);
 }
 
-const prompt = ai.definePrompt({
+const initialPrompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
@@ -46,6 +46,26 @@ In addition to the article, you must generate the following assets:
 Return all of this in a single, valid JSON object.`,
 });
 
+const RefineContentInputSchema = z.object({
+  article: z.string(),
+});
+
+const RefineContentOutputSchema = z.object({
+    refinedArticle: z.string(),
+});
+
+const refineContentPrompt = ai.definePrompt({
+    name: 'refineWrittenContentPrompt',
+    input: { schema: RefineContentInputSchema },
+    output: { schema: RefineContentOutputSchema },
+    prompt: `Rewrite the following article to make it more "hindi aur halka english me bnao google discover friendly bnao".
+
+Original Article:
+{{{article}}}
+
+Return only the refined article content in the 'refinedArticle' field of the JSON output.`,
+});
+
 
 const generateWrittenContentFlow = ai.defineFlow(
   {
@@ -54,11 +74,28 @@ const generateWrittenContentFlow = ai.defineFlow(
     outputSchema: GenerateWrittenContentOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt(input);
-    // Fallback for titles if the model doesn't generate them
-    if (!output!.titles || output!.titles.length === 0) {
-      output!.titles = [input.title];
+    // Step 1: Generate initial content
+    const {output: initialOutput} = await initialPrompt(input);
+
+    if (!initialOutput) {
+        throw new Error("Initial content generation failed.");
     }
-    return output!;
+
+    // Step 2: Refine the generated content
+    const { output: refinedOutput } = await refineContentPrompt({ article: initialOutput.content });
+    
+    if (!refinedOutput) {
+        throw new Error("Content refinement failed.");
+    }
+
+    // Replace the original content with the refined content
+    initialOutput.content = refinedOutput.refinedArticle;
+
+    // Fallback for titles if the model doesn't generate them
+    if (!initialOutput.titles || initialOutput.titles.length === 0) {
+      initialOutput.titles = [input.title];
+    }
+    
+    return initialOutput;
   }
 );
