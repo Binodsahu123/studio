@@ -38,7 +38,7 @@ const prompt = ai.definePrompt({
   name: 'convertTextToHtmlPrompt',
   input: {schema: ConvertTextToHtmlInputSchema},
   output: {schema: ConvertTextToHtmlOutputSchema},
-  prompt: `You are an expert SEO content formatter for WordPress, behaving like the DeepSeek AI model. Your task is to convert the following plain text into a well-structured, SEO-friendly HTML document.
+  prompt: `You are an expert SEO content formatter for WordPress. Your task is to convert the following plain text into a well-structured, SEO-friendly HTML document.
 
 **Instructions:**
 - Use the exact text provided. Do not add any new content or words from outside. Do not be overly creative.

@@ -28,7 +28,7 @@ const prompt = ai.definePrompt({
   name: 'generateBlogTopicPrompt',
   input: {schema: GenerateBlogTopicInputSchema},
   output: {schema: GenerateBlogTopicOutputSchema},
-  prompt: `You are a blog topic generator, behaving like the DeepSeek AI model. Generate 5 blog topics from the following prompt: {{{prompt}}}. Return the topics as a JSON array of strings.\n`,
+  prompt: `You are a blog topic generator. Generate 5 blog topics from the following prompt: {{{prompt}}}. Return the topics as a JSON array of strings.\n`,
 });
 
 const generateBlogTopicFlow = ai.defineFlow(

@@ -35,7 +35,7 @@ const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
-  prompt: `You are an expert SEO content writer, behaving like the DeepSeek AI model. Your primary task is to write an in-depth, engaging, and comprehensive article of AT LEAST 1000 WORDS in the specified language.
+  prompt: `You are an expert SEO content writer. Your primary task is to write an in-depth, engaging, and comprehensive article of AT LEAST 1000 WORDS in the specified language.
 
 **Topic:** {{{title}}}
 **Base Description:** {{{shortDescription}}}

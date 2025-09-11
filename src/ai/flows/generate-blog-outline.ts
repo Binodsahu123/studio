@@ -29,7 +29,7 @@ const prompt = ai.definePrompt({
   name: 'generateBlogOutlinePrompt',
   input: {schema: GenerateBlogOutlineInputSchema},
   output: {schema: GenerateBlogOutlineOutputSchema},
-  prompt: `You are an expert content strategist, behaving like the DeepSeek AI model. Your task is to create a comprehensive, well-structured blog post outline based on the provided title and keywords.
+  prompt: `You are an expert content strategist. Your task is to create a comprehensive, well-structured blog post outline based on the provided title and keywords.
 
 The outline should be in HTML format. Use <h2> tags for main sections and <h3> tags for sub-sections.
 The outline should be logical, flow well, and cover the topic in-depth. Make sure to naturally incorporate the provided keywords.

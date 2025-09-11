@@ -29,7 +29,7 @@ const prompt = ai.definePrompt({
   name: 'generateBlogFromOutlinePrompt',
   input: {schema: GenerateBlogFromOutlineInputSchema},
   output: {schema: GenerateBlogFromOutlineOutputSchema},
-  prompt: `You are an expert SEO content writer, behaving like the DeepSeek AI model. Your task is to write an in-depth, well-researched, and engaging article based on the provided title and HTML outline.
+  prompt: `You are an expert SEO content writer. Your task is to write an in-depth, well-researched, and engaging article based on the provided title and HTML outline.
 
 **Article Title:** {{{title}}}
 

@@ -35,7 +35,7 @@ const prompt = ai.definePrompt({
   name: 'generateKeywordIdeasPrompt',
   input: {schema: GenerateKeywordIdeasInputSchema},
   output: {schema: GenerateKeywordIdeasOutputSchema},
-  prompt: `You are an expert SEO keyword researcher, behaving like the DeepSeek AI model. Your task is to generate 10-15 keyword ideas for the given topic.
+  prompt: `You are an expert SEO keyword researcher. Your task is to generate 10-15 keyword ideas for the given topic.
 
 For each keyword, you must provide:
 1.  **keyword**: The keyword idea itself.
