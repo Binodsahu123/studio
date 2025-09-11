@@ -16,3 +16,4 @@ import '@/ai/flows/generate-hashtags.ts';
 import '@/ai/flows/generate-keyword-ideas.ts';
 import '@/ai/flows/generate-seo-assets-from-title.ts';
 import '@/ai/flows/summarize-pdf-content.ts';
+import '@/ai/flows/generate-logo-ideas.ts';
