@@ -35,31 +35,33 @@ const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
-  prompt: `You are an expert SEO content writer. Your task is to generate a comprehensive set of assets based on the user's input.
+  prompt: `You are a human expert who deeply understands the subject. Write an in-depth, well-researched, Google Discover-friendly article on "{{{title}}}".
 
-**Primary Topic:** {{{title}}}
-**Language:** {{{language}}}
+**Instructions:**
+- **Language:** The entire article and all related assets must be in **{{{language}}}**. If the language is Hindi, use general Hindi that is clear and accessible to a broad audience.
+- **Tone:** Use a conversational yet informative tone. Avoid robotic or generic writing.
+- **Structure:**
+    - The article should be AT LEAST 1000 WORDS and formatted in HTML.
+    - DO NOT include an <h1> tag. Start directly with the first <h2>.
+    - Structure the article naturally with a proper introduction, detailed body sections (using <h2> and <h3>), and a strong conclusion.
+    - Break down complex concepts into simple terms.
+    - Keep sentences varied and engaging to maintain reader interest.
+- **Content Quality:**
+    - Provide clear explanations, examples, and insights.
+    - Where necessary, include relevant statistics, case studies, or expert opinions to add credibility.
 {{#if shortDescription}}
-**Description:** {{{shortDescription}}}
+- **Core Focus:** Base the article on this description: "{{{shortDescription}}}"
 {{/if}}
 {{#if additionalTopic}}
-**Additional Keyword:** {{{additionalTopic}}}
+- **Additional Focus:** Also incorporate this keyword: "{{{additionalTopic}}}"
 {{/if}}
 
-**Your tasks are:**
-
-1.  **Write the Article:**
-    *   Compose an in-depth article of AT LEAST 1000 WORDS in HTML format.
-    *   The article's language must be **{{{language}}}**.
-    *   The tone should be conversational yet expert.
-    *   Structure the article with catchy <h2> and <h3> tags. Use <p>, <strong>, and <ul> tags appropriately.
-    *   **Crucially, DO NOT include an <h1> tag in the article content.** Start directly with the first <h2>.
-
-2.  **Generate SEO Assets:**
-    *   **Titles:** Create a list of 10 catchy, SEO-friendly title options.
-    *   **Meta Description:** Write a compelling meta description under 160 characters.
-    *   **Focus Keywords (Tags):** Provide a comma-separated string of up to 50 relevant keywords.
-    *   **Image Titles:** Suggest 8 SEO-friendly titles for images related to the article.
+**SEO Asset Generation:**
+After writing the article, create the following assets:
+1.  **titles:** An array of 10 catchy, SEO-friendly title options.
+2.  **description:** A compelling meta description under 160 characters.
+3.  **tags:** A comma-separated string of up to 50 relevant focus keywords.
+4.  **imageTitles:** An array of 8 SEO-friendly image titles related to the content.
 
 Return all of this in a single, valid JSON object.`,
 });
