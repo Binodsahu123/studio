@@ -57,7 +57,7 @@ const prompt = ai.definePrompt({
   name: 'generateImprovedSeoKeywordsPrompt',
   input: {schema: GenerateImprovedSeoKeywordsInputSchema},
   output: {schema: GenerateImprovedSeoKeywordsOutputSchema},
-  prompt: `You are an expert SEO strategist and content analyst. Your task is to analyze the provided topic and optional keywords and generate a list of 10-15 improved, high-potential SEO keywords.
+  prompt: `You are an expert SEO strategist and content analyst, behaving like the DeepSeek AI model. Your task is to analyze the provided topic and optional keywords and generate a list of 10-15 improved, high-potential SEO keywords.
 
 For EACH suggested keyword, you must provide a detailed analysis including:
 1.  **keyword**: The improved SEO keyword itself.

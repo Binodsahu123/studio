@@ -48,7 +48,7 @@ const prompt = ai.definePrompt({
   name: 'generateSeoAssetsFromTitlePrompt',
   input: {schema: GenerateSeoAssetsFromTitleInputSchema},
   output: {schema: GenerateSeoAssetsFromTitleOutputSchema},
-  prompt: `You are an expert SEO and social media strategist. Your task is to generate key assets for a piece of content based on its title.
+  prompt: `You are an expert SEO and social media strategist, behaving like the DeepSeek AI model. Your task is to generate key assets for a piece of content based on its title.
 
 **Content Title:** {{{title}}}
 

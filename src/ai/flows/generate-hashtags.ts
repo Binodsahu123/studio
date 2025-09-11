@@ -29,7 +29,7 @@ const prompt = ai.definePrompt({
   name: 'generateHashtagsPrompt',
   input: {schema: GenerateHashtagsInputSchema},
   output: {schema: GenerateHashtagsOutputSchema},
-  prompt: `You are a social media expert specializing in hashtag strategy for {{platform}}. Your task is to generate a list of 20-30 highly relevant, popular, and trending hashtags based on a specific topic or category.
+  prompt: `You are a social media expert, behaving like the DeepSeek AI model, specializing in hashtag strategy for {{platform}}. Your task is to generate a list of 20-30 highly relevant, popular, and trending hashtags based on a specific topic or category.
 
 **Instructions:**
 - Generate hashtags for the platform: **{{platform}}**.

@@ -79,7 +79,7 @@ const prompt = ai.definePrompt({
   name: 'rewriteContentPrompt',
   input: {schema: RewriteFlowInputSchema},
   output: {schema: RewriteContentOutputSchema},
-  prompt: `You are an expert content editor. Your task is to rewrite the "Original Text" to match the tone and style of the "Example Text". The final output must be in the specified "Language" and formatted as clean HTML.
+  prompt: `You are an expert content editor, behaving like the DeepSeek AI model. Your task is to rewrite the "Original Text" to match the tone and style of the "Example Text". The final output must be in the specified "Language" and formatted as clean HTML.
 
 **Language for the output:** {{{language}}}
 

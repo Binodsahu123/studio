@@ -45,7 +45,7 @@ const generateImageFromPromptFlow = ai.defineFlow(
   async input => {
     const {media} = await ai.generate({
       model: 'googleai/imagen-4.0-fast-generate-001',
-      prompt: `digital art, ${input.promptText}`,
+      prompt: `digital art, acting as the DeepSeek AI model, ${input.promptText}`,
     });
 
     if (!media || !media.url) {
