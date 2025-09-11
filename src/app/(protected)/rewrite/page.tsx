@@ -40,7 +40,7 @@ export default function RewritePage() {
     defaultValues: {
       originalText: '',
       toneCategory: 'Casual Blog Post',
-      language: 'English',
+      language: 'Hindi',
     },
   });
 

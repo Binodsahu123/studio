@@ -41,7 +41,7 @@ export default function WritePage() {
     defaultValues: {
       title: '',
       shortDescription: '',
-      language: 'English',
+      language: 'Hindi',
       additionalTopic: '',
     },
   });

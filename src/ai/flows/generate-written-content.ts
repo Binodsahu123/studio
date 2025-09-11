@@ -35,15 +35,30 @@ const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
-  prompt: `Write an in-depth, well-researched article in google discover friendly on "{{{title}}}" The article should be structured naturally, providing clear explanations, examples, and insights to help readers fully understand the topic. Use a conversational yet informative tone, making it engaging and easy to read. Ensure the content flows logically, with a proper introduction, detailed body sections, and a strong conclusion. Avoid robotic or generic writing; instead, write as an expert who deeply understands the subject. Use general hindi that is clear and accessible to a broad audience. Break down complex concepts into simple terms, and where necessary, include relevant statistics, case studies, or expert opinions to add credibility. Keep sentences varied and engaging to maintain reader interest. The final article should feel like it was written by a human expert, not Al.
+  prompt: `You are an expert content writer and SEO specialist. Your task is to write an in-depth, well-researched, and engaging article on the topic provided.
 
-The article must be in HTML format and MUST NOT include an <h1> tag. It should include multiple catchy <h2> and <h3> headings. Use <p> for paragraphs, <strong> for important keywords, and lists (<ul>) where appropriate.
+**Instructions:**
+- **Language**: The entire output, including the article, titles, description, tags, and image titles, MUST be in **{{{language}}}**.
+- **Topic**: "{{{title}}}"
+{{#if shortDescription}}
+- **Description**: {{{shortDescription}}}
+{{/if}}
+{{#if additionalTopic}}
+- **Additional Focus**: {{{additionalTopic}}}
+{{/if}}
 
-In addition to the article, you must generate the following assets:
-1.  **titles:** An array of 10 catchy, SEO-friendly title options.
-2.  **description:** A compelling meta description under 160 characters.
-3.  **tags:** A comma-separated string of up to 50 relevant focus keywords.
-4.  **imageTitles:** An array of 8 SEO-friendly image titles related to the content.
+- **Article Content**:
+  - Write a high-quality, comprehensive article that is Google Discover friendly.
+  - Structure the article naturally with a clear introduction, detailed body, and a strong conclusion.
+  - The tone should be conversational yet informative, like an expert explaining the topic.
+  - Break down complex ideas into simple terms. Use statistics, examples, or expert opinions to add credibility.
+  - The final article must be in HTML format. It MUST NOT include an <h1> tag. Use multiple catchy <h2> and <h3> headings, <p> for paragraphs, <strong> for important keywords, and lists (<ul>) where appropriate.
+
+- **Generated Assets**:
+  1.  **titles:** An array of 10 catchy, SEO-friendly title options for the article, in the specified language.
+  2.  **description:** A compelling meta description under 160 characters, in the specified language.
+  3.  **tags:** A comma-separated string of up to 50 relevant focus keywords, in the specified language.
+  4.  **imageTitles:** An array of 8 SEO-friendly image titles related to the content, in the specified language.
 
 Return all of this in a single, valid JSON object.`,
 });
