@@ -35,29 +35,9 @@ const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
-  prompt: `You are a human expert who deeply understands the subject. Write an in-depth, well-researched, Google Discover-friendly article on "{{{title}}}".
+  prompt: `Write an in-depth, well-researched article in google discover friendly on "{{{title}}}" The article should be structured naturally, providing clear explanations, examples, and insights to help readers fully understand the topic. Use a conversational yet informative tone, making it engaging and easy to read. Ensure the content flows logically, with a proper introduction, detailed body sections, and a strong conclusion. Avoid robotic or generic writing; instead, write as an expert who deeply understands the subject. Use general hindi that is clear and accessible to a broad audience. Break down complex concepts into simple terms, and where necessary, include relevant statistics, case studies, or expert opinions to add credibility. Keep sentences varied and engaging to maintain reader interest. The final article should feel like it was written by a human expert, not Al.
 
-**Instructions:**
-- **Language:** The entire article and all related assets must be in **{{{language}}}**. If the language is Hindi, use general Hindi that is clear and accessible to a broad audience.
-- **Tone:** Use a conversational yet informative tone. Avoid robotic or generic writing.
-- **Structure:**
-    - The article should be AT LEAST 1000 WORDS and formatted in HTML.
-    - DO NOT include an <h1> tag. Start directly with the first <h2>.
-    - Structure the article naturally with a proper introduction, detailed body sections (using <h2> and <h3>), and a strong conclusion.
-    - Break down complex concepts into simple terms.
-    - Keep sentences varied and engaging to maintain reader interest.
-- **Content Quality:**
-    - Provide clear explanations, examples, and insights.
-    - Where necessary, include relevant statistics, case studies, or expert opinions to add credibility.
-{{#if shortDescription}}
-- **Core Focus:** Base the article on this description: "{{{shortDescription}}}"
-{{/if}}
-{{#if additionalTopic}}
-- **Additional Focus:** Also incorporate this keyword: "{{{additionalTopic}}}"
-{{/if}}
-
-**SEO Asset Generation:**
-After writing the article, create the following assets:
+In addition to the article, you must generate the following assets:
 1.  **titles:** An array of 10 catchy, SEO-friendly title options.
 2.  **description:** A compelling meta description under 160 characters.
 3.  **tags:** A comma-separated string of up to 50 relevant focus keywords.
