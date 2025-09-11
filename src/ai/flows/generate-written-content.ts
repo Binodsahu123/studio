@@ -37,6 +37,8 @@ const initialPrompt = ai.definePrompt({
   output: {schema: GenerateWrittenContentOutputSchema},
   prompt: `Write an in-depth, well-researched article in google discover friendly on "{{{title}}}" The article should be structured naturally, providing clear explanations, examples, and insights to help readers fully understand the topic. Use a conversational yet informative tone, making it engaging and easy to read. Ensure the content flows logically, with a proper introduction, detailed body sections, and a strong conclusion. Avoid robotic or generic writing; instead, write as an expert who deeply understands the subject. Use general hindi that is clear and accessible to a broad audience. Break down complex concepts into simple terms, and where necessary, include relevant statistics, case studies, or expert opinions to add credibility. Keep sentences varied and engaging to maintain reader interest. The final article should feel like it was written by a human expert, not Al.
 
+The article must be in HTML format and MUST NOT include an <h1> tag. It should include multiple catchy <h2> and <h3> headings. Use <p> for paragraphs, <strong> for important keywords, and lists (<ul>) where appropriate.
+
 In addition to the article, you must generate the following assets:
 1.  **titles:** An array of 10 catchy, SEO-friendly title options.
 2.  **description:** A compelling meta description under 160 characters.
