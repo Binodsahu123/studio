@@ -26,7 +26,7 @@ const toneCategories = [
 const formSchema = z.object({
   originalText: z.string().min(20, 'Please enter at least 20 characters to rewrite.'),
   toneCategory: z.string().min(1, 'Please select a tone and style.'),
-  language: z.string().min(1, 'Please select a language.'),
+  language: z.enum(['English', 'Hindi']),
 });
 
 export default function RewritePage() {
@@ -68,9 +68,12 @@ export default function RewritePage() {
 
   const handleCopy = () => {
     if (!rewrittenContent) return;
-    navigator.clipboard.writeText(rewrittenContent).then(() => {
+    const el = document.createElement('div');
+    el.innerHTML = rewrittenContent;
+    const plainText = el.textContent || el.innerText || "";
+    navigator.clipboard.writeText(plainText).then(() => {
       setIsCopied(true);
-      toast({ title: "Copied HTML to clipboard!" });
+      toast({ title: "Copied text to clipboard!" });
       setTimeout(() => setIsCopied(false), 2000);
     });
   };
@@ -174,7 +177,7 @@ export default function RewritePage() {
                      {rewrittenContent && (
                         <Button variant="outline" size="sm" onClick={handleCopy} disabled={isCopied}>
                             {isCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
-                            Copy HTML
+                            Copy Text
                         </Button>
                      )}
                   </div>
