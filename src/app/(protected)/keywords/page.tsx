@@ -162,10 +162,10 @@ export default function KeywordIdeasPage() {
                                   <TableRow key={item.keyword}>
                                       <TableCell className="font-medium">{item.keyword}</TableCell>
                                       <TableCell className="text-center">
-                                          <Badge variant={getBadgeVariant(item.difficulty)}>{item.difficulty}</Badge>
+                                          <Badge variant={getBadgeVariant(item.difficulty)}>{item.difficulty} ({item.difficultyScore})</Badge>
                                       </TableCell>
                                       <TableCell className="text-center">
-                                          <Badge variant={getBadgeVariant(item.searchVolume)}>{item.searchVolume}</Badge>
+                                          <Badge variant={getBadgeVariant(item.searchVolume)}>{item.searchVolume} ({item.searchVolumeScore})</Badge>
                                       </TableCell>
                                   </TableRow>
                                   ))}
