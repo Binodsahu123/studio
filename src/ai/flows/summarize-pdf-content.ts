@@ -34,7 +34,7 @@ export async function summarizePdfContent(
 
 const summarizePdfContentPrompt = ai.definePrompt({
   name: 'summarizePdfContentPrompt',
-  input: {schema: SummarizePdfContentInputSchema},
+  input: {schema: z.object({pdfContent: z.string()})},
   output: {schema: SummarizePdfContentOutputSchema},
   prompt: `Summarize the following PDF content. Be concise and focus on the main points.\n\nPDF Content: {{{pdfContent}}}`,
 });
@@ -60,7 +60,6 @@ const summarizePdfContentFlow = ai.defineFlow(
     const pdfContent = docs.map(doc => doc.pageContent).join('\n');
 
     const {output} = await summarizePdfContentPrompt({
-      ...input,
       pdfContent,
     });
     return output!;
