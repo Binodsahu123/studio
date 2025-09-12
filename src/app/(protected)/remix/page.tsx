@@ -1,7 +1,7 @@
 // src/app/(protected)/remix/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -33,33 +33,39 @@ export default function RemixPage() {
   const [toneCategories, setToneCategories] = useState<{ value: string; label: string; }[]>([]);
   const [toneExamples, setToneExamples] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    async function fetchToneData() {
-      const examples = await getToneExamples();
-      setToneExamples(examples);
-      const categories = Object.keys(examples).map(key => ({ value: key, label: key }));
-      setToneCategories(categories);
-      form.setValue('toneCategory', 'Casual Blog Post');
-      form.setValue('toneReferenceArticle', examples['Casual Blog Post'] || '');
-    }
-    fetchToneData();
-  }, [form]);
-
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       sourceArticles: '',
-      toneCategory: '',
+      toneCategory: 'Casual Blog Post',
       toneReferenceArticle: '',
     },
   });
 
+  const fetchToneData = useCallback(async () => {
+      const examples = await getToneExamples();
+      setToneExamples(examples);
+      const categories = Object.keys(examples).map(key => ({ value: key, label: key }));
+      setToneCategories(categories);
+      // Set initial value for toneReferenceArticle based on default category
+      if (form.getValues('toneCategory') && examples[form.getValues('toneCategory')]) {
+          form.setValue('toneReferenceArticle', examples[form.getValues('toneCategory')]);
+      } else if (categories.length > 0) {
+          form.setValue('toneCategory', categories[0].value);
+          form.setValue('toneReferenceArticle', examples[categories[0].value]);
+      }
+  }, [form]);
+
+  useEffect(() => {
+    fetchToneData();
+  }, [fetchToneData]);
+
+
   const selectedCategory = form.watch('toneCategory');
 
   useEffect(() => {
-    if (toneExamples && selectedCategory) {
-      form.setValue('toneReferenceArticle', toneExamples[selectedCategory] || '');
+    if (toneExamples && selectedCategory && toneExamples[selectedCategory]) {
+      form.setValue('toneReferenceArticle', toneExamples[selectedCategory]);
     }
   }, [selectedCategory, form, toneExamples]);
 

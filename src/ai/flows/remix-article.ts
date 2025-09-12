@@ -3,6 +3,7 @@
  * @fileOverview A flow to remix multiple source articles into a single new one, matching a specific tone and style from a reference article.
  *
  * - remixArticle - A function that remixes articles.
+ * - getToneExamples - A function that returns the pre-defined tone examples.
  * - RemixArticleInput - The input type for the function.
  * - RemixArticleOutput - The return type for the function.
  */
@@ -43,15 +44,17 @@ const RemixArticleOutputSchema = z.object({
 });
 export type RemixArticleOutput = z.infer<typeof RemixArticleOutputSchema>;
 
+
+export async function getToneExamples(): Promise<Record<string, string>> {
+  return Promise.resolve(toneExamples);
+}
+
 export async function remixArticle(
   input: RemixArticleInput
 ): Promise<RemixArticleOutput> {
   return remixArticleFlow(input);
 }
 
-export async function getToneExamples() {
-    return toneExamples;
-}
 
 const prompt = ai.definePrompt({
   name: 'remixArticlePrompt',
