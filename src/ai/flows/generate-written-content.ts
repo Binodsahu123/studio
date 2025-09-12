@@ -11,7 +11,9 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GenerateWrittenContentInputSchema = z.object({
-  originalContent: z.string().describe('The original content to be enriched and formatted.'),
+  title: z.string().describe('The main title of the article.'),
+  description: z.string().optional().describe('A short description of the article to give context.'),
+  keywords: z.string().optional().describe('A comma-separated list of keywords to focus on.'),
   language: z.string().describe('The language for the generated content (e.g., "English" or "Hindi").'),
 });
 export type GenerateWrittenContentInput = z.infer<typeof GenerateWrittenContentInputSchema>;
@@ -33,7 +35,37 @@ const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
-  prompt: `Write an in-depth, well-researched article in google discover friendly on The article should be structured naturally, providing clear explanations, examples, and insights to help readers fully understand the topic. Use a conversational yet informative tone, making it engaging and easy to read. Ensure the content flows logically, with a proper introduction, detailed body sections, and a strong conclusion. Avoid robotic or generic writing; instead, write as an expert who deeply understands the subject. Use general hindi that is clear and accessible to a broad audience. Break down complex concepts into simple terms, and where necessary, include relevant statistics, case studies, or expert opinions to add credibility. Keep sentences varied and engaging to maintain reader interest. The final article should feel like it was written by a human expert, not Al  hindi aur halka english me bnao google discover friendly bnao ise human touch do jese human likhte hai saral hindi lanaguge mein ek bhi word ai se likha hua nahi lagna chahiye sab aesa hi lagna chaiye jese humne likha ho readability ka khaas dhyan rakhein or kam s kam 1000 words ka hona chaye jisme satrting mein pehle 2 paragraph hone chaye or usme saerchebale keyword add hone chaiye or phirr aage acha sa human jesa likhta hai aesa follow kro or zyada kahin bullents points ka use nhi hona chaiye bs ek do agah ho jahan important ho batana or table bhi rakhna kisi ek heading ke saath or kisi ki bhi heading change nhi honi chaiye sab same honi chaye follow kro or m hi likh kar do or  Is content se meta discription aur meta  tag bna aur title bhi do jismein Mera yah title Aaye. Meta tag rank math ke liye do Focus keyword maximum 50 Coma Laga ke do yaar, Main ismein aath image dalna chahta hun UN sabhi image ka title ISI content se uthakar bnao app mein क्या-क्या khas Hai ine sabhi baat ka Dhyan rakhte hue banana hai title ekadam SEO friendly Ho aur clickbait bhi ho Ye mera content hai "{{{originalContent}}}"Is content me full heading haff heading sub jodna ha aur jitna content diya hai utna hi jodna Hai Bahar ka kuchh bhi content nahin jodna Hai aur na hi jyada dimag lagane ki jarurat hai ismein Keval word press ke code editor ke liye SEO friendly bnao aur kahin Bahar ka content nahin jodna hai aur na hi kahin ISI content ko bus se friendly banana hai jitna Maine content Diya Hai Is content se meta description aur meta  tag bnao aur title bhi do jismein Mera yah title Aaye Jo seo फ्रेंडली और एकदम क्लिक वेट हो 10 टाइटल का ऑप्शन दो. Meta tag rank math ke liye do Focus keyword maximum 50 Coma Laga ke do yaar, Main ismein 8 image dalna chahta hun UN sabhi image ka title ISI content se uthakar bnao jo seo tittle se milta julta ho aur title mein phone ka jo jo specification ho vah sab aana chahie jaise ki RAM ROM camera display. The entire output must be in the language: {{{language}}}.`,
+  prompt: `You are an expert content creator and SEO specialist. Your task is to write an in-depth, well-researched article that is Google Discover friendly, based on the provided title, description, and keywords.
+
+**Article Details:**
+- **Title:** {{{title}}}
+{{#if description}}
+- **Description:** {{{description}}}
+{{/if}}
+{{#if keywords}}
+- **Keywords:** {{{keywords}}}
+{{/if}}
+
+**Your Instructions are:**
+1.  **Tone and Style:** Write in a conversational yet informative tone. The language should be simple Hindi with some English words (Hinglish), making it clear and accessible to a broad audience. The final article must feel like it was written by a human expert, not an AI. It must have a "human touch".
+2.  **Length:** The article must be at least 1000 words.
+3.  **Structure:**
+    *   Start with two strong introductory paragraphs that include searchable keywords.
+    *   Structure the rest of the article naturally with full headings (h2) and sub-headings (h3).
+    *   Do not overuse bullet points. Use them only where it's important to list items.
+    *   Include one table under a relevant heading to present data or comparisons.
+    *   Ensure a logical flow with a strong conclusion.
+4.  **Content:**
+    *   Stick to the information related to the title, description, and keywords. Do not add external or unnecessary information.
+    *   Your primary goal is to create an SEO-friendly article for a WordPress code editor.
+5.  **Generated Assets (in the same language as the article - {{{language}}}):**
+    *   **Titles:** Generate 10 alternative titles that are SEO-friendly and click-worthy, based on the main title.
+    *   **Meta Description:** Create a compelling meta description.
+    *   **Meta Tags:** Provide a list of up to 50 focus keywords for Rank Math, separated by commas.
+    *   **Image Titles:** Create 8 SEO-friendly titles for images that could be used in the article. These titles should be related to the main topic and include relevant specifications if mentioned (e.g., RAM, ROM, camera, display for a phone review).
+
+The entire output, including all generated assets, must be in the specified language: **{{{language}}}**.
+`,
 });
 
 const generateWrittenContentFlow = ai.defineFlow(
@@ -51,9 +83,7 @@ const generateWrittenContentFlow = ai.defineFlow(
 
     // Fallback for titles if the model doesn't generate them
     if (!output.titles || output.titles.length === 0) {
-      // Create a fallback title from the first few words of the content
-      const fallbackTitle = input.originalContent.split(' ').slice(0, 10).join(' ');
-      output.titles = [fallbackTitle];
+      output.titles = [input.title];
     }
     
     return output;

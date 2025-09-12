@@ -1,4 +1,3 @@
-// src/app/write/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -22,7 +21,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 
 
 const formSchema = z.object({
-  originalContent: z.string().min(50, 'Please enter at least 50 characters of content.'),
+  title: z.string().min(10, 'Please enter a title of at least 10 characters.'),
+  description: z.string().optional(),
+  keywords: z.string().optional(),
   language: z.string().min(1, 'Please select a language.'),
 });
 
@@ -37,7 +38,9 @@ export default function WritePage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      originalContent: '',
+      title: '',
+      description: '',
+      keywords: '',
       language: 'Hindi',
     },
   });
@@ -114,6 +117,45 @@ export default function WritePage() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                 <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Main Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., 'A Complete Guide to Digital Marketing in 2024'" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Short Description (Optional)</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Briefly describe what the article is about..." {...field} rows={3} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="keywords"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Keywords / Tags (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., seo, content marketing, smb" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="language"
@@ -131,19 +173,6 @@ export default function WritePage() {
                             <SelectItem value="Hindi">Hindi</SelectItem>
                         </SelectContent>
                       </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="originalContent"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your Content</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Paste your full article content here to be enriched..." {...field} rows={15} />
-                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -169,18 +198,21 @@ export default function WritePage() {
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
               <p>
-                To get the best results from our AI Content Writer, simply paste your entire article content into the "Your Content" box.
+                To get the best results from our AI Content Writer, simply provide a clear and specific title. The more detailed your title, the better the article will be.
               </p>
               <ul className="list-disc pl-6 space-y-3">
                 <li>
-                  <strong>Your Content:</strong> Paste your full draft here. The AI will read it, add SEO-friendly headings (h2, h3), bold important keywords, and structure it for a WordPress editor.
+                  <strong>Main Title:</strong> This is the most important input. A good title helps the AI understand the topic, angle, and target audience.
                 </li>
-                 <li>
-                  <strong>Language:</strong> Select the language of your content to ensure all generated assets (titles, descriptions, tags) are in the correct language.
+                <li>
+                  <strong>Short Description (Optional):</strong> Provide a sentence or two of context to guide the AI on the article's goal or tone.
+                </li>
+                <li>
+                  <strong>Keywords (Optional):</strong> List comma-separated keywords you want the AI to focus on.
                 </li>
               </ul>
               <p>
-                The AI will generate a complete article, 10 SEO-friendly titles, a meta description, relevant tags, and even titles for images to use in your post. It will not add any information that wasn't in your original text.
+                The AI will generate a complete article, 10 SEO-friendly titles, a meta description, relevant tags, and even titles for images to use in your post.
               </p>
           </CardContent>
         </Card>
