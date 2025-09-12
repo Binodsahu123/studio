@@ -42,10 +42,10 @@ const tools = [
   },
   {
     icon: <FileText className="h-8 w-8 text-primary" />,
-    title: "Full Blog Post Workflow",
-    description: "A step-by-step wizard to generate keywords, titles, outlines, and a full article.",
+    title: "Blog",
+    description: "Tips, tutorials, and insights on how to get the most out of our AI-powered content creation tools.",
     href: "/blog",
-    cta: "Start Workflow",
+    cta: "Read Now",
     active: true,
   },
    {

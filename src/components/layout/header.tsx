@@ -7,11 +7,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 const navLinks = [
     { href: "/#features", label: "Features" },
     { href: "/payment", label: "Pricing" },
+    { href: "/blog", label: "Blog" },
     { href: "/write", label: "Write Content" },
     { href: "/rewrite", label: "Rewrite Content" },
     { href: "/remix", label: "Article Mixer" },
     { href: "/html-converter", label: "HTML Converter" },
-    { href: "/blog", label: "Full Blog Post Workflow" },
     { href: "/keywords", label: "Keyword Ideas" },
     { href: "/seo", label: "Advanced SEO Analyzer" },
     { href: "/image", label: "Image Generation" },
