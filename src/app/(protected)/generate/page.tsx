@@ -33,6 +33,14 @@ const tools = [
     active: true,
   },
   {
+    icon: <FileCode className="h-8 w-8 text-primary" />,
+    title: "Text to HTML Converter",
+    description: "Convert plain text into well-structured, SEO-friendly HTML.",
+    href: "/html-converter",
+    cta: "Convert Now",
+    active: true,
+  },
+  {
     icon: <FileText className="h-8 w-8 text-primary" />,
     title: "Blog",
     description: "Tips, tutorials, and insights on how to get the most out of our AI-powered content creation tools.",
