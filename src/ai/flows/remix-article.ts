@@ -52,6 +52,33 @@ Vivo V40e Price
   'Finance': `The Reserve Bank of India (RBI) has kept the repo rate unchanged at 6.5% for the sixth consecutive time, citing persistent inflationary pressures. The decision by the Monetary Policy Committee (MPC) was unanimous. The central bank has maintained its GDP growth forecast for the fiscal year at 7%, but remains cautious about the inflation outlook, which is projected to average 5.4% for the year.`,
   'Entertainment': `The trailer for the much-anticipated sci-fi epic "Nexus Point" has finally dropped, and it's already breaking the internet. Directed by visionary filmmaker Anya Sharma, the film stars superstar Vikram Rao in a role that promises to be a visual spectacle. Fans are praising the stunning visual effects and intriguing plot. "Nexus Point" is set to hit theaters worldwide this December, and is expected to be a major box office hit.`,
   'Autos/Vehicles': `Tata Motors has launched the all-new Safari EV, marking its entry into the electric SUV segment. The Safari EV boasts an impressive claimed range of 500 km on a single charge and comes packed with features like a panoramic sunroof, a 12.3-inch touchscreen, and advanced driver-assistance systems (ADAS). Bookings are now open, with introductory prices starting at ₹25 lakh (ex-showroom).`,
+  'Bike News': `Hero Splendor Plus हुआ और भी स्मार्ट, 70KM माइलेज और न्यू मॉडल के साथ मार्केट में हुई एंट्री
+
+
+देश की दिग्गज दो पहिया वाहन निर्माता कंपनी हीरो मोटर्स ने अपनी सबसे ज्यादा लोकप्रिय मोटरसाइकिल में से एक Hero Splendor Plus के न्यू मॉडल को बाजार में उतार दिया है।
+
+
+जिसमें कि पहले से कई स्मार्ट फीचर्स और यूनिक डिजाइन का प्रयोग किया गया है। मोटरसाइकिल में इतना सिर्फ पावरफुल इंजन बल्कि 70 किलोमीटर तक की माइलेज और कई स्मार्ट फीचर्स मिलते हैं चलिए इसकी कीमत के बारे में जान लेते हैं।
+
+Hero Splendor Plus के यूनिक डिजाइन 
+सबसे पहले तो आपको बता दूं कि नए मॉडल के साथ आई Hero Splendor Plus में कंपनी की ओर से काफी शानदार कलर विकल्प दिए गए हैं। इसके अलावा बाइक के कॉस्मेटिक में भी बदलाव किए गए हैं।
+
+जिसमें फ्रंट में यूनिक डिजाइन वाली हेडलाइट और एलइडी स्ट्रिप लाइट दी गई है वही इस बार के स्प्लेंडर में फ्रंट में डिस्क ब्रेक का भी प्रयोग किया गया है।
+
+Hero Splendor Plus के फीचर्स
+दोस्तों फीचर्स के मामले भी Hero Splendor Plus का न्यू मॉडल काफी एडवांस है। मोटरसाइकिल में फीचर्स के तौर पर फुली डिजिटल स्पीडोमीटर का प्रयोग किया गया है ।
+
+जिसमें फ्यूल लेवल, रियल टाइम स्पीड और टाइम जैसे फीचर्स दिखती है। इसके अलावा LED हेडलाइट, LED इंडिकेटर सेफ्टी के लिए इस बार फ्रंट में डिस्क ब्रेक और रेट में ड्रम ब्रेक जैसे फीचर्स भी मिलेंगे।
+
+Hero Splendor Plus के इंजन
+बाइक में मिलने वाले इंजन तथा माइलेज की बात करें तो बेहतर परफॉर्मेंस के लिए इसमें 97.2 cc का सिंगल सिलेंडर एयर कोल्ड इंजन का प्रयोग किया गया है।
+
+यह इंजन 8000 Rpm पर 7.5 Bhp की पावर के साथ 6000 Rpm पर 8.5 Nm का टॉर्क को प्रोड्यूस करता है। वही मोटरसाइकिल कर स्पीड गियर बॉक्स से लैस है जिसमें बेहतर परफॉर्मेंस और 65 से 70 किलोमीटर की माइलेज मिलती है।
+
+Hero Splendor Plus के कीमत
+2025 में अगर आप अपने लिए एक मोटरसाइकिल तलाश रहे हैं जिसमें आपको यूनिक लोग स्मार्ट फीचर्स और बेहतर माइलेज भी मिले।
+
+वह भी सस्ते में तो आप न्यू मॉडल के साथ आई Hero Splendor Plus की ओर अपना रुख कर सकते हैं। कीमत की बात करें तो बाजार में यह मोटरसाइकिल ₹75,000 से 85,000 रुपए के बीच उपलब्ध है।`,
 };
 
 const RemixArticleInputSchema = z.object({
