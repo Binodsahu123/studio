@@ -62,7 +62,7 @@ export default function HtmlConverterPage() {
   };
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col bg-background">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto space-y-8">
@@ -72,7 +72,7 @@ export default function HtmlConverterPage() {
                   <FileCode className="h-8 w-8 text-primary" />
                   <div>
                     <CardTitle className="text-3xl">Text to HTML Converter</CardTitle>
-                    <CardDescription>Paste your plain text and let AI convert it into clean, structured HTML.</CardDescription>
+                    <CardDescription>Paste your plain text and convert it into SEO-friendly HTML for your blog.</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -86,7 +86,7 @@ export default function HtmlConverterPage() {
                         <FormItem>
                           <FormLabel>Your Plain Text</FormLabel>
                           <FormControl>
-                            <Textarea placeholder="Paste your article, blog post, or any plain text here..." {...field} rows={15} />
+                            <Textarea placeholder="Paste your article content here..." {...field} rows={15} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -189,6 +189,6 @@ export default function HtmlConverterPage() {
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
