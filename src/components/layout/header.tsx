@@ -5,9 +5,6 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader, SheetTitle 
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const navLinks = [
-    { href: "/#features", label: "Features" },
-    { href: "/payment", label: "Pricing" },
-    { href: "/blog", label: "Blog" },
     { href: "/write", label: "Write Content" },
     { href: "/rewrite", label: "Rewrite Content" },
     { href: "/remix", label: "Article Mixer" },
@@ -20,6 +17,9 @@ const navLinks = [
     { href: "/seo-assets", label: "SEO Assets Generator" },
     { href: "/detect", label: "AI Detector" },
     { href: "/#faq", label: "Support" },
+    { href: "/#features", label: "Features" },
+    { href: "/payment", label: "Pricing" },
+    { href: "/blog", label: "Blog" },
 ];
 
 export function Header() {
