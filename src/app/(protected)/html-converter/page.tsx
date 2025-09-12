@@ -62,7 +62,7 @@ export default function HtmlConverterPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <>
       <Header />
       <main className="flex-1 container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto space-y-8">
@@ -189,6 +189,6 @@ export default function HtmlConverterPage() {
         </div>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }
