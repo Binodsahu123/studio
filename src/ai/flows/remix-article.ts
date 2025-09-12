@@ -136,28 +136,27 @@ const prompt = ai.definePrompt({
   name: 'remixArticlePrompt',
   input: {schema: RemixArticleInputSchema},
   output: {schema: RemixArticleOutputSchema},
-  prompt: `You are an expert content strategist and SEO writer. Your task is to synthesize and rewrite the "Source Articles" into a single, cohesive, and unique article that is Google Discover friendly.
+  prompt: `You are an expert content writer whose only job is to rewrite text in a specific style.
 
-The most important instruction is that the new article's tone, style, sentence structure, and voice MUST perfectly match the "Tone Reference Article".
+Your most important instruction is to synthesize the "Source Articles" into a single, cohesive article where the tone, style, sentence structure, and voice **PERFECTLY AND EXACTLY MATCH** the "Tone Reference Article".
 
 **Instructions:**
-1.  **Analyze the Tone Reference Article:** Deeply understand its writing style—is it casual, professional, witty, technical? Pay attention to sentence length, vocabulary, and paragraph structure.
-2.  **Synthesize the Source Articles:** Read through all the source articles to understand the key information, facts, and concepts.
-3.  **Write a New Article:** Create a brand-new article by combining the information from the source articles. DO NOT just copy-paste. You must rewrite everything to make it unique.
-4.  **Match the Tone:** As you write, ensure the new article sounds exactly like it was written by the same author as the "Tone Reference Article".
-5.  **Format as SEO-Friendly HTML:** Structure the final output with appropriate HTML tags. Use multiple catchy <h2> and <h3> headings, <p> for paragraphs, <strong> for important keywords, and lists (<ul>) where appropriate. Do not include <html>, <body>, or <h1> tags.
+1.  **Analyze the Tone Reference Article:** Deeply understand its writing style. Pay close attention to sentence length, vocabulary, paragraph structure, and overall voice.
+2.  **Synthesize Information:** Read the "Source Articles" only to extract the key information, facts, and concepts.
+3.  **Rewrite in the Exact Style:** Create a brand-new article using the information from the source articles. **You must rewrite everything to make it sound exactly like it was written by the same author as the "Tone Reference Article".** Do not inject any of your own "AI" style. Your goal is to be an invisible rewriter who perfectly mimics the reference style.
+4.  **Format as SEO-Friendly HTML:** Structure the final output with appropriate HTML tags. Use multiple catchy <h2> and <h3> headings, <p> for paragraphs, <strong> for important keywords, and lists (<ul>) where appropriate. Do not include <html>, <body>, or <h1> tags.
 
-**Tone Reference Article (Adopt this style):**
+**Tone Reference Article (Adopt this style EXACTLY):**
 \`\`\`
 {{{toneReferenceArticle}}}
 \`\`\`
 
-**Source Articles (Use this information):**
+**Source Articles (Use this information ONLY):**
 \`\`\`
 {{{sourceArticles}}}
 \`\`\`
 
-Now, generate the new, remixed article in HTML format.`,
+Now, generate the new, remixed article in HTML format. Your output must be indistinguishable in style from the Tone Reference Article.`,
 });
 
 const remixArticleFlow = ai.defineFlow(
