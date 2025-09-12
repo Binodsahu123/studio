@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { getToneExamples as getToneSamples } from './remix-article';
 
 const RewriteContentInputSchema = z.object({
   originalText: z
@@ -28,6 +29,10 @@ const RewriteContentOutputSchema = z.object({
     .describe('The rewritten content, formatted in HTML.'),
 });
 export type RewriteContentOutput = z.infer<typeof RewriteContentOutputSchema>;
+
+export async function getToneExamples(): Promise<Record<string, string>> {
+  return getToneSamples();
+}
 
 export async function rewriteContent(
   input: RewriteContentInput
