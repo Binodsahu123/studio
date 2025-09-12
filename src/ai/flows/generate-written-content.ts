@@ -11,10 +11,8 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GenerateWrittenContentInputSchema = z.object({
-  title: z.string().describe('The main title or topic of the content.'),
-  shortDescription: z.string().optional().describe('A short description of the content.'),
+  originalContent: z.string().describe('The original content to be enriched and formatted.'),
   language: z.string().describe('The language for the generated content (e.g., "English" or "Hindi").'),
-  additionalTopic: z.string().optional().describe('An additional topic or keyword to focus on.'),
 });
 export type GenerateWrittenContentInput = z.infer<typeof GenerateWrittenContentInputSchema>;
 
@@ -35,30 +33,8 @@ const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
-  prompt: `You are an expert SEO content writer. Your primary task is to write an in-depth, engaging, and comprehensive article of AT LEAST 1000 WORDS in the specified language.
-
-**Topic:** {{{title}}}
-**Base Description:** {{{shortDescription}}}
-**Additional Keyword:** {{{additionalTopic}}}
-**Language:** {{{language}}}
-
-**Content & Structure Guidelines:**
-- The article MUST be in HTML format.
-- DO NOT include an <h1> tag. Start directly with the first <h2> heading.
-- Use multiple catchy <h2> and <h3> tags.
-- Use <p> for paragraphs, <strong> for important keywords, and lists (<ul>) where appropriate.
-- The tone should be conversational yet expert.
-- The content must be fully SEO optimized, with the main title "{{title}}" appearing naturally.
-
-**SEO Asset Generation:**
-After writing the article, create the following assets for it:
-1.  **Titles:** Provide 10 SEO-friendly and click-worthy title options.
-2.  **Meta Description:** Create a compelling meta description (under 160 characters).
-3.  **Meta Tags:** Provide a comma-separated string of up to 50 relevant focus keywords.
-4.  **Image Titles:** Create 8 SEO-friendly titles for images relevant to the new article.
-`,
+  prompt: `Ye mera content hai "{{{originalContent}}}" Is content me full heading haff heading sub jodna ha aur jitna content diya hai utna hi jodna Hai Bahar ka kuchh bhi content nahin jodna Hai aur na hi jyada dimag lagane ki jarurat hai ismein Keval word press ke code editor ke liye SEO friendly bnao aur kahin Bahar ka content nahin jodna hai aur na hi kahin ISI content ko bus se friendly banana hai jitna Maine content Diya Hai Is content se meta description aur meta  tag bnao aur title bhi do jismein Mera yah title Aaye Jo seo फ्रेंडली और एकदम क्लिक वेट हो 10 टाइटल का ऑप्शन दो. Meta tag rank math ke liye do Focus keyword maximum 50 Coma Laga ke do yaar, Main ismein 8 image dalna chahta hun UN sabhi image ka title ISI content se uthakar bnao jo seo tittle se milta julta ho aur title mein phone ka jo jo specification ho vah sab aana chahie jaise ki RAM ROM camera display. The entire output must be in the language: {{{language}}}.`,
 });
-
 
 const generateWrittenContentFlow = ai.defineFlow(
   {
@@ -68,10 +44,18 @@ const generateWrittenContentFlow = ai.defineFlow(
   },
   async (input) => {
     const {output} = await prompt(input);
-    // Fallback for titles if the model doesn't generate them
-    if (!output!.titles || output!.titles.length === 0) {
-      output!.titles = [input.title];
+    
+    if (!output) {
+      throw new Error("Content generation failed.");
     }
-    return output!;
+
+    // Fallback for titles if the model doesn't generate them
+    if (!output.titles || output.titles.length === 0) {
+      // Create a fallback title from the first few words of the content
+      const fallbackTitle = input.originalContent.split(' ').slice(0, 10).join(' ');
+      output.titles = [fallbackTitle];
+    }
+    
+    return output;
   }
 );

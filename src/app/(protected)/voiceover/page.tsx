@@ -21,10 +21,9 @@ const formSchema = z.object({
   voice: z.string().min(1, 'Please select a voice.'),
 });
 
-// Using only the allowed voice names from the error message.
 const voices = [
-    { value: 'gacrux', label: 'Hindi (India) - Female 1' },
-    { value: 'schedar', label: 'Hindi (India) - Male 1' },
+    { value: 'gacrux', label: 'Hindi (India) - Female' },
+    { value: 'schedar', label: 'Hindi (India) - Male' },
     { value: 'achernar', label: 'English (India) - Female' },
     { value: 'algenib', label: 'English (India) - Male' },
     { value: 'autonoe', label: 'English (US) - Female' },

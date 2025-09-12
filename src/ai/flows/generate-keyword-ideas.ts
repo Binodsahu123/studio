@@ -18,7 +18,9 @@ export type GenerateKeywordIdeasInput = z.infer<typeof GenerateKeywordIdeasInput
 const KeywordIdeaSchema = z.object({
     keyword: z.string().describe('The suggested SEO keyword.'),
     difficulty: z.enum(['Low', 'Medium', 'High']).describe('Estimated difficulty to rank for this keyword.'),
+    difficultyScore: z.number().int().min(0).max(100).describe('A numerical score for difficulty from 0 to 100.'),
     searchVolume: z.enum(['Low', 'Medium', 'High']).describe('Estimated monthly search volume (Low, Medium, or High).'),
+    searchVolumeScore: z.number().int().min(0).max(100).describe('A numerical score for search volume from 0 to 100.'),
 });
 
 const GenerateKeywordIdeasOutputSchema = z.object({
@@ -40,7 +42,9 @@ const prompt = ai.definePrompt({
 For each keyword, you must provide:
 1.  **keyword**: The keyword idea itself.
 2.  **difficulty**: The estimated competition to rank for this keyword ('Low', 'Medium', or 'High').
-3.  **searchVolume**: The estimated monthly search volume for this keyword ('Low', 'Medium', or 'High').
+3.  **difficultyScore**: A numerical score for the difficulty from 0-100.
+4.  **searchVolume**: The estimated monthly search volume for this keyword ('Low', 'Medium', or 'High').
+5.  **searchVolumeScore**: A numerical score for the search volume from 0-100.
 
 Topic: {{{topic}}}
 
