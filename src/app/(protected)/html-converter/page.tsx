@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2, FileCode, Copy, Check } from 'lucide-react';
+import { Loader2, FileCode, Copy, Check, Sparkles, Wand2 } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
@@ -150,6 +150,49 @@ export default function HtmlConverterPage() {
               </Card>
             </div>
           )}
+           <div className="md:col-span-2 space-y-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Why Use This Tool?</CardTitle>
+                  <CardDescription>Understand the benefits of structured HTML for your content.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 text-muted-foreground">
+                  <div className="flex items-start gap-4">
+                    <Sparkles className="h-6 w-6 text-accent flex-shrink-0 mt-1" />
+                    <div>
+                      <h4 className="font-semibold text-foreground">Boost Your SEO</h4>
+                      <p>Search engines like Google prefer well-structured content. By using proper HTML tags like `<h2>` for headings and `<strong>` for important keywords, you make it easier for search bots to understand your content, which can improve your rankings.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <Wand2 className="h-6 w-6 text-accent flex-shrink-0 mt-1" />
+                    <div>
+                      <h4 className="font-semibold text-foreground">Save Time & Effort</h4>
+                      <p>Manually adding HTML tags to your articles is tedious and prone to errors. This tool automates the entire process, allowing you to focus on what matters: writing great content.</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>How It Works</CardTitle>
+                  <CardDescription>A simple process to get clean HTML.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 text-muted-foreground">
+                   <ol className="list-decimal pl-6 space-y-3">
+                    <li>
+                      <strong>Paste Your Text:</strong> Simply copy your plain text from any editor (like Notepad, Google Docs, or Word) and paste it into the "Your Plain Text" box.
+                    </li>
+                    <li>
+                      <strong>Convert:</strong> Click the "Convert to HTML" button. Our AI will analyze your text and intelligently add the appropriate HTML tags.
+                    </li>
+                    <li>
+                      <strong>Preview & Copy:</strong> You can preview how your content will look on a website. Once you're happy, switch to the "HTML" tab and copy the clean code to paste directly into your website's CMS (like WordPress or Blogger).
+                    </li>
+                  </ol>
+                </CardContent>
+              </Card>
+           </div>
         </div>
       </main>
       <Footer />
