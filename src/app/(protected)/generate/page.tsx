@@ -18,8 +18,8 @@ const tools = [
   },
   {
     icon: <Wand2 className="h-8 w-8 text-primary" />,
-    title: "Content Rewriter",
-    description: "Rephrase, shorten, or change the tone of your existing text to make it fresh.",
+    title: "Advanced Content Rewriter",
+    description: "Rephrase or change the tone of your text by choosing from professional writing styles.",
     href: "/rewrite",
     cta: "Rewrite Content",
     active: true,
