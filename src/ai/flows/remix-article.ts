@@ -17,7 +17,32 @@ const toneExamples: Record<string, string> = {
   'Smartphone Review': `The Vivo V29 5G is a premium smartphone from the company, known for its stunning design and excellent camera quality. This phone is especially for users who want strong performance and 5G connectivity along with a stylish look. It sports a 6.78-inch AMOLED 3D curved display with a 120Hz refresh rate and FHD+ resolution. Its display is very smooth and bright, making the experience of watching videos, gaming, and scrolling excellent. The biggest highlight of the Vivo V29 5G is its camera setup. It features a 50MP OIS primary camera, an 8MP ultra-wide, and a 2MP depth sensor.`,
   'Sports': `The final whistle blew, and the stadium erupted. Manchester United has secured a dramatic 2-1 victory over Liverpool in a nail-biting encounter at Old Trafford. The match, filled with end-to-end action, saw Marcus Rashford score a stunning winner in the 88th minute, sending the home fans into delirium. Liverpool's defense, which had been solid for most of the game, was finally breached by a moment of individual brilliance.`,
   'Politics': `The Parliament session concluded today after a week of heated debates on the new infrastructure bill. The opposition raised significant concerns regarding the bill's financial implications and environmental impact. The ruling party, however, maintained that the legislation is crucial for national economic growth and modernization. The bill is now set to be presented in the upper house for further deliberation next month.`,
-  'Technology': `Cybersecurity firm 'NexusGuard' has just unveiled its latest AI-powered threat detection platform, "Aegis 7." The new system utilizes advanced machine learning algorithms to predict and neutralize zero-day attacks in real-time. According to the company, Aegis 7 can analyze billions of data points per second, offering an unprecedented level of protection for enterprise networks against sophisticated cyber threats.`,
+  'Technology': `मार्केट में आया सबसे सस्ता Vivo का प्रीमियम स्मार्टफोन, 12GB RAM के साथ मिलेगा 64MP धाकड़ कैमरा
+
+Vivo V40e एक स्टाइलिश और पावरफुल 5G स्मार्टफोन है जिसे खासतौर पर उन यूज़र्स के लिए डिजाइन किया गया है जो बेहतर डिस्प्ले, शानदार कैमरा और लंबी बैटरी लाइफ की तलाश में रहते हैं।
+
+Vivo V40e
+इसका मॉडर्न डिजाइन और स्लिम बॉडी इसे प्रीमियम फील देते हैं। यह फोन गेमिंग, मल्टीटास्किंग और एंटरटेनमेंट सभी जरूरतों को पूरा करने में सक्षम है। Vivo का यह मॉडल अपनी कीमत में फ्लैगशिप जैसी परफॉर्मेंस देने का वादा करता है।
+
+Vivo V40e Features
+Design – फोन का डिजाइन काफी आकर्षक और स्लिम है। इसमें ग्लास फिनिश और कर्व्ड बॉडी दी गई है जो इसे पकड़ने में आरामदायक बनाती है। कलर ऑप्शंस भी प्रीमियम लुक को और खास बनाते हैं।
+
+Display – Vivo V40e में 6.7 इंच का AMOLED डिस्प्ले मिलता है जो 120Hz रिफ्रेश रेट सपोर्ट करता है। हाई ब्राइटनेस और HDR सपोर्ट के कारण वीडियो और गेमिंग का अनुभव बेहद स्मूद और डिटेल्ड बनता है।
+
+Camera – इसमें 64MP का प्राइमरी कैमरा, अल्ट्रा-वाइड और डेप्थ सेंसर के साथ दिया गया है। AI फीचर्स और नाइट मोड कम रोशनी में भी शानदार तस्वीरें कैप्चर करते हैं। फ्रंट कैमरा हाई-रेज़ॉल्यूशन सेल्फी और वीडियो कॉलिंग के लिए बेहतरीन है।
+
+Battery – फोन में 5000mAh की बैटरी दी गई है। यह फास्ट चार्जिंग सपोर्ट करती है जिससे बैटरी कुछ ही समय में चार्ज हो जाती है। एक बार चार्ज करने पर यह पूरे दिन का बैकअप आसानी से दे देती है।
+
+RAM & ROM – Vivo V40e में 8GB और 12GB RAM के विकल्प मिलते हैं। स्टोरेज के लिए 128GB और 256GB के वेरिएंट उपलब्ध हैं। यह कॉम्बिनेशन मल्टीटास्किंग और बड़े डेटा स्टोर करने के लिए परफेक्ट है।
+
+Performance – Vivo V40e परफॉर्मेंस के मामले में स्मूद और फास्ट है। चाहे गेमिंग हो, मल्टीटास्किंग हो या हाई-ग्राफिक्स एप्स का इस्तेमाल, यह फोन बिना किसी लैग के सब संभाल लेता है।
+
+Features – इसमें सिक्योरिटी के लिए इन-डिस्प्ले फिंगरप्रिंट सेंसर और फेस अनलॉक मौजूद हैं। कनेक्टिविटी के लिए 5G, ब्लूटूथ और वाई-फाई सपोर्ट मिलता है। डॉल्बी ऑडियो क्वालिटी म्यूज़िक और मूवी एक्सपीरियंस को और बेहतर बनाती है।
+
+Vivo V40e Price
+भारत में Vivo V40e की शुरुआती कीमत लगभग ₹28,999 हो सकती है। यह कीमत इसके RAM और स्टोरेज वेरिएंट पर निर्भर करेगी। कंपनी EMI विकल्प भी उपलब्ध कराएगी।
+
+जहां यूज़र्स लगभग ₹2,000–₹2,400 की मासिक किस्त पर इसे खरीद सकते हैं। आकर्षक डिजाइन, दमदार कैमरा और पावरफुल परफॉर्मेंस के साथ Vivo V40e उन यूज़र्स के लिए शानदार विकल्प है जो मिड-रेंज बजट में प्रीमियम अनुभव चाहते हैं`,
   'Law': `In a landmark judgment, the Supreme Court has ruled that the right to privacy is a fundamental right under Article 21 of the Constitution. The verdict, delivered by a nine-judge bench, overrules previous judgments on the matter. Legal experts believe this decision will have wide-ranging implications for data protection laws and individual freedoms in the digital age. The ruling emphasizes the intrinsic value of privacy and its importance for human dignity.`,
   'Government': `The Ministry of Health and Family Welfare has announced the rollout of the second phase of its nationwide vaccination drive, starting August 1st. This phase will target individuals between the ages of 18 and 44. Citizens can register through the official government portal. The ministry has assured that adequate vaccine stocks have been allocated to all states to ensure a smooth and efficient process.`,
   'Games': `Developer 'PixelHeart Studios' has just dropped the gameplay trailer for their highly anticipated open-world RPG, "Chronicles of Aethel." The trailer showcases the game's breathtaking visuals, dynamic combat system, and a sprawling world filled with mythical creatures. Fans are particularly excited about the non-linear storyline, which promises a unique experience for every player. The game is slated for a Q4 2024 release.`,
