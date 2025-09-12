@@ -37,7 +37,7 @@ export default function RemixPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       sourceArticles: '',
-      toneCategory: 'Casual Blog Post',
+      toneCategory: 'Technology',
       toneReferenceArticle: '',
     },
   });
