@@ -18,13 +18,6 @@ const tools = [
     cta: "Rewrite Content",
   },
   {
-    icon: <FileCode className="h-8 w-8 text-primary" />,
-    title: "Text to HTML Converter",
-    description: "Convert your plain text into SEO-friendly HTML for your WordPress articles with a single click.",
-    href: "/html-converter",
-    cta: "Convert Now",
-  },
-  {
     icon: <FileText className="h-8 w-8 text-primary" />,
     title: "Full Blog Post Workflow",
     description: "A step-by-step wizard to generate keywords, titles, outlines, and a full article from a single topic.",
@@ -43,7 +36,7 @@ const tools = [
     title: "Advanced SEO Analyzer",
     description: "Get keyword insights, difficulty analysis, and title suggestions to boost your rankings.",
     href: "/seo",
-    cta: "Analyze Keywords",
+cta: "Analyze Keywords",
   },
   {
     icon: <ImageIcon className="h-8 w-8 text-primary" />,

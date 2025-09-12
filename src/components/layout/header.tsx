@@ -8,7 +8,6 @@ const navLinks = [
     { href: "/write", label: "Write Content" },
     { href: "/rewrite", label: "Rewrite Content" },
     { href: "/remix", label: "Article Mixer" },
-    { href: "/html-converter", label: "HTML Converter" },
     { href: "/keywords", label: "Keyword Ideas" },
     { href: "/seo", label: "Advanced SEO Analyzer" },
     { href: "/image", label: "Image Generation" },
