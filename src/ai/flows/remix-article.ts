@@ -51,7 +51,31 @@ Vivo V40e Price
   'Business': `Reliance Industries Limited (RIL) announced its quarterly earnings today, posting a record-breaking net profit of ₹18,549 crore, a 15% year-on-year increase. The growth was primarily driven by strong performance in its retail and telecom ventures. The company's stock surged by 3% following the announcement. Analysts suggest that RIL's diversified portfolio continues to be a key factor in its sustained financial success.`,
   'Finance': `The Reserve Bank of India (RBI) has kept the repo rate unchanged at 6.5% for the sixth consecutive time, citing persistent inflationary pressures. The decision by the Monetary Policy Committee (MPC) was unanimous. The central bank has maintained its GDP growth forecast for the fiscal year at 7%, but remains cautious about the inflation outlook, which is projected to average 5.4% for the year.`,
   'Entertainment': `The trailer for the much-anticipated sci-fi epic "Nexus Point" has finally dropped, and it's already breaking the internet. Directed by visionary filmmaker Anya Sharma, the film stars superstar Vikram Rao in a role that promises to be a visual spectacle. Fans are praising the stunning visual effects and intriguing plot. "Nexus Point" is set to hit theaters worldwide this December, and is expected to be a major box office hit.`,
-  'Autos/Vehicles': `Tata Motors has launched the all-new Safari EV, marking its entry into the electric SUV segment. The Safari EV boasts an impressive claimed range of 500 km on a single charge and comes packed with features like a panoramic sunroof, a 12.3-inch touchscreen, and advanced driver-assistance systems (ADAS). Bookings are now open, with introductory prices starting at ₹25 lakh (ex-showroom).`,
+  'Autos/Vehicles': `Daldo 4000cc ताकतवर इंजन और प्रीमियम लुक के साथ Toyota की SUV कार हुई लॉन्च, जानिए कितनी है कीमत
+
+CAR कंपनी Toyota मोटर्स ने भारतीय बाजार में अपनी एक ताकतवर इंजन वाली suv कार को लांच कर दिया है, जो की Toyota FJ Cruiser SUV के नाम से जानी जाती है।
+
+इस फोर व्हीलर में कंपनी की ओर से 4000cc की पावरफुल इंजन का प्रयोग किया गया है। साथ ही इसमें मस्कुलर लोक लग्जरी इंटीरियर और कई आधुनिक फीचर से भी लैस किया गया है चलिए इसके बारे में विस्तार पूर्वक जान लेते हैं।
+
+Toyota FJ Cruiser SUV के इंटीरियर
+सबसे पहले बात अगर फोर व्हीलर के इंटीरियर की करें तो कंपनी के द्वारा इसे काफी मस्कुलर लुक दिया गया है। एसयूवी के फ्रंट में यूनिक डिजाइन वाली डंपर और हेडलाइट का प्रयोग किया गया है।
+
+वहीं इसके केबिन में हमें काफी माडर्न डैशबोर्ड लग्जरी इंटीरियर और कंफर्टेबल लेदर सीट मिलती है जो लंबी यात्रा को आरामदायक बनता है।
+
+Toyota FJ Cruiser SUV के फीचर्स
+Toyota FJ Cruiser SUV फीचर्स के मामले में भी काफी आधुनिक है कंपनी की ओर से इसमें टचस्क्रीन इन्फोटेनमेंट सिस्टम, ब्लूटूथ कनेक्टिविटी, सेफ्टी के लिए मल्टीप्ल एयरबैग
+
+360 डिग्री कैमरा, ऑटोमेटिक क्लाइमेट कंट्रोल, पावर विंडो, सीट बेल्ट अलर्ट, एलईडी हेडलाइट जैसे कई स्मार्ट और एडवांस्ड फीचर्स का प्रयोग किया गया है।
+
+Toyota FJ Cruiser SUV के इंजन
+इंजन और माइलेज के मामले में भी यह एसयूवी काफी कमल की है पावर और परफॉर्मेंस के लिए कंपनी की ओर से 4 लीटर का b6 पेट्रोल इंजन मिलता है जो की 3956cc की होने वाली है।
+
+यह इंजन 380Nm का टॉर्क और 270Bhp की पावर प्रोड्यूस करता है, इस इंजन के साथ पांच स्पीड ऑटोमेटिक गियर बॉक्स मिलता है जो की 17 से 18 किलोमीटर तक की माइलेज भी देती है।
+
+Toyota FJ Cruiser SUV के कीमत
+अगर आप भी अपने लिए एक ताकतवर इंजन और भौकाली लुक वाली सव खरीदना चाहते हैं तो आप Toyota FJ Cruiser SUV की और अपना रुख कर सकते हैं।
+
+बात अगर कीमत की करें तो बाजार में एसयूवी ₹35 लाख से शुरू होकर 40 लाख रुपए तक की कीमत पर उपलब्ध है।`,
   'Bike News': `Hero Splendor Plus हुआ और भी स्मार्ट, 70KM माइलेज और न्यू मॉडल के साथ मार्केट में हुई एंट्री
 
 
