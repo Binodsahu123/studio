@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { remixArticle, RemixArticleInput, RemixArticleOutput } from '@/ai/flows/remix-article';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Blend, Copy, Check } from 'lucide-react';
 import { Header } from '@/components/layout/header';
