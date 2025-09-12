@@ -15,10 +15,30 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+const toneCategories = [
+    { value: 'Casual Blog Post', label: 'Casual Blog Post' },
+    { value: 'News Report', label: 'News Report' },
+    { value: 'Smartphone Review', label: 'Smartphone Review' },
+    { value: 'Sports', label: 'Sports' },
+    { value: 'Politics', label: 'Politics' },
+    { value: 'Technology', label: 'Technology' },
+    { value: 'Law', label: 'Law' },
+    { value: 'Government', label: 'Government' },
+    { value: 'Games', label: 'Games' },
+    { value: 'Jobs', label: 'Jobs' },
+    { value: 'Education', label: 'Education' },
+    { value: 'Business', label: 'Business' },
+    { value: 'Finance', label: 'Finance' },
+    { value: 'Entertainment', label: 'Entertainment' },
+    { value: 'Autos/Vehicles', label: 'Autos/Vehicles' },
+];
+
 
 const formSchema = z.object({
   sourceArticles: z.string().min(100, 'Please enter at least 100 characters from source articles.'),
-  toneReferenceArticle: z.string().min(100, 'Please enter at least 100 characters for the tone reference.'),
+  toneCategory: z.string().min(1, 'Please select a tone category.'),
 });
 
 export default function RemixPage() {
@@ -32,7 +52,7 @@ export default function RemixPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       sourceArticles: '',
-      toneReferenceArticle: '',
+      toneCategory: 'Casual Blog Post',
     },
   });
 
@@ -40,7 +60,10 @@ export default function RemixPage() {
     setIsLoading(true);
     setRemixedHtml(null);
     try {
-      const input: RemixArticleInput = values;
+      const input: RemixArticleInput = {
+        ...values,
+        toneCategory: values.toneCategory as any,
+      };
       const result: RemixArticleOutput = await remixArticle(input);
       setRemixedHtml(result.remixedArticleHtml);
     } catch (error) {
@@ -87,8 +110,8 @@ export default function RemixPage() {
                 <div className="flex items-center gap-3">
                   <Blend className="h-8 w-8 text-primary" />
                   <div>
-                    <CardTitle className="text-3xl">Article Remix Tool</CardTitle>
-                    <CardDescription>Combine multiple articles into one unique piece with a consistent tone.</CardDescription>
+                    <CardTitle className="text-3xl">AI Article Mixer & Rephraser</CardTitle>
+                    <CardDescription>Combine multiple articles and adopt a professional tone from a predefined category.</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -109,20 +132,31 @@ export default function RemixPage() {
                         </FormItem>
                       )}
                     />
-                     <FormField
-                      control={form.control}
-                      name="toneReferenceArticle"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Tone Reference Article</FormLabel>
-                          <FormControl>
-                            <Textarea placeholder="Paste a human-written article here to set the tone..." {...field} rows={8} />
-                          </FormControl>
-                           <FormDescription>The AI will mimic the writing style, voice, and tone of this article.</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <FormField
+                        control={form.control}
+                        name="toneCategory"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Choose Tone & Style</FormLabel>
+                             <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a tone..." />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {toneCategories.map(category => (
+                                    <SelectItem key={category.value} value={category.value}>
+                                        {category.label}
+                                    </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>The AI will mimic the writing style of this category.</FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     <Button type="submit" disabled={isLoading} size="lg">
                       {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       Remix Article

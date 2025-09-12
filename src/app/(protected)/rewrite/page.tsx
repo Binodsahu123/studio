@@ -10,35 +10,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2, Wand2, Copy, Check } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
-
-const toneCategories = [
-    { value: 'Casual Blog Post', label: 'Casual Blog Post' },
-    { value: 'Professional Email', label: 'Professional Email' },
-    { value: 'News Report', label: 'News Report' },
-    { value: 'Smartphone Review', label: 'Smartphone Review' },
-    { value: 'Sports', label: 'Sports' },
-    { value: 'Politics', label: 'Politics' },
-    { value: 'Technology', label: 'Technology' },
-    { value: 'Law', label: 'Law' },
-    { value: 'Government', label: 'Government' },
-    { value: 'Games', label: 'Games' },
-    { value: 'Jobs', label: 'Jobs' },
-    { value: 'Education', label: 'Education' },
-    { value: 'Business', label: 'Business' },
-    { value: 'Finance', label: 'Finance' },
-    { value: 'Entertainment', label: 'Entertainment' },
-    { value: 'Autos/Vehicles', label: 'Autos/Vehicles' },
-];
+import { Input } from '@/components/ui/input';
 
 const formSchema = z.object({
   originalText: z.string().min(20, 'Please enter at least 20 characters to rewrite.'),
-  toneCategory: z.string().min(1, 'Please select a tone and style.'),
-  language: z.enum(['English', 'Hindi']),
+  instructions: z.string().min(3, 'Please provide instructions.'),
 });
 
 export default function RewritePage() {
@@ -51,8 +31,7 @@ export default function RewritePage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       originalText: '',
-      toneCategory: 'Casual Blog Post',
-      language: 'Hindi',
+      instructions: 'Make this more casual and friendly.',
     },
   });
 
@@ -60,10 +39,7 @@ export default function RewritePage() {
     setIsLoading(true);
     setRewrittenContent(null);
     try {
-      const input: RewriteContentInput = {
-        ...values,
-        toneCategory: values.toneCategory as any, // The enum in the flow is dynamically generated
-      };
+      const input: RewriteContentInput = values;
       const result: RewriteContentOutput = await rewriteContent(input);
       setRewrittenContent(result.rewrittenText);
     } catch (error) {
@@ -101,8 +77,8 @@ export default function RewritePage() {
                 <div className="flex items-center gap-3">
                   <Wand2 className="h-8 w-8 text-primary" />
                   <div>
-                    <CardTitle className="text-3xl">Advanced Content Rewriter</CardTitle>
-                    <CardDescription>Refine your text by adopting the tone and style of professional examples.</CardDescription>
+                    <CardTitle className="text-3xl">Content Rewriter</CardTitle>
+                    <CardDescription>Refine your text by giving simple instructions.</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -123,50 +99,18 @@ export default function RewritePage() {
                       )}
                     />
                     <FormField
-                        control={form.control}
-                        name="toneCategory"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Choose Tone & Style</FormLabel>
-                             <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a tone..." />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {toneCategories.map(category => (
-                                    <SelectItem key={category.value} value={category.value}>
-                                        {category.label}
-                                    </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                     <FormField
-                        control={form.control}
-                        name="language"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Output Language</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a language" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                  <SelectItem value="English">English</SelectItem>
-                                  <SelectItem value="Hindi">Hindi</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      control={form.control}
+                      name="instructions"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Instructions</FormLabel>
+                          <FormControl>
+                            <Input placeholder="e.g., 'Make it shorter and more professional' or 'Translate to Hindi'" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <Button type="submit" disabled={isLoading} size="lg">
                       {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       Rewrite Content

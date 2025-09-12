@@ -9,7 +9,7 @@ const navLinks = [
     { href: "/payment", label: "Pricing" },
     { href: "/write", label: "Write Content" },
     { href: "/rewrite", label: "Rewrite Content" },
-    { href: "/remix", label: "Article Remix" },
+    { href: "/remix", label: "Article Mixer" },
     { href: "/html-converter", label: "HTML Converter" },
     { href: "/blog", label: "Full Blog Post Workflow" },
     { href: "/keywords", label: "Keyword Ideas" },
