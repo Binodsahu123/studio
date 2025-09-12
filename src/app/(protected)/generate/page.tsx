@@ -32,14 +32,6 @@ const tools = [
     cta: "Remix Article",
     active: true,
   },
-   {
-    icon: <FileCode className="h-8 w-8 text-primary" />,
-    title: "Text to HTML Converter",
-    description: "Convert plain text into SEO-friendly, structured HTML automatically.",
-    href: "/html-converter",
-    cta: "Convert to HTML",
-    active: true,
-  },
   {
     icon: <FileText className="h-8 w-8 text-primary" />,
     title: "Blog",
