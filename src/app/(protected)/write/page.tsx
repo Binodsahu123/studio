@@ -22,10 +22,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 
 
 const formSchema = z.object({
-  title: z.string().min(1, 'Please enter a title.'),
-  shortDescription: z.string().optional(),
+  originalContent: z.string().min(50, 'Please enter at least 50 characters of content.'),
   language: z.string().min(1, 'Please select a language.'),
-  additionalTopic: z.string().optional(),
 });
 
 export default function WritePage() {
@@ -39,10 +37,8 @@ export default function WritePage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
-      shortDescription: '',
+      originalContent: '',
       language: 'Hindi',
-      additionalTopic: '',
     },
   });
 
@@ -141,38 +137,12 @@ export default function WritePage() {
                 />
                 <FormField
                   control={form.control}
-                  name="title"
+                  name="originalContent"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Topic / Main Title</FormLabel>
+                      <FormLabel>Your Content</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g., 'The Future of Artificial Intelligence' or 'Samsung Galaxy S24 Ultra Review'" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="shortDescription"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Short Description (Optional)</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Briefly describe what the content is about." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="additionalTopic"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Additional Topic/Keyword (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., 'Machine Learning'" {...field} />
+                        <Textarea placeholder="Paste your full article content here to be enriched..." {...field} rows={15} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -199,18 +169,18 @@ export default function WritePage() {
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
               <p>
-                To get the best results from our AI Content Writer, please follow these guidelines when filling out the form:
+                To get the best results from our AI Content Writer, simply paste your entire article content into the "Your Content" box.
               </p>
               <ul className="list-disc pl-6 space-y-3">
                 <li>
-                  <strong>Topic / Main Title:</strong> Be as specific as possible. Instead of "new phone," use "Samsung Galaxy S24 Ultra vs iPhone 15 Pro Max camera comparison." The more details you provide, the better the AI can tailor the content.
+                  <strong>Your Content:</strong> Paste your full draft here. The AI will read it, add SEO-friendly headings (h2, h3), bold important keywords, and structure it for a WordPress editor.
                 </li>
-                <li>
-                  <strong>Short Description:</strong> Briefly explain the main goal of your article. For example, "An article comparing the camera quality of two flagship phones to help users decide which is better for photography."
+                 <li>
+                  <strong>Language:</strong> Select the language of your content to ensure all generated assets (titles, descriptions, tags) are in the correct language.
                 </li>
               </ul>
               <p>
-                The AI will generate a complete article, 10 SEO-friendly titles, a meta description, relevant tags, and even titles for images to use in your post.
+                The AI will generate a complete article, 10 SEO-friendly titles, a meta description, relevant tags, and even titles for images to use in your post. It will not add any information that wasn't in your original text.
               </p>
           </CardContent>
         </Card>

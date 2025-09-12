@@ -11,10 +11,8 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GenerateWrittenContentInputSchema = z.object({
-  title: z.string().describe('The main title or topic of the content.'),
-  shortDescription: z.string().optional().describe('A short description of the content.'),
+  originalContent: z.string().describe('The original content to be enriched and formatted.'),
   language: z.string().describe('The language for the generated content (e.g., "English" or "Hindi").'),
-  additionalTopic: z.string().optional().describe('An additional topic or keyword to focus on.'),
 });
 export type GenerateWrittenContentInput = z.infer<typeof GenerateWrittenContentInputSchema>;
 
@@ -35,32 +33,7 @@ const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
-  prompt: `You are an expert content writer and SEO specialist. Your task is to write an in-depth, well-researched, and engaging article on the topic provided.
-
-**Instructions:**
-- **Language**: The entire output, including the article, titles, description, tags, and image titles, MUST be in **{{{language}}}**.
-- **Topic**: "{{{title}}}"
-{{#if shortDescription}}
-- **Description**: {{{shortDescription}}}
-{{/if}}
-{{#if additionalTopic}}
-- **Additional Focus**: {{{additionalTopic}}}
-{{/if}}
-
-- **Article Content**:
-  - Write a high-quality, comprehensive article that is Google Discover friendly.
-  - Structure the article naturally with a clear introduction, detailed body, and a strong conclusion.
-  - The tone should be conversational yet informative, like an expert explaining the topic.
-  - Break down complex ideas into simple terms. Use statistics, examples, or expert opinions to add credibility.
-  - The final article must be in HTML format. It MUST NOT include an <h1> tag. Use multiple catchy <h2> and <h3> headings, <p> for paragraphs, <strong> for important keywords, and lists (<ul>) where appropriate.
-
-- **Generated Assets**:
-  1.  **titles:** An array of 10 catchy, SEO-friendly title options for the article, in the specified language.
-  2.  **description:** A compelling meta description under 160 characters, in the specified language.
-  3.  **tags:** A comma-separated string of up to 50 relevant focus keywords, in the specified language.
-  4.  **imageTitles:** An array of 8 SEO-friendly image titles related to the content, in the specified language.
-
-Return all of this in a single, valid JSON object.`,
+  prompt: `Ye mera content hai "{{{originalContent}}}" Is content me full heading haff heading sub jodna ha aur jitna content diya hai utna hi jodna Hai Bahar ka kuchh bhi content nahin jodna Hai aur na hi jyada dimag lagane ki jarurat hai ismein Keval word press ke code editor ke liye SEO friendly bnao aur kahin Bahar ka content nahin jodna hai aur na hi kahin ISI content ko bus se friendly banana hai jitna Maine content Diya Hai Is content se meta description aur meta  tag bnao aur title bhi do jismein Mera yah title Aaye Jo seo फ्रेंडली और एकदम क्लिक वेट हो 10 टाइटल का ऑप्शन दो. Meta tag rank math ke liye do Focus keyword maximum 50 Coma Laga ke do yaar, Main ismein 8 image dalna chahta hun UN sabhi image ka title ISI content se uthakar bnao jo seo tittle se milta julta ho aur title mein phone ka jo jo specification ho vah sab aana chahie jaise ki RAM ROM camera display. The entire output must be in the language: {{{language}}}.`,
 });
 
 const generateWrittenContentFlow = ai.defineFlow(
@@ -78,7 +51,9 @@ const generateWrittenContentFlow = ai.defineFlow(
 
     // Fallback for titles if the model doesn't generate them
     if (!output.titles || output.titles.length === 0) {
-      output.titles = [input.title];
+      // Create a fallback title from the first few words of the content
+      const fallbackTitle = input.originalContent.split(' ').slice(0, 10).join(' ');
+      output.titles = [fallbackTitle];
     }
     
     return output;
