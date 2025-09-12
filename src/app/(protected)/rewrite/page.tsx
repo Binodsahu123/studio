@@ -1,11 +1,11 @@
 // src/app/rewrite/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { rewriteContent, RewriteContentInput, RewriteContentOutput, getToneExamples } from '@/ai/flows/rewrite-content';
+import { rewriteContent, RewriteContentInput, RewriteContentOutput } from '@/ai/flows/rewrite-content';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -14,11 +14,10 @@ import { Loader2, Wand2, Copy, Check } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const formSchema = z.object({
   originalText: z.string().min(20, 'Please enter at least 20 characters to rewrite.'),
-  instructions: z.string().min(3, 'Please select a tone.'),
+  instructions: z.string().min(20, 'Please provide a sample text of at least 20 characters for tone reference.'),
 });
 
 export default function RewritePage() {
@@ -26,33 +25,20 @@ export default function RewritePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const { toast } = useToast();
-  const [toneCategories, setToneCategories] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       originalText: '',
-      instructions: 'Casual Blog Post',
+      instructions: '',
     },
   });
-
-  useEffect(() => {
-    async function fetchTones() {
-      const tones = await getToneExamples();
-      setToneCategories(Object.keys(tones));
-    }
-    fetchTones();
-  }, []);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setRewrittenContent(null);
     try {
-      const input: RewriteContentInput = {
-        originalText: values.originalText,
-        instructions: `Rewrite the following text in the style of a ${values.instructions}.`
-      };
-      const result: RewriteContentOutput = await rewriteContent(input);
+      const result: RewriteContentOutput = await rewriteContent(values);
       setRewrittenContent(result.rewrittenText);
     } catch (error) {
       console.error('Error rewriting content:', error);
@@ -90,7 +76,7 @@ export default function RewritePage() {
                   <Wand2 className="h-8 w-8 text-primary" />
                   <div>
                     <CardTitle className="text-3xl">Content Rewriter</CardTitle>
-                    <CardDescription>Refine your text by choosing a professional tone and style.</CardDescription>
+                    <CardDescription>Refine your text by providing a sample of the desired tone and style.</CardDescription>
                   </div>
                 </div>
               </CardHeader>
@@ -115,21 +101,10 @@ export default function RewritePage() {
                       name="instructions"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Choose Tone & Style</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a tone..." />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {toneCategories.map(category => (
-                                  <SelectItem key={category} value={category}>
-                                      {category}
-                                  </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <FormLabel>Rewrite Instructions / Tone Reference</FormLabel>
+                          <FormControl>
+                            <Textarea placeholder="Paste a sample text here that has the tone and style you want the AI to adopt..." {...field} rows={6} />
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}

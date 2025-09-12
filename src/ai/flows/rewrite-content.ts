@@ -9,7 +9,6 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
-import { getToneExamples as getToneSamples } from './remix-article';
 
 const RewriteContentInputSchema = z.object({
   originalText: z
@@ -18,7 +17,7 @@ const RewriteContentInputSchema = z.object({
   instructions: z
     .string()
     .describe(
-      'Specific instructions for rewriting the text (e.g., "make it more casual", "shorten it to two paragraphs", "translate to spanish").'
+      'Specific instructions for rewriting the text, which can include a tone reference sample.'
     ),
 });
 export type RewriteContentInput = z.infer<typeof RewriteContentInputSchema>;
@@ -30,9 +29,6 @@ const RewriteContentOutputSchema = z.object({
 });
 export type RewriteContentOutput = z.infer<typeof RewriteContentOutputSchema>;
 
-export async function getToneExamples(): Promise<Record<string, string>> {
-  return getToneSamples();
-}
 
 export async function rewriteContent(
   input: RewriteContentInput
@@ -44,17 +40,19 @@ const prompt = ai.definePrompt({
   name: 'rewriteContentPrompt',
   input: {schema: RewriteContentInputSchema},
   output: {schema: RewriteContentOutputSchema},
-  prompt: `You are an expert content editor. Your task is to rewrite the following text based on the provided instructions. The final output must be formatted as clean HTML.
+  prompt: `You are an expert content editor. Your primary task is to rewrite the "Original Text" to perfectly match the tone, style, and voice of the provided "Rewrite Instructions / Tone Reference".
 
-**Original Text:**
+**Original Text (The content to be rewritten):**
 \`\`\`
 {{{originalText}}}
 \`\`\`
 
-**Instructions:**
-"{{{instructions}}}"
+**Rewrite Instructions / Tone Reference (Adopt this style):**
+\`\`\`
+{{{instructions}}}
+\`\`\`
 
-Please now provide the rewritten text below, fully following the instructions. Use appropriate HTML tags like <p>, <strong>, and <ul> where necessary.`,
+Please now provide the rewritten text below, fully following the style of the reference. Format the output as clean HTML. Use appropriate tags like <p>, <h2>, <h3>, <strong>, and <ul> where necessary.`,
 });
 
 const rewriteContentFlow = ai.defineFlow(
