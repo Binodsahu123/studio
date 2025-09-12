@@ -17,6 +17,13 @@ const tools = [
     href: "/rewrite",
     cta: "Rewrite Content",
   },
+    {
+    icon: <FileCode className="h-8 w-8 text-primary" />,
+    title: "Text to HTML Converter",
+    description: "Convert plain text into SEO-friendly, structured HTML automatically.",
+    href: "/html-converter",
+    cta: "Convert to HTML",
+  },
   {
     icon: <FileText className="h-8 w-8 text-primary" />,
     title: "Full Blog Post Workflow",
