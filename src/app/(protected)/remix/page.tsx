@@ -1,11 +1,11 @@
 // src/app/(protected)/remix/page.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { remixArticle, RemixArticleInput, RemixArticleOutput } from '@/ai/flows/remix-article';
+import { remixArticle, RemixArticleInput, toneExamples } from '@/ai/flows/remix-article';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
@@ -17,28 +17,12 @@ import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-const toneCategories = [
-    { value: 'Casual Blog Post', label: 'Casual Blog Post' },
-    { value: 'News Report', label: 'News Report' },
-    { value: 'Smartphone Review', label: 'Smartphone Review' },
-    { value: 'Sports', label: 'Sports' },
-    { value: 'Politics', label: 'Politics' },
-    { value: 'Technology', label: 'Technology' },
-    { value: 'Law', label: 'Law' },
-    { value: 'Government', label: 'Government' },
-    { value: 'Games', label: 'Games' },
-    { value: 'Jobs', label: 'Jobs' },
-    { value: 'Education', label: 'Education' },
-    { value: 'Business', label: 'Business' },
-    { value: 'Finance', label: 'Finance' },
-    { value: 'Entertainment', label: 'Entertainment' },
-    { value: 'Autos/Vehicles', label: 'Autos/Vehicles' },
-];
-
+const toneCategories = Object.keys(toneExamples).map(key => ({ value: key, label: key }));
 
 const formSchema = z.object({
   sourceArticles: z.string().min(100, 'Please enter at least 100 characters from source articles.'),
   toneCategory: z.string().min(1, 'Please select a tone category.'),
+  toneReferenceArticle: z.string().min(50, 'The tone reference article must have at least 50 characters.'),
 });
 
 export default function RemixPage() {
@@ -53,18 +37,25 @@ export default function RemixPage() {
     defaultValues: {
       sourceArticles: '',
       toneCategory: 'Casual Blog Post',
+      toneReferenceArticle: toneExamples['Casual Blog Post'],
     },
   });
+
+  const selectedCategory = form.watch('toneCategory');
+
+  useEffect(() => {
+    form.setValue('toneReferenceArticle', toneExamples[selectedCategory] || '');
+  }, [selectedCategory, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setRemixedHtml(null);
     try {
       const input: RemixArticleInput = {
-        ...values,
-        toneCategory: values.toneCategory as any,
+        sourceArticles: values.sourceArticles,
+        toneReferenceArticle: values.toneReferenceArticle,
       };
-      const result: RemixArticleOutput = await remixArticle(input);
+      const result = await remixArticle(input);
       setRemixedHtml(result.remixedArticleHtml);
     } catch (error) {
       console.error('Error remixing article:', error);
@@ -123,7 +114,7 @@ export default function RemixPage() {
                       name="sourceArticles"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Source Article(s) Content</FormLabel>
+                          <FormLabel>1. Source Article(s) Content</FormLabel>
                           <FormControl>
                             <Textarea placeholder="Paste content from one or more source articles here..." {...field} rows={12} />
                           </FormControl>
@@ -137,7 +128,7 @@ export default function RemixPage() {
                         name="toneCategory"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Choose Tone & Style</FormLabel>
+                            <FormLabel>2. Choose a Tone Category</FormLabel>
                              <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger>
@@ -152,11 +143,25 @@ export default function RemixPage() {
                                 ))}
                               </SelectContent>
                             </Select>
-                            <FormDescription>The AI will mimic the writing style of this category.</FormDescription>
+                            <FormDescription>This will auto-fill the tone reference article below.</FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+                     <FormField
+                      control={form.control}
+                      name="toneReferenceArticle"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>3. Tone Reference Article (Editable)</FormLabel>
+                          <FormControl>
+                            <Textarea placeholder="The sample article for the selected tone will appear here." {...field} rows={8} />
+                          </FormControl>
+                           <FormDescription>The AI will mimic the writing style of this article. You can edit it if you want to fine-tune the tone.</FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <Button type="submit" disabled={isLoading} size="lg">
                       {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       Remix Article
@@ -225,3 +230,4 @@ export default function RemixPage() {
     </div>
   );
 }
+
