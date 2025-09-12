@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Loader2, Hash, Copy, Check, Youtube, Instagram } from 'lucide-react';
+import { Loader2, Hash, Copy, Check, Youtube, Instagram, Tags } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
@@ -28,9 +28,10 @@ const categories = [
 ];
 
 export default function HashtagGeneratorPage() {
-  const [hashtags, setHashtags] = useState<string[] | null>(null);
+  const [results, setResults] = useState<GenerateHashtagsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isCopied, setIsCopied] = useState(false);
+  const [isHashtagCopied, setIsHashtagCopied] = useState(false);
+  const [isTagsCopied, setIsTagsCopied] = useState(false);
   const [currentPlatform, setCurrentPlatform] = useState<'Instagram' | 'YouTube' | null>(null);
   const { toast } = useToast();
 
@@ -47,16 +48,16 @@ export default function HashtagGeneratorPage() {
         return;
     }
     setIsLoading(true);
-    setHashtags(null);
+    setResults(null);
     setCurrentPlatform(platform);
     try {
       const input: GenerateHashtagsInput = { topic, platform };
       const result: GenerateHashtagsOutput = await generateHashtags(input);
-      setHashtags(result.hashtags);
+      setResults(result);
     } catch (error) {
-      console.error(`Error generating ${platform} hashtags:`, error);
+      console.error(`Error generating ${platform} assets:`, error);
       toast({
-        title: "Error Generating Hashtags",
+        title: "Error Generating Assets",
         description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
@@ -69,13 +70,17 @@ export default function HashtagGeneratorPage() {
     handleGenerate(values.topic, 'Instagram'); // Default to Instagram for topic-based generation
   };
 
-  const handleCopy = () => {
-    if (!hashtags || hashtags.length === 0) return;
-    const hashtagText = hashtags.join(' ');
-    navigator.clipboard.writeText(hashtagText).then(() => {
-      setIsCopied(true);
-      toast({ title: "Copied hashtags to clipboard!" });
-      setTimeout(() => setIsCopied(false), 2000);
+  const handleCopy = (text: string, type: 'hashtags' | 'tags') => {
+    navigator.clipboard.writeText(text).then(() => {
+      if (type === 'hashtags') {
+        setIsHashtagCopied(true);
+        toast({ title: "Copied hashtags to clipboard!" });
+        setTimeout(() => setIsHashtagCopied(false), 2000);
+      } else {
+        setIsTagsCopied(true);
+        toast({ title: "Copied SEO tags to clipboard!" });
+        setTimeout(() => setIsTagsCopied(false), 2000);
+      }
     });
   };
 
@@ -88,17 +93,16 @@ export default function HashtagGeneratorPage() {
             <div className="flex items-center gap-3">
               <Hash className="h-8 w-8 text-primary" />
               <div>
-                <CardTitle className="text-3xl">AI Hashtag Generator</CardTitle>
-                <CardDescription>Generate viral and trending hashtags for Instagram and YouTube.</CardDescription>
+                <CardTitle className="text-3xl">AI Hashtag & Tag Generator</CardTitle>
+                <CardDescription>Generate viral hashtags and SEO tags for your content.</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent className="space-y-8">
-            {/* Generate from Title */}
             <Card className="bg-secondary/50">
               <CardHeader>
-                <CardTitle className="text-xl">Generate Hashtags from a Title</CardTitle>
-                <CardDescription>Enter a topic or title to get relevant hashtags for a specific platform.</CardDescription>
+                <CardTitle className="text-xl">Generate from a Title</CardTitle>
+                <CardDescription>Enter a topic to get relevant hashtags and tags.</CardDescription>
               </CardHeader>
               <CardContent>
                 <Form {...form}>
@@ -116,7 +120,7 @@ export default function HashtagGeneratorPage() {
                         </FormItem>
                       )}
                     />
-                    <div className="flex gap-4">
+                    <div className="flex flex-wrap gap-4">
                         <Button type="submit" disabled={isLoading}>
                           {isLoading && currentPlatform === 'Instagram' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           <Instagram className="mr-2 h-4 w-4" /> Generate for Instagram
@@ -131,11 +135,10 @@ export default function HashtagGeneratorPage() {
               </CardContent>
             </Card>
 
-            {/* Trending Hashtags by Category */}
             <Card>
                <CardHeader>
-                <CardTitle className="text-xl">Discover Trending Hashtags by Category</CardTitle>
-                <CardDescription>Get popular hashtags for different categories and platforms.</CardDescription>
+                <CardTitle className="text-xl">Discover by Category</CardTitle>
+                <CardDescription>Get popular assets for different categories and platforms.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
@@ -143,7 +146,7 @@ export default function HashtagGeneratorPage() {
                   <div className="flex flex-wrap gap-2">
                     {categories.map(category => (
                         <Button key={`insta-${category}`} onClick={() => handleGenerate(category, 'Instagram')} disabled={isLoading} variant="outline" size="sm">
-                            {isLoading && currentPlatform === 'Instagram' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                            {isLoading && currentPlatform === 'Instagram' && results === null ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                             {category}
                         </Button>
                     ))}
@@ -155,7 +158,7 @@ export default function HashtagGeneratorPage() {
                   <div className="flex flex-wrap gap-2">
                     {categories.map(category => (
                         <Button key={`yt-${category}`} onClick={() => handleGenerate(category, 'YouTube')} disabled={isLoading} variant="outline" size="sm">
-                            {isLoading && currentPlatform === 'YouTube' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                            {isLoading && currentPlatform === 'YouTube' && results === null ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                             {category}
                         </Button>
                     ))}
@@ -164,30 +167,37 @@ export default function HashtagGeneratorPage() {
               </CardContent>
             </Card>
           
-            {(isLoading || hashtags) && (
-                <div className="space-y-4 pt-4">
+            {(isLoading || results) && (
+              <div className="space-y-6 pt-4">
+                {isLoading ? (
+                  <Card>
+                    <CardHeader>
+                        <CardTitle>Generating...</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex flex-col items-center justify-center h-full py-12 text-muted-foreground">
+                      <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                      <p className="mt-4">Generating assets...</p>
+                    </CardContent>
+                  </Card>
+                ) : results && (
+                  <>
+                    {/* Hashtags Card */}
                     <Card>
                         <CardHeader>
                             <div className="flex justify-between items-center">
-                                <CardTitle>Generated Hashtags</CardTitle>
-                                {hashtags && hashtags.length > 0 && (
-                                    <Button variant="outline" size="sm" onClick={handleCopy} disabled={isCopied}>
-                                        {isCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                                <CardTitle className="flex items-center gap-2"><Hash className="h-5 w-5"/> Generated Hashtags</CardTitle>
+                                {results.hashtags && results.hashtags.length > 0 && (
+                                    <Button variant="outline" size="sm" onClick={() => handleCopy(results.hashtags.join(' '), 'hashtags')} disabled={isHashtagCopied}>
+                                        {isHashtagCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
                                         Copy All
                                     </Button>
                                 )}
                             </div>
                         </CardHeader>
-                        <CardContent className="min-h-[150px]">
-                            {isLoading && (
-                                <div className="flex flex-col items-center justify-center h-full py-12 text-muted-foreground">
-                                    <Loader2 className="h-12 w-12 animate-spin text-primary" />
-                                    <p className="mt-4">Generating hashtags...</p>
-                                </div>
-                            )}
-                            {!isLoading && hashtags && (
+                        <CardContent className="min-h-[100px]">
+                            {results.hashtags && results.hashtags.length > 0 ? (
                                 <div className="flex flex-wrap gap-2">
-                                {hashtags.map((tag, index) => (
+                                {results.hashtags.map((tag, index) => (
                                     <Badge key={index} variant="secondary" className="text-sm font-normal cursor-pointer hover:bg-primary/10" onClick={() => {
                                       navigator.clipboard.writeText(tag);
                                       toast({title: `Copied "${tag}"`});
@@ -196,15 +206,40 @@ export default function HashtagGeneratorPage() {
                                     </Badge>
                                 ))}
                                 </div>
+                            ) : (
+                                <div className="flex items-center justify-center h-full text-muted-foreground">
+                                   <p>No hashtags were generated. Please try a different topic.</p>
+                                </div>
                             )}
-                             {!isLoading && hashtags?.length === 0 && (
-                                 <div className="flex flex-col items-center justify-center h-full py-12 text-muted-foreground">
-                                    <p>No hashtags were generated. Please try a different topic.</p>
-                                 </div>
-                             )}
                         </CardContent>
                     </Card>
-                </div>
+
+                    {/* SEO Tags Card */}
+                    <Card>
+                        <CardHeader>
+                            <div className="flex justify-between items-center">
+                                <CardTitle className="flex items-center gap-2"><Tags className="h-5 w-5"/> Generated SEO Tags</CardTitle>
+                                {results.tags && (
+                                    <Button variant="outline" size="sm" onClick={() => handleCopy(results.tags, 'tags')} disabled={isTagsCopied}>
+                                        {isTagsCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                                        Copy All
+                                    </Button>
+                                )}
+                            </div>
+                        </CardHeader>
+                        <CardContent className="min-h-[60px]">
+                            {results.tags ? (
+                                <p className="text-sm text-muted-foreground">{results.tags}</p>
+                            ) : (
+                                <div className="flex items-center justify-center h-full text-muted-foreground">
+                                   <p>No SEO tags were generated.</p>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                  </>
+                )}
+              </div>
             )}
           </CardContent>
         </Card>
