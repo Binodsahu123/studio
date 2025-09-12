@@ -21,6 +21,18 @@ const toneCategories = [
     { value: 'Professional Email', label: 'Professional Email' },
     { value: 'News Report', label: 'News Report' },
     { value: 'Smartphone Review', label: 'Smartphone Review' },
+    { value: 'Sports', label: 'Sports' },
+    { value: 'Politics', label: 'Politics' },
+    { value: 'Technology', label: 'Technology' },
+    { value: 'Law', label: 'Law' },
+    { value: 'Government', label: 'Government' },
+    { value: 'Games', label: 'Games' },
+    { value: 'Jobs', label: 'Jobs' },
+    { value: 'Education', label: 'Education' },
+    { value: 'Business', label: 'Business' },
+    { value: 'Finance', label: 'Finance' },
+    { value: 'Entertainment', label: 'Entertainment' },
+    { value: 'Autos/Vehicles', label: 'Autos/Vehicles' },
 ];
 
 const formSchema = z.object({
@@ -50,7 +62,7 @@ export default function RewritePage() {
     try {
       const input: RewriteContentInput = {
         ...values,
-        toneCategory: values.toneCategory as "Casual Blog Post" | "Professional Email" | "News Report" | "Smartphone Review",
+        toneCategory: values.toneCategory as any, // The enum in the flow is dynamically generated
       };
       const result: RewriteContentOutput = await rewriteContent(input);
       setRewrittenContent(result.rewrittenText);
