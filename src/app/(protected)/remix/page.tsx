@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { remixArticle, RemixArticleInput, toneExamples } from '@/ai/flows/remix-article';
+import { remixArticle, RemixArticleInput, getToneExamples } from '@/ai/flows/remix-article';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
@@ -16,8 +16,6 @@ import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-const toneCategories = Object.keys(toneExamples).map(key => ({ value: key, label: key }));
 
 const formSchema = z.object({
   sourceArticles: z.string().min(100, 'Please enter at least 100 characters from source articles.'),
@@ -32,20 +30,38 @@ export default function RemixPage() {
   const [isTextCopied, setIsTextCopied] = useState(false);
   const { toast } = useToast();
 
+  const [toneCategories, setToneCategories] = useState<{ value: string; label: string; }[]>([]);
+  const [toneExamples, setToneExamples] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    async function fetchToneData() {
+      const examples = await getToneExamples();
+      setToneExamples(examples);
+      const categories = Object.keys(examples).map(key => ({ value: key, label: key }));
+      setToneCategories(categories);
+      form.setValue('toneCategory', 'Casual Blog Post');
+      form.setValue('toneReferenceArticle', examples['Casual Blog Post'] || '');
+    }
+    fetchToneData();
+  }, [form]);
+
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       sourceArticles: '',
-      toneCategory: 'Casual Blog Post',
-      toneReferenceArticle: toneExamples['Casual Blog Post'],
+      toneCategory: '',
+      toneReferenceArticle: '',
     },
   });
 
   const selectedCategory = form.watch('toneCategory');
 
   useEffect(() => {
-    form.setValue('toneReferenceArticle', toneExamples[selectedCategory] || '');
-  }, [selectedCategory, form]);
+    if (toneExamples && selectedCategory) {
+      form.setValue('toneReferenceArticle', toneExamples[selectedCategory] || '');
+    }
+  }, [selectedCategory, form, toneExamples]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
@@ -230,4 +246,3 @@ export default function RemixPage() {
     </div>
   );
 }
-

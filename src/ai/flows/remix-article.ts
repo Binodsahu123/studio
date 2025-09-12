@@ -10,7 +10,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const toneExamples: Record<string, string> = {
+const toneExamples: Record<string, string> = {
   'Casual Blog Post': `Today, I finally got my hands on the new "Chrono-Lander" smartwatch, and I'm buzzing! First off, the unboxing experience was a treat. The packaging is super sleek. Setting it up was a breeze—just a few taps and it was synced with my phone. The screen is gorgeous, and the strap feels really comfy. I took it for a spin on my evening run, and the GPS tracking was spot on. Honestly, I'm already impressed. Can't wait to see what else this thing can do over the next few days!`,
   'News Report': `New data released by the National Statistics Bureau today reveals a significant shift in consumer spending habits over the past fiscal quarter. The report indicates a 15% decrease in spending on non-essential goods, while the services sector saw a surprising 8% surge. Economists suggest these figures reflect growing market uncertainty and a reprioritization of household budgets. The government is expected to issue a formal statement later this week in response to these findings.`,
   'Smartphone Review': `The Vivo V29 5G is a premium smartphone from the company, known for its stunning design and excellent camera quality. This phone is especially for users who want strong performance and 5G connectivity along with a stylish look. It sports a 6.78-inch AMOLED 3D curved display with a 120Hz refresh rate and FHD+ resolution. Its display is very smooth and bright, making the experience of watching videos, gaming, and scrolling excellent. The biggest highlight of the Vivo V29 5G is its camera setup. It features a 50MP OIS primary camera, an 8MP ultra-wide, and a 2MP depth sensor.`,
@@ -28,7 +28,7 @@ export const toneExamples: Record<string, string> = {
   'Autos/Vehicles': `Tata Motors has launched the all-new Safari EV, marking its entry into the electric SUV segment. The Safari EV boasts an impressive claimed range of 500 km on a single charge and comes packed with features like a panoramic sunroof, a 12.3-inch touchscreen, and advanced driver-assistance systems (ADAS). Bookings are now open, with introductory prices starting at ₹25 lakh (ex-showroom).`,
 };
 
-export const RemixArticleInputSchema = z.object({
+const RemixArticleInputSchema = z.object({
   sourceArticles: z
     .string()
     .describe('The combined text content from multiple source articles to be remixed.'),
@@ -47,6 +47,10 @@ export async function remixArticle(
   input: RemixArticleInput
 ): Promise<RemixArticleOutput> {
   return remixArticleFlow(input);
+}
+
+export async function getToneExamples() {
+    return toneExamples;
 }
 
 const prompt = ai.definePrompt({
@@ -88,4 +92,3 @@ const remixArticleFlow = ai.defineFlow(
     return output!;
   }
 );
-
