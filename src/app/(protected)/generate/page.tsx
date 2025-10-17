@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2, FileCode, Hash, Search, Combine } from "lucide-react";
+import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2, FileCode, Hash, Search, Combine, Blend } from "lucide-react";
 
 const tools = [
   {
@@ -19,25 +19,33 @@ const tools = [
   {
     icon: <Wand2 className="h-8 w-8 text-primary" />,
     title: "Content Rewriter",
-    description: "Rephrase, shorten, or change the tone of your existing text to make it fresh.",
+    description: "Rephrase, shorten, or change the tone of your text with a simple instruction.",
     href: "/rewrite",
     cta: "Rewrite Content",
     active: true,
   },
-    {
+  {
+    icon: <Blend className="h-8 w-8 text-primary" />,
+    title: "AI Article Mixer & Rephraser",
+    description: "Combine multiple articles and adopt a professional tone from predefined categories.",
+    href: "/remix",
+    cta: "Remix Article",
+    active: true,
+  },
+  {
     icon: <FileCode className="h-8 w-8 text-primary" />,
     title: "Text to HTML Converter",
-    description: "Convert your plain text into SEO-friendly HTML for your WordPress articles.",
+    description: "Convert plain text into well-structured, SEO-friendly HTML.",
     href: "/html-converter",
     cta: "Convert Now",
     active: true,
   },
   {
     icon: <FileText className="h-8 w-8 text-primary" />,
-    title: "Full Blog Post Workflow",
-    description: "A step-by-step wizard to generate keywords, titles, outlines, and a full article.",
+    title: "Blog",
+    description: "Tips, tutorials, and insights on how to get the most out of our AI-powered content creation tools.",
     href: "/blog",
-    cta: "Start Workflow",
+    cta: "Read Now",
     active: true,
   },
    {

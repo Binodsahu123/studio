@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Loader2, Search } from 'lucide-react';
+import { Loader2, Search, Copy } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
@@ -76,6 +76,12 @@ export default function KeywordIdeasPage() {
       default:
         return 'secondary';
     }
+  };
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast({ title: `Copied "${text}"` });
+    });
   };
 
   return (
@@ -152,9 +158,10 @@ export default function KeywordIdeasPage() {
                           <Table>
                               <TableHeader>
                                   <TableRow>
-                                  <TableHead className="w-[50%]">Keyword</TableHead>
+                                  <TableHead className="w-[45%]">Keyword</TableHead>
                                   <TableHead className="text-center">Competition</TableHead>
                                   <TableHead className="text-center">Search Volume</TableHead>
+                                  <TableHead className="text-right">Action</TableHead>
                                   </TableRow>
                               </TableHeader>
                               <TableBody>
@@ -162,10 +169,15 @@ export default function KeywordIdeasPage() {
                                   <TableRow key={item.keyword}>
                                       <TableCell className="font-medium">{item.keyword}</TableCell>
                                       <TableCell className="text-center">
-                                          <Badge variant={getBadgeVariant(item.difficulty)}>{item.difficulty}</Badge>
+                                          <Badge variant={getBadgeVariant(item.difficulty)}>{item.difficulty} ({item.difficultyScore})</Badge>
                                       </TableCell>
                                       <TableCell className="text-center">
-                                          <Badge variant={getBadgeVariant(item.searchVolume)}>{item.searchVolume}</Badge>
+                                          <Badge variant={getBadgeVariant(item.searchVolume)}>{item.searchVolume} ({item.searchVolumeScore})</Badge>
+                                      </TableCell>
+                                      <TableCell className="text-right">
+                                        <Button variant="ghost" size="sm" onClick={() => handleCopy(item.keyword)}>
+                                            <Copy className="h-4 w-4" />
+                                        </Button>
                                       </TableCell>
                                   </TableRow>
                                   ))}

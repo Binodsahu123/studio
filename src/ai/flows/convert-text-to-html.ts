@@ -1,8 +1,8 @@
 'use server';
 /**
- * @fileOverview A flow to convert plain text into SEO-friendly HTML.
+ * @fileOverview A flow to convert plain text to structured HTML.
  *
- * - convertTextToHtml - A function that converts text to HTML.
+ * - convertTextToHtml - A function that takes plain text and converts it to HTML.
  * - ConvertTextToHtmlInput - The input type for the function.
  * - ConvertTextToHtmlOutput - The return type for the function.
  */
@@ -11,9 +11,7 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const ConvertTextToHtmlInputSchema = z.object({
-  text: z
-    .string()
-    .describe('The plain text content to be converted to HTML.'),
+  text: z.string().describe('The plain text to be converted to HTML.'),
 });
 export type ConvertTextToHtmlInput = z.infer<
   typeof ConvertTextToHtmlInputSchema
@@ -22,7 +20,7 @@ export type ConvertTextToHtmlInput = z.infer<
 const ConvertTextToHtmlOutputSchema = z.object({
   htmlContent: z
     .string()
-    .describe('The generated SEO-friendly HTML content.'),
+    .describe('The resulting structured and semantic HTML.'),
 });
 export type ConvertTextToHtmlOutput = z.infer<
   typeof ConvertTextToHtmlOutputSchema
@@ -38,21 +36,21 @@ const prompt = ai.definePrompt({
   name: 'convertTextToHtmlPrompt',
   input: {schema: ConvertTextToHtmlInputSchema},
   output: {schema: ConvertTextToHtmlOutputSchema},
-  prompt: `You are an expert SEO content formatter for WordPress. Your task is to convert the following plain text into a well-structured, SEO-friendly HTML document.
+  prompt: `You are an expert web developer. Your task is to convert the following plain text into well-structured, semantic HTML.
 
 **Instructions:**
-- Use the exact text provided. Do not add any new content or words from outside. Do not be overly creative.
-- Add appropriate HTML tags like <h2> for main headings, <h3> for subheadings, and <p> for paragraphs.
-- Use <strong> tags for important keywords to make them stand out.
-- The output must be only the HTML content, ready to be pasted into a WordPress code editor.
-- Do not include <html>, <body>, or <h1> tags.
+- Analyze the provided text to identify headings, paragraphs, lists, and important keywords.
+- Use appropriate HTML tags like <h2>, <h3> for headings, <p> for paragraphs, <ul> and <li> for lists, and <strong> for bolding important terms.
+- The structure should be logical and reflect the hierarchy of the original text.
+- DO NOT include <html>, <body>, or <head> tags in your output. The output should only be the HTML content for the body.
+- Ensure the output is clean and properly formatted.
 
 **Plain Text to Convert:**
 \`\`\`
 {{{text}}}
 \`\`\`
 
-Now, generate the HTML content based on these instructions.`,
+Now, generate the HTML content.`,
 });
 
 const convertTextToHtmlFlow = ai.defineFlow(

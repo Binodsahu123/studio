@@ -1,4 +1,3 @@
-// src/app/write/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -22,10 +21,10 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 
 
 const formSchema = z.object({
-  title: z.string().min(1, 'Please enter a title.'),
-  shortDescription: z.string().optional(),
+  title: z.string().min(10, 'Please enter a title of at least 10 characters.'),
+  description: z.string().optional(),
+  keywords: z.string().optional(),
   language: z.string().min(1, 'Please select a language.'),
-  additionalTopic: z.string().optional(),
 });
 
 export default function WritePage() {
@@ -40,9 +39,9 @@ export default function WritePage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: '',
-      shortDescription: '',
-      language: 'English',
-      additionalTopic: '',
+      description: '',
+      keywords: '',
+      language: 'Hindi',
     },
   });
 
@@ -118,6 +117,45 @@ export default function WritePage() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                 <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Main Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., 'A Complete Guide to Digital Marketing in 2024'" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Short Description (Optional)</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Briefly describe what the article is about..." {...field} rows={3} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="keywords"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Keywords / Tags (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., seo, content marketing, smb" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="language"
@@ -135,45 +173,6 @@ export default function WritePage() {
                             <SelectItem value="Hindi">Hindi</SelectItem>
                         </SelectContent>
                       </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Topic / Main Title</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., 'The Future of Artificial Intelligence' or 'Samsung Galaxy S24 Ultra Review'" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="shortDescription"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Short Description (Optional)</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Briefly describe what the content is about." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="additionalTopic"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Additional Topic/Keyword (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., 'Machine Learning'" {...field} />
-                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -199,14 +198,17 @@ export default function WritePage() {
           </CardHeader>
           <CardContent className="space-y-4 text-muted-foreground">
               <p>
-                To get the best results from our AI Content Writer, please follow these guidelines when filling out the form:
+                To get the best results from our AI Content Writer, simply provide a clear and specific title. The more detailed your title, the better the article will be.
               </p>
               <ul className="list-disc pl-6 space-y-3">
                 <li>
-                  <strong>Topic / Main Title:</strong> Be as specific as possible. Instead of "new phone," use "Samsung Galaxy S24 Ultra vs iPhone 15 Pro Max camera comparison." The more details you provide, the better the AI can tailor the content.
+                  <strong>Main Title:</strong> This is the most important input. A good title helps the AI understand the topic, angle, and target audience.
                 </li>
                 <li>
-                  <strong>Short Description:</strong> Briefly explain the main goal of your article. For example, "An article comparing the camera quality of two flagship phones to help users decide which is better for photography."
+                  <strong>Short Description (Optional):</strong> Provide a sentence or two of context to guide the AI on the article's goal or tone.
+                </li>
+                <li>
+                  <strong>Keywords (Optional):</strong> List comma-separated keywords you want the AI to focus on.
                 </li>
               </ul>
               <p>

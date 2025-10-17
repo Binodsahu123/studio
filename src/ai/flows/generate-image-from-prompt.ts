@@ -1,4 +1,3 @@
-// src/ai/flows/generate-image-from-prompt.ts
 'use server';
 
 /**
@@ -45,7 +44,7 @@ const generateImageFromPromptFlow = ai.defineFlow(
   async input => {
     const {media} = await ai.generate({
       model: 'googleai/imagen-4.0-fast-generate-001',
-      prompt: `digital art, ${input.promptText}`,
+      prompt: input.promptText,
     });
 
     if (!media || !media.url) {

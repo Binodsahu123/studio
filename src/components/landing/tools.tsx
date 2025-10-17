@@ -20,7 +20,7 @@ const tools = [
   {
     icon: <FileCode className="h-8 w-8 text-primary" />,
     title: "Text to HTML Converter",
-    description: "Convert your plain text into SEO-friendly HTML for your WordPress articles with a single click.",
+    description: "Convert plain text into well-structured, SEO-friendly HTML.",
     href: "/html-converter",
     cta: "Convert Now",
   },
@@ -43,7 +43,7 @@ const tools = [
     title: "Advanced SEO Analyzer",
     description: "Get keyword insights, difficulty analysis, and title suggestions to boost your rankings.",
     href: "/seo",
-    cta: "Analyze Keywords",
+cta: "Analyze Keywords",
   },
   {
     icon: <ImageIcon className="h-8 w-8 text-primary" />,

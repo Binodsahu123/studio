@@ -1,8 +1,8 @@
 'use server';
 /**
- * @fileOverview A flow to generate relevant and trending hashtags from a topic or category.
+ * @fileOverview A flow to generate relevant hashtags and SEO tags from a topic or category.
  *
- * - generateHashtags - A function that generates hashtags.
+ * - generateHashtags - A function that generates hashtags and tags.
  * - GenerateHashtagsInput - The input type for the function.
  * - GenerateHashtagsOutput - The return type for the function.
  */
@@ -11,13 +11,14 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GenerateHashtagsInputSchema = z.object({
-  topic: z.string().describe('The topic, category, or title to generate hashtags for.'),
+  topic: z.string().describe('The topic, category, or title to generate hashtags and tags for.'),
   platform: z.enum(['Instagram', 'YouTube']).describe('The social media platform for which to generate hashtags.'),
 });
 export type GenerateHashtagsInput = z.infer<typeof GenerateHashtagsInputSchema>;
 
 const GenerateHashtagsOutputSchema = z.object({
   hashtags: z.array(z.string()).describe('An array of 20-30 generated hashtags, including the # symbol.'),
+  tags: z.string().describe('A comma-separated string of 15-20 relevant SEO keywords/tags.'),
 });
 export type GenerateHashtagsOutput = z.infer<typeof GenerateHashtagsOutputSchema>;
 
@@ -29,17 +30,20 @@ const prompt = ai.definePrompt({
   name: 'generateHashtagsPrompt',
   input: {schema: GenerateHashtagsInputSchema},
   output: {schema: GenerateHashtagsOutputSchema},
-  prompt: `You are a social media expert specializing in hashtag strategy for {{platform}}. Your task is to generate a list of 20-30 highly relevant, popular, and trending hashtags based on a specific topic or category.
+  prompt: `You are a social media and SEO expert. Your task is to generate a list of hashtags and SEO tags based on a specific topic.
 
 **Instructions:**
-- Generate hashtags for the platform: **{{platform}}**.
-- The topic/category is: **{{{topic}}}**.
-- Generate hashtags that are directly related to the provided topic/category.
-- Include a mix of popular (high-traffic), niche (specific), and keyword-specific hashtags.
-- All hashtags must start with the '#' symbol.
-- Return the list as a JSON array of strings.
+1.  **Hashtags:** Generate a list of 20-30 highly relevant, popular, and trending hashtags for the platform: **{{platform}}**.
+    - Include a mix of popular (high-traffic), niche (specific), and keyword-specific hashtags.
+    - All hashtags must start with the '#' symbol.
 
-Generate the hashtags now.`,
+2.  **SEO Tags:** Generate a comma-separated string of 15-20 relevant SEO keywords (tags). These should be suitable for a blog post or website content.
+
+**Topic/Category:** **{{{topic}}}**
+
+Return the full output as a JSON object with 'hashtags' and 'tags' keys.
+
+Generate the assets now.`,
 });
 
 const generateHashtagsFlow = ai.defineFlow(

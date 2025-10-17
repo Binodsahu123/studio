@@ -2,15 +2,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PenTool, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const navLinks = [
-    { href: "/#features", label: "Features" },
-    { href: "/payment", label: "Pricing" },
     { href: "/write", label: "Write Content" },
     { href: "/rewrite", label: "Rewrite Content" },
-    { href: "/html-converter", label: "HTML Converter" },
-    { href: "/blog", label: "Full Blog Post Workflow" },
+    { href: "/remix", label: "Article Mixer" },
     { href: "/keywords", label: "Keyword Ideas" },
     { href: "/seo", label: "Advanced SEO Analyzer" },
     { href: "/image", label: "Image Generation" },
@@ -19,6 +16,9 @@ const navLinks = [
     { href: "/seo-assets", label: "SEO Assets Generator" },
     { href: "/detect", label: "AI Detector" },
     { href: "/#faq", label: "Support" },
+    { href: "/#features", label: "Features" },
+    { href: "/payment", label: "Pricing" },
+    { href: "/blog", label: "Blog" },
 ];
 
 export function Header() {
@@ -33,11 +33,16 @@ export function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="hidden items-center space-x-1 md:flex">
-            {navLinks.map((link) => (
-                <Button key={link.href} asChild variant="ghost">
-                    <Link href={link.href}>{link.label}</Link>
-                </Button>
-            ))}
+             <ScrollArea className="max-w-xl lg:max-w-2xl whitespace-nowrap">
+                <div className="flex items-center space-x-1">
+                    {navLinks.map((link) => (
+                        <Button key={link.href} asChild variant="ghost">
+                            <Link href={link.href}>{link.label}</Link>
+                        </Button>
+                    ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
             <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
               <Link href="/generate">Start Creating</Link>
             </Button>

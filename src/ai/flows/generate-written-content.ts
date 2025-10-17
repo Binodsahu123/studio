@@ -11,10 +11,10 @@ import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
 const GenerateWrittenContentInputSchema = z.object({
-  title: z.string().describe('The main title or topic of the content.'),
-  shortDescription: z.string().optional().describe('A short description of the content.'),
+  title: z.string().describe('The main title of the article.'),
+  description: z.string().optional().describe('A short description of the article to give context.'),
+  keywords: z.string().optional().describe('A comma-separated list of keywords to focus on.'),
   language: z.string().describe('The language for the generated content (e.g., "English" or "Hindi").'),
-  additionalTopic: z.string().optional().describe('An additional topic or keyword to focus on.'),
 });
 export type GenerateWrittenContentInput = z.infer<typeof GenerateWrittenContentInputSchema>;
 
@@ -35,30 +35,38 @@ const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
-  prompt: `You are an expert SEO content writer. Your primary task is to write an in-depth, engaging, and comprehensive article of AT LEAST 1000 WORDS in the specified language.
+  prompt: `You are an expert content creator and SEO specialist. Your task is to write an in-depth, well-researched article that is Google Discover friendly, based on the provided title, description, and keywords.
 
-**Topic:** {{{title}}}
-**Base Description:** {{{shortDescription}}}
-**Additional Keyword:** {{{additionalTopic}}}
-**Language:** {{{language}}}
+**Article Details:**
+- **Title:** {{{title}}}
+{{#if description}}
+- **Description:** {{{description}}}
+{{/if}}
+{{#if keywords}}
+- **Keywords:** {{{keywords}}}
+{{/if}}
 
-**Content & Structure Guidelines:**
-- The article MUST be in HTML format.
-- DO NOT include an <h1> tag. Start directly with the first <h2> heading.
-- Use multiple catchy <h2> and <h3> tags.
-- Use <p> for paragraphs, <strong> for important keywords, and lists (<ul>) where appropriate.
-- The tone should be conversational yet expert.
-- The content must be fully SEO optimized, with the main title "{{title}}" appearing naturally.
+**Your Instructions are:**
+1.  **Tone and Style:** Write in a conversational yet informative tone. The language should be simple Hindi with some English words (Hinglish), making it clear and accessible to a broad audience. The final article must feel like it was written by a human expert, not an AI. It must have a "human touch".
+2.  **Length:** The article must be at least 1000 words.
+3.  **Structure:**
+    *   Start with two strong introductory paragraphs that include searchable keywords.
+    *   Structure the rest of the article naturally with full headings (h2) and sub-headings (h3).
+    *   Do not overuse bullet points. Use them only where it's important to list items.
+    *   Include one table under a relevant heading to present data or comparisons.
+    *   Ensure a logical flow with a strong conclusion.
+4.  **Content:**
+    *   Stick to the information related to the title, description, and keywords. Do not add external or unnecessary information.
+    *   Your primary goal is to create an SEO-friendly article for a WordPress code editor.
+5.  **Generated Assets (in the same language as the article - {{{language}}}):**
+    *   **Titles:** Generate 10 alternative titles that are SEO-friendly and click-worthy, based on the main title.
+    *   **Meta Description:** Create a compelling meta description.
+    *   **Meta Tags:** Provide a list of up to 50 focus keywords for Rank Math, separated by commas.
+    *   **Image Titles:** Create 8 SEO-friendly titles for images that could be used in the article. These titles should be related to the main topic and include relevant specifications if mentioned (e.g., RAM, ROM, camera, display for a phone review).
 
-**SEO Asset Generation:**
-After writing the article, create the following assets for it:
-1.  **Titles:** Provide 10 SEO-friendly and click-worthy title options.
-2.  **Meta Description:** Create a compelling meta description (under 160 characters).
-3.  **Meta Tags:** Provide a comma-separated string of up to 50 relevant focus keywords.
-4.  **Image Titles:** Create 8 SEO-friendly titles for images relevant to the new article.
+The entire output, including all generated assets, must be in the specified language: **{{{language}}}**.
 `,
 });
-
 
 const generateWrittenContentFlow = ai.defineFlow(
   {
@@ -68,10 +76,16 @@ const generateWrittenContentFlow = ai.defineFlow(
   },
   async (input) => {
     const {output} = await prompt(input);
-    // Fallback for titles if the model doesn't generate them
-    if (!output!.titles || output!.titles.length === 0) {
-      output!.titles = [input.title];
+    
+    if (!output) {
+      throw new Error("Content generation failed.");
     }
-    return output!;
+
+    // Fallback for titles if the model doesn't generate them
+    if (!output.titles || output.titles.length === 0) {
+      output.titles = [input.title];
+    }
+    
+    return output;
   }
 );
