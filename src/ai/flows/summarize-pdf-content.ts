@@ -1,10 +1,16 @@
-// Summarizes the content of a PDF file provided as a data URI.
-
 'use server';
+/**
+ * @fileOverview A flow to summarize the content of a PDF file.
+ *
+ * - summarizePdfContent - A function that summarizes a PDF.
+ * - SummarizePdfContentInput - The input type for the function.
+ * - SummarizePdfContentOutput - The return type for the function.
+ */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 import {PDFLoader} from 'langchain/document_loaders/fs/pdf';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const SummarizePdfContentInputSchema = z.object({
   pdfDataUri: z
@@ -34,6 +40,7 @@ export async function summarizePdfContent(
 
 const summarizePdfContentPrompt = ai.definePrompt({
   name: 'summarizePdfContentPrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: z.object({pdfContent: z.string()})},
   output: {schema: SummarizePdfContentOutputSchema},
   prompt: `Summarize the following PDF content. Be concise and focus on the main points.\n\nPDF Content: {{{pdfContent}}}`,

@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const GenerateWrittenContentInputSchema = z.object({
   title: z.string().describe('The main title of the article.'),
@@ -33,6 +34,7 @@ export async function generateWrittenContent(input: GenerateWrittenContentInput)
 
 const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: GenerateWrittenContentInputSchema},
   output: {schema: GenerateWrittenContentOutputSchema},
   prompt: `You are an expert content creator and SEO specialist. Your task is to write an in-depth, well-researched article that is Google Discover friendly, based on the provided title, description, and keywords.

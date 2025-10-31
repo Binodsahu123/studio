@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const AnalyzeContentOriginalityInputSchema = z.object({
   text: z.string().describe('The text content to be analyzed.'),
@@ -51,6 +52,7 @@ export async function analyzeContentOriginality(
 
 const prompt = ai.definePrompt({
   name: 'analyzeContentOriginalityPrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: AnalyzeContentOriginalityInputSchema},
   output: {schema: AnalyzeContentOriginalityOutputSchema},
   prompt: `You are an expert AI content detector. Your task is to analyze the following text and determine the probability that it was written by an AI. You are not a plagiarism checker, but you should flag text that seems overly generic or unoriginal.

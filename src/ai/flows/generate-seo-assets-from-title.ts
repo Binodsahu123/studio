@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const GenerateSeoAssetsFromTitleInputSchema = z.object({
   title: z.string().describe('The title of the content to generate assets for.'),
@@ -46,6 +47,7 @@ export async function generateSeoAssetsFromTitle(
 
 const prompt = ai.definePrompt({
   name: 'generateSeoAssetsFromTitlePrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: GenerateSeoAssetsFromTitleInputSchema},
   output: {schema: GenerateSeoAssetsFromTitleOutputSchema},
   prompt: `You are an expert SEO and social media strategist. Your task is to generate key assets for a piece of content based on its title.

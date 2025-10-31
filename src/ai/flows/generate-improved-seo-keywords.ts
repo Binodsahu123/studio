@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const GenerateImprovedSeoKeywordsInputSchema = z.object({
   originalKeywords: z
@@ -55,6 +56,7 @@ export async function generateImprovedSeoKeywords(
 
 const prompt = ai.definePrompt({
   name: 'generateImprovedSeoKeywordsPrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: GenerateImprovedSeoKeywordsInputSchema},
   output: {schema: GenerateImprovedSeoKeywordsOutputSchema},
   prompt: `You are an expert SEO strategist and content analyst. Your task is to analyze the provided topic and optional keywords and generate a list of 10-15 improved, high-potential SEO keywords.

@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const ConvertTextToHtmlInputSchema = z.object({
   text: z.string().describe('The plain text to be converted to HTML.'),
@@ -34,6 +35,7 @@ export async function convertTextToHtml(
 
 const prompt = ai.definePrompt({
   name: 'convertTextToHtmlPrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: ConvertTextToHtmlInputSchema},
   output: {schema: ConvertTextToHtmlOutputSchema},
   prompt: `You are an expert web developer. Your task is to convert the following plain text into well-structured, semantic HTML.

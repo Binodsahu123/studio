@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const GenerateHashtagsInputSchema = z.object({
   topic: z.string().describe('The topic, category, or title to generate hashtags and tags for.'),
@@ -28,6 +29,7 @@ export async function generateHashtags(input: GenerateHashtagsInput): Promise<Ge
 
 const prompt = ai.definePrompt({
   name: 'generateHashtagsPrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: GenerateHashtagsInputSchema},
   output: {schema: GenerateHashtagsOutputSchema},
   prompt: `You are a social media and SEO expert. Your task is to generate a list of hashtags and SEO tags based on a specific topic.

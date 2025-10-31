@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const GenerateKeywordIdeasInputSchema = z.object({
   topic: z.string().describe('The topic or category to generate keyword ideas for.'),
@@ -35,6 +36,7 @@ export async function generateKeywordIdeas(input: GenerateKeywordIdeasInput): Pr
 
 const prompt = ai.definePrompt({
   name: 'generateKeywordIdeasPrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: GenerateKeywordIdeasInputSchema},
   output: {schema: GenerateKeywordIdeasOutputSchema},
   prompt: `You are an expert SEO keyword researcher. Your task is to generate 10-15 keyword ideas for the given topic.

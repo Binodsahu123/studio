@@ -10,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const toneExamples: Record<string, string> = {
   'Casual Blog Post': `Today, I finally got my hands on the new "Chrono-Lander" smartwatch, and I'm buzzing! First off, the unboxing experience was a treat. The packaging is super sleek. Setting it up was a breeze—just a few taps and it was synced with my phone. The screen is gorgeous, and the strap feels really comfy. I took it for a spin on my evening run, and the GPS tracking was spot on. Honestly, I'm already impressed. Can't wait to see what else this thing can do over the next few days!`,
@@ -134,6 +135,7 @@ export async function remixArticle(
 
 const prompt = ai.definePrompt({
   name: 'remixArticlePrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: RemixArticleInputSchema},
   output: {schema: RemixArticleOutputSchema},
   prompt: `You are an expert content writer whose only job is to rewrite text in a specific style.

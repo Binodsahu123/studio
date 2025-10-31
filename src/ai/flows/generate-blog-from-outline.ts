@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const GenerateBlogFromOutlineInputSchema = z.object({
   title: z.string().describe('The main title of the article.'),
@@ -27,6 +28,7 @@ export async function generateBlogFromOutline(input: GenerateBlogFromOutlineInpu
 
 const prompt = ai.definePrompt({
   name: 'generateBlogFromOutlinePrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: GenerateBlogFromOutlineInputSchema},
   output: {schema: GenerateBlogFromOutlineOutputSchema},
   prompt: `You are an expert SEO content writer. Your task is to write an in-depth, well-researched, and engaging article based on the provided title and HTML outline.

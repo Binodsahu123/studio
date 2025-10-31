@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const RewriteContentInputSchema = z.object({
   originalText: z
@@ -38,6 +39,7 @@ export async function rewriteContent(
 
 const prompt = ai.definePrompt({
   name: 'rewriteContentPrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: RewriteContentInputSchema},
   output: {schema: RewriteContentOutputSchema},
   prompt: `You are an expert content editor. Your primary task is to rewrite the "Original Text" to perfectly match the tone, style, and voice of the provided "Rewrite Instructions / Tone Reference".

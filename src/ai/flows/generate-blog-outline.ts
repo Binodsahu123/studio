@@ -9,6 +9,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {googleAI} from '@genkit-ai/google-genai';
 
 const GenerateBlogOutlineInputSchema = z.object({
   title: z.string().describe('The title of the blog post.'),
@@ -27,6 +28,7 @@ export async function generateBlogOutline(input: GenerateBlogOutlineInput): Prom
 
 const prompt = ai.definePrompt({
   name: 'generateBlogOutlinePrompt',
+  model: googleAI.model('gemini-1.5-flash'),
   input: {schema: GenerateBlogOutlineInputSchema},
   output: {schema: GenerateBlogOutlineOutputSchema},
   prompt: `You are an expert content strategist. Your task is to create a comprehensive, well-structured blog post outline based on the provided title and keywords.
