@@ -47,7 +47,7 @@ export async function generateSeoAssetsFromTitle(
 
 const prompt = ai.definePrompt({
   name: 'generateSeoAssetsFromTitlePrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: GenerateSeoAssetsFromTitleInputSchema},
   output: {schema: GenerateSeoAssetsFromTitleOutputSchema},
   prompt: `You are an expert SEO and social media strategist. Your task is to generate key assets for a piece of content based on its title.

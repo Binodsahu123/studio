@@ -56,7 +56,7 @@ export async function generateImprovedSeoKeywords(
 
 const prompt = ai.definePrompt({
   name: 'generateImprovedSeoKeywordsPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: GenerateImprovedSeoKeywordsInputSchema},
   output: {schema: GenerateImprovedSeoKeywordsOutputSchema},
   prompt: `You are an expert SEO strategist and content analyst. Your task is to analyze the provided topic and optional keywords and generate a list of 10-15 improved, high-potential SEO keywords.

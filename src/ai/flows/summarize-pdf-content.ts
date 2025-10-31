@@ -40,7 +40,7 @@ export async function summarizePdfContent(
 
 const summarizePdfContentPrompt = ai.definePrompt({
   name: 'summarizePdfContentPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: z.object({pdfContent: z.string()})},
   output: {schema: SummarizePdfContentOutputSchema},
   prompt: `Summarize the following PDF content. Be concise and focus on the main points.\n\nPDF Content: {{{pdfContent}}}`,

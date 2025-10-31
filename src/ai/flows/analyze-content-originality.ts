@@ -52,7 +52,7 @@ export async function analyzeContentOriginality(
 
 const prompt = ai.definePrompt({
   name: 'analyzeContentOriginalityPrompt',
-  model: 'googleai/gemini-pro',
+  model: googleAI.model('gemini-pro'),
   input: {schema: AnalyzeContentOriginalityInputSchema},
   output: {schema: AnalyzeContentOriginalityOutputSchema},
   prompt: `You are an expert AI content detector. Your task is to analyze the following text and determine the probability that it was written by an AI. You are not a plagiarism checker, but you should flag text that seems overly generic or unoriginal.
@@ -78,4 +78,6 @@ const analyzeContentOriginalityFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    
+    return output!;
+  }
+);

@@ -29,7 +29,7 @@ export async function generateHashtags(input: GenerateHashtagsInput): Promise<Ge
 
 const prompt = ai.definePrompt({
   name: 'generateHashtagsPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: GenerateHashtagsInputSchema},
   output: {schema: GenerateHashtagsOutputSchema},
   prompt: `You are a social media and SEO expert. Your task is to generate a list of hashtags and SEO tags based on a specific topic.

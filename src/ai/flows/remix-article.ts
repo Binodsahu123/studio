@@ -135,7 +135,7 @@ export async function remixArticle(
 
 const prompt = ai.definePrompt({
   name: 'remixArticlePrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: RemixArticleInputSchema},
   output: {schema: RemixArticleOutputSchema},
   prompt: `You are an expert content writer whose only job is to rewrite text in a specific style.

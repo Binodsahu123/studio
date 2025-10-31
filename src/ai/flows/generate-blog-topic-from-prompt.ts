@@ -27,7 +27,7 @@ export async function generateBlogTopic(input: GenerateBlogTopicInput): Promise<
 
 const prompt = ai.definePrompt({
   name: 'generateBlogTopicPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: GenerateBlogTopicInputSchema},
   output: {schema: GenerateBlogTopicOutputSchema},
   prompt: `You are a blog topic generator. Generate 5 blog topics from the following prompt: {{{prompt}}}. Return the topics as a JSON array of strings.\n`,

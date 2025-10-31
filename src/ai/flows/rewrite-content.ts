@@ -39,7 +39,7 @@ export async function rewriteContent(
 
 const prompt = ai.definePrompt({
   name: 'rewriteContentPrompt',
-  model: googleAI.model('gemini-1.5-flash'),
+  model: googleAI.model('gemini-pro'),
   input: {schema: RewriteContentInputSchema},
   output: {schema: RewriteContentOutputSchema},
   prompt: `You are an expert content editor. Your primary task is to rewrite the "Original Text" to perfectly match the tone, style, and voice of the provided "Rewrite Instructions / Tone Reference".
