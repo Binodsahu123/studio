@@ -36,9 +36,12 @@ export async function generateKeywordIdeas(input: GenerateKeywordIdeasInput): Pr
 
 const prompt = ai.definePrompt({
   name: 'generateKeywordIdeasPrompt',
-  model: googleAI.model('gemini-pro'),
+  model: 'googleai/gemini-pro',
   input: {schema: GenerateKeywordIdeasInputSchema},
-  output: {schema: GenerateKeywordIdeasOutputSchema},
+  output: {
+    format: 'json',
+    schema: GenerateKeywordIdeasOutputSchema,
+  },
   prompt: `You are an expert SEO keyword researcher. Your task is to generate 10-15 keyword ideas for the given topic.
 
 For each keyword, you must provide:

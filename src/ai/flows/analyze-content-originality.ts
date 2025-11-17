@@ -52,9 +52,12 @@ export async function analyzeContentOriginality(
 
 const prompt = ai.definePrompt({
   name: 'analyzeContentOriginalityPrompt',
-  model: googleAI.model('gemini-pro'),
+  model: 'googleai/gemini-pro',
   input: {schema: AnalyzeContentOriginalityInputSchema},
-  output: {schema: AnalyzeContentOriginalityOutputSchema},
+  output: {
+    format: 'json',
+    schema: AnalyzeContentOriginalityOutputSchema,
+  },
   prompt: `You are an expert AI content detector. Your task is to analyze the following text and determine the probability that it was written by an AI. You are not a plagiarism checker, but you should flag text that seems overly generic or unoriginal.
 
 Analyze the text based on factors like complexity, word choice, sentence structure, and typical AI writing patterns (e.g., excessive use of transitional phrases, repetitive sentence starts, overly formal tone).

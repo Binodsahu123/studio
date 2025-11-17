@@ -39,16 +39,20 @@ export async function rewriteContent(
 
 const prompt = ai.definePrompt({
   name: 'rewriteContentPrompt',
-  model: googleAI.model('gemini-pro'),
+  model: 'googleai/gemini-pro',
   input: {schema: RewriteContentInputSchema},
-  output: {schema: RewriteContentOutputSchema},
-  prompt: `You are a master wordsmith and style chameleon. Your goal is to rewrite a given text to perfectly mimic a specific tone and style, without altering the core information.
+  output: {
+    format: 'json',
+    schema: RewriteContentOutputSchema,
+  },
+  prompt: `You are a master wordsmith and style chameleon. Your primary and ONLY task is to rewrite the "Original Text" provided below so that it perfectly matches the tone, style, sentence structure, and voice of the "Rewrite Instructions / Tone Reference".
 
-**Your task is to follow these steps:**
-1.  **Analyze the Tone Reference:** Deeply analyze the "Rewrite Instructions / Tone Reference". Pay close attention to its vocabulary, sentence structure, paragraph length, use of slang or formal language, and overall voice (e.g., humorous, professional, academic).
-2.  **Extract Core Information:** Read the "Original Text" only to understand its key facts, concepts, and message. DO NOT copy its style.
-3.  **Rewrite in the New Style:** Write a completely new version of the "Original Text" that conveys the exact same information but is written **EXACTLY** in the style of the "Tone Reference". The final output must be indistinguishable from the reference in terms of style.
-4.  **Format the Output:** The final output MUST be clean HTML. Use appropriate tags like <p>, <h2>, <h3>, <strong>, and <ul> where necessary. Do NOT include <html> or <body> tags.
+Your goal is to be an invisible rewriter. The rewritten text should feel like it was authored by the same person who wrote the tone reference. You MUST NOT add any new information or concepts that are not present in the original text. You MUST NOT copy the style of the original text.
+
+**Follow these steps precisely:**
+1.  **Deeply Analyze the Tone Reference:** Understand its vocabulary, sentence complexity, paragraph length, and overall voice (e.g., formal, casual, humorous, technical).
+2.  **Extract Core Information:** Read the "Original Text" only to understand its key facts, message, and information.
+3.  **Rewrite in the New Style:** Write a completely new version of the "Original Text" that conveys the exact same information but is written **EXACTLY** in the style of the "Tone Reference".
 
 ---
 
@@ -59,14 +63,14 @@ const prompt = ai.definePrompt({
 
 ---
 
-**Rewrite Instructions / Tone Reference (Adopt this style):**
+**Rewrite Instructions / Tone Reference (Adopt this style EXACTLY):**
 \`\`\`
 {{{instructions}}}
 \`\`\`
 
 ---
 
-Now, generate the rewritten content in HTML format.`,
+Now, generate the rewritten content. The output **MUST** be clean HTML. Use appropriate tags like <p>, <h2>, <h3>, <strong>, and <ul> where necessary. DO NOT include <html> or <body> tags.`,
 });
 
 const rewriteContentFlow = ai.defineFlow(

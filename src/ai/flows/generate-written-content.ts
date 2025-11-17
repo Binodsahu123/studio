@@ -34,9 +34,12 @@ export async function generateWrittenContent(input: GenerateWrittenContentInput)
 
 const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
-  model: googleAI.model('gemini-pro'),
+  model: 'googleai/gemini-pro',
   input: {schema: GenerateWrittenContentInputSchema},
-  output: {schema: GenerateWrittenContentOutputSchema},
+  output: {
+    format: 'json',
+    schema: GenerateWrittenContentOutputSchema,
+  },
   prompt: `You are an expert content creator and SEO specialist. Your task is to write an in-depth, well-researched article that is Google Discover friendly, based on the provided title, description, and keywords.
 
 **Article Details:**

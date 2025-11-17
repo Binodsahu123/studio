@@ -28,9 +28,12 @@ export async function generateBlogFromOutline(input: GenerateBlogFromOutlineInpu
 
 const prompt = ai.definePrompt({
   name: 'generateBlogFromOutlinePrompt',
-  model: googleAI.model('gemini-pro'),
+  model: 'googleai/gemini-pro',
   input: {schema: GenerateBlogFromOutlineInputSchema},
-  output: {schema: GenerateBlogFromOutlineOutputSchema},
+  output: {
+    format: 'json',
+    schema: GenerateBlogFromOutlineOutputSchema,
+  },
   prompt: `You are an expert SEO content writer. Your task is to write an in-depth, well-researched, and engaging article based on the provided title and HTML outline.
 
 **Article Title:** {{{title}}}

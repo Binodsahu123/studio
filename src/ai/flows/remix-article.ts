@@ -86,14 +86,14 @@ Toyota FJ Cruiser SUV के कीमत
 जिसमें कि पहले से कई स्मार्ट फीचर्स और यूनिक डिजाइन का प्रयोग किया गया है। मोटरसाइकिल में इतना सिर्फ पावरफुल इंजन बल्कि 70 किलोमीटर तक की माइलेज और कई स्मार्ट फीचर्स मिलते हैं चलिए इसकी कीमत के बारे में जान लेते हैं।
 
 Hero Splendor Plus के यूनिक डिजाइन 
-सबसे पहले तो आपको बता दूं कि नए मॉडल के साथ आई Hero Splendor Plus में कंपनी की ओर से काफी शानदार कलर विकल्प दिए गए हैं। इसके अलावा बाइक के कॉस्मेटिक में بھی बदलाव किए गए हैं।
+सबसे पहले तो आपको बता दूं कि नए मॉडल के साथ आई Hero Splendor Plus में कंपनी की ओर से काफी शानदार कलर विकल्प दिए गए हैं। इसके अलावा बाइक के कॉस्मेटिक में भी बदलाव किए गए हैं।
 
 जिसमें फ्रंट में यूनिक डिजाइन वाली हेडलाइट और एलइडी स्ट्रिप लाइट दी गई है वही इस बार के स्प्लेंडर में फ्रंट में डिस्क ब्रेक का भी प्रयोग किया गया है।
 
 Hero Splendor Plus के फीचर्स
 दोस्तों फीचर्स के मामले भी Hero Splendor Plus का न्यू मॉडल काफी एडवांस है। मोटरसाइकिल में फीचर्स के तौर पर फुली डिजिटल स्पीडोमीटर का प्रयोग किया गया है ।
 
-जिसमें फ्यूल लेवल, रियल टाइम स्पीड और टाइम जैसे फीचर्स दिखती है। इसके अलावा LED हेडलाइट, LED इंडिकेटर सेफ्टी के लिए इस बार फ्रंट में डिस्क ब्रेक और रेट में ड्रम ब्रेक जैसे फीचर्स भी मिलेंगे।
+जिसमें फ्यूल लेवल, रियल टाइम स्पीड और टाइम जैसे फीचर्स दिखती है। इसके अलावा LED हेडलाइट, LED इंडिकेटर सेफ्टी के لیے इस बार फ्रंट में डिस्क ब्रेक और रेट में ड्रम ब्रेक जैसे फीचर्स भी मिलेंगे।
 
 Hero Splendor Plus के इंजन
 बाइक में मिलने वाले इंजन तथा माइलेज की बात करें तो बेहतर परफॉर्मेंस के लिए इसमें 97.2 cc का सिंगल सिलेंडर एयर कोल्ड इंजन का प्रयोग किया गया है।
@@ -135,9 +135,12 @@ export async function remixArticle(
 
 const prompt = ai.definePrompt({
   name: 'remixArticlePrompt',
-  model: googleAI.model('gemini-pro'),
+  model: 'googleai/gemini-pro',
   input: {schema: RemixArticleInputSchema},
-  output: {schema: RemixArticleOutputSchema},
+  output: {
+    format: 'json',
+    schema: RemixArticleOutputSchema,
+  },
   prompt: `You are an expert content writer whose only job is to rewrite text in a specific style.
 
 Your most important instruction is to synthesize the "Source Articles" into a single, cohesive article where the tone, style, sentence structure, and voice **PERFECTLY AND EXACTLY MATCH** the "Tone Reference Article".

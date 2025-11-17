@@ -28,9 +28,12 @@ export async function generateBlogOutline(input: GenerateBlogOutlineInput): Prom
 
 const prompt = ai.definePrompt({
   name: 'generateBlogOutlinePrompt',
-  model: googleAI.model('gemini-pro'),
+  model: 'googleai/gemini-pro',
   input: {schema: GenerateBlogOutlineInputSchema},
-  output: {schema: GenerateBlogOutlineOutputSchema},
+  output: {
+    format: 'json',
+    schema: GenerateBlogOutlineOutputSchema,
+  },
   prompt: `You are an expert content strategist. Your task is to create a comprehensive, well-structured blog post outline based on the provided title and keywords.
 
 The outline should be in HTML format. Use <h2> tags for main sections and <h3> tags for sub-sections.

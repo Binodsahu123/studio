@@ -37,9 +37,12 @@ export async function convertTextToHtml(
 
 const prompt = ai.definePrompt({
   name: 'convertTextToHtmlPrompt',
-  model: googleAI.model('gemini-pro'),
+  model: 'googleai/gemini-pro',
   input: {schema: ConvertTextToHtmlInputSchema},
-  output: {schema: ConvertTextToHtmlOutputSchema},
+  output: {
+    format: 'json',
+    schema: ConvertTextToHtmlOutputSchema,
+  },
   prompt: `You are an intelligent text-to-HTML converter. Your task is to take the provided plain text and transform it into well-structured, SEO-friendly HTML.
 
 **Instructions:**
