@@ -48,13 +48,25 @@ const prompt = ai.definePrompt({
 1.  **Analyze the Tone Reference:** Deeply analyze the "Rewrite Instructions / Tone Reference". Pay close attention to its vocabulary, sentence structure, paragraph length, use of slang or formal language, and overall voice (e.g., humorous, professional, academic).
 2.  **Extract Core Information:** Read the "Original Text" only to understand its key facts, concepts, and message. DO NOT copy its style.
 3.  **Rewrite in the New Style:** Write a completely new version of the "Original Text" that conveys the exact same information but is written **EXACTLY** in the style of the "Tone Reference". The final output must be indistinguishable from the reference in terms of style.
+4.  **Format the Output:** The final output MUST be clean HTML. Use appropriate tags like <p>, <h2>, <h3>, <strong>, and <ul> where necessary. Do NOT include <html> or <body> tags.
 
 ---
 
 **Original Text (The content to be rewritten):**
 \`\`\`
 {{{originalText}}}
-\`\`\``,
+\`\`\`
+
+---
+
+**Rewrite Instructions / Tone Reference (Adopt this style):**
+\`\`\`
+{{{instructions}}}
+\`\`\`
+
+---
+
+Now, generate the rewritten content in HTML format.`,
 });
 
 const rewriteContentFlow = ai.defineFlow(
