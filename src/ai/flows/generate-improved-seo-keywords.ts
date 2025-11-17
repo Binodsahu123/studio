@@ -56,7 +56,7 @@ export async function generateImprovedSeoKeywords(
 
 const prompt = ai.definePrompt({
   name: 'generateImprovedSeoKeywordsPrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateImprovedSeoKeywordsInputSchema},
   output: {
     format: 'json',

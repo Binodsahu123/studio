@@ -40,7 +40,7 @@ export async function summarizePdfContent(
 
 const summarizePdfContentPrompt = ai.definePrompt({
   name: 'summarizePdfContentPrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: z.object({pdfContent: z.string()})},
   output: {
     format: 'json',

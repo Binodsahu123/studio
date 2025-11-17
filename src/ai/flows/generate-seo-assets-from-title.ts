@@ -47,7 +47,7 @@ export async function generateSeoAssetsFromTitle(
 
 const prompt = ai.definePrompt({
   name: 'generateSeoAssetsFromTitlePrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateSeoAssetsFromTitleInputSchema},
   output: {
     format: 'json',

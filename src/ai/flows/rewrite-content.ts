@@ -39,7 +39,7 @@ export async function rewriteContent(
 
 const prompt = ai.definePrompt({
   name: 'rewriteContentPrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: RewriteContentInputSchema},
   output: {
     format: 'json',

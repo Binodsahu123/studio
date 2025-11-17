@@ -36,7 +36,7 @@ export async function generateKeywordIdeas(input: GenerateKeywordIdeasInput): Pr
 
 const prompt = ai.definePrompt({
   name: 'generateKeywordIdeasPrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateKeywordIdeasInputSchema},
   output: {
     format: 'json',

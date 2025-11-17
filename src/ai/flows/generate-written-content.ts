@@ -34,7 +34,7 @@ export async function generateWrittenContent(input: GenerateWrittenContentInput)
 
 const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateWrittenContentInputSchema},
   output: {
     format: 'json',

@@ -29,7 +29,7 @@ export async function generateHashtags(input: GenerateHashtagsInput): Promise<Ge
 
 const prompt = ai.definePrompt({
   name: 'generateHashtagsPrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateHashtagsInputSchema},
   output: {
     format: 'json',

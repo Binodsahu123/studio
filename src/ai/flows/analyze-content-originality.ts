@@ -52,7 +52,7 @@ export async function analyzeContentOriginality(
 
 const prompt = ai.definePrompt({
   name: 'analyzeContentOriginalityPrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: AnalyzeContentOriginalityInputSchema},
   output: {
     format: 'json',

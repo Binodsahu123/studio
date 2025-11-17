@@ -28,7 +28,7 @@ export async function generateBlogOutline(input: GenerateBlogOutlineInput): Prom
 
 const prompt = ai.definePrompt({
   name: 'generateBlogOutlinePrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateBlogOutlineInputSchema},
   output: {
     format: 'json',

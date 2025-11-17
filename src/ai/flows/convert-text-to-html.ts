@@ -37,7 +37,7 @@ export async function convertTextToHtml(
 
 const prompt = ai.definePrompt({
   name: 'convertTextToHtmlPrompt',
-  model: 'googleai/gemini-pro',
+  model: 'googleai/gemini-1.0-pro',
   input: {schema: ConvertTextToHtmlInputSchema},
   output: {
     format: 'json',
