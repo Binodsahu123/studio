@@ -58,10 +58,6 @@ const prompt = ai.definePrompt({
   name: 'generateImprovedSeoKeywordsPrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateImprovedSeoKeywordsInputSchema},
-  output: {
-    format: 'json',
-    schema: GenerateImprovedSeoKeywordsOutputSchema,
-  },
   prompt: `You are an expert SEO strategist and content analyst. Your task is to analyze the provided topic and optional keywords and generate a list of 10-15 improved, high-potential SEO keywords.
 
 For EACH suggested keyword, you must provide a detailed analysis including:
@@ -75,7 +71,7 @@ Content Topic: {{{contentTopic}}}
 Original Keywords (for context): {{{originalKeywords}}}
 {{/if}}
 
-Return the full analysis as a JSON object containing an array of keyword analysis objects.`,
+Return the full analysis as a JSON object inside a \`\`\`json ... \`\`\` code block, containing an array of keyword analysis objects with the key "improvedKeywords".`,
 });
 
 const generateImprovedSeoKeywordsFlow = ai.defineFlow(
@@ -85,7 +81,8 @@ const generateImprovedSeoKeywordsFlow = ai.defineFlow(
     outputSchema: GenerateImprovedSeoKeywordsOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

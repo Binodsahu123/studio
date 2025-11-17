@@ -29,11 +29,10 @@ const prompt = ai.definePrompt({
   name: 'generateBlogTopicPrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateBlogTopicInputSchema},
-  output: {
-    format: 'json',
-    schema: GenerateBlogTopicOutputSchema,
-  },
-  prompt: `You are a blog topic generator. Generate 5 blog topics from the following prompt: {{{prompt}}}. Return the topics as a JSON array of strings.\n`,
+  prompt: `You are a blog topic generator. Generate 5 blog topics from the following prompt: {{{prompt}}}. 
+
+Return the topics as a JSON object inside a \`\`\`json ... \`\`\` code block with the key "topics", which should be an array of strings.
+`,
 });
 
 const generateBlogTopicFlow = ai.defineFlow(
@@ -43,7 +42,8 @@ const generateBlogTopicFlow = ai.defineFlow(
     outputSchema: GenerateBlogTopicOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

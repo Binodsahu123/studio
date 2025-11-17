@@ -49,10 +49,6 @@ const prompt = ai.definePrompt({
   name: 'generateSeoAssetsFromTitlePrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateSeoAssetsFromTitleInputSchema},
-  output: {
-    format: 'json',
-    schema: GenerateSeoAssetsFromTitleOutputSchema,
-  },
   prompt: `You are an expert SEO and social media strategist. Your task is to generate key assets for a piece of content based on its title.
 
 **Content Title:** {{{title}}}
@@ -63,7 +59,7 @@ const prompt = ai.definePrompt({
 3.  **Generate Hashtags:** Create a list of 15-20 trending and viral hashtags suitable for platforms like Instagram and YouTube. Include a mix of broad and niche hashtags. All hashtags must start with '#'.
 4.  **Write a Meta Description:** Based on the title and the tags you generated, write a compelling, click-worthy meta description that is under 160 characters.
 
-Provide the output in a single JSON object with the keys "tags", "hashtags", and "description".`,
+Provide the output in a single JSON object inside a \`\`\`json ... \`\`\` code block with the keys "tags", "hashtags", and "description".`,
 });
 
 const generateSeoAssetsFromTitleFlow = ai.defineFlow(
@@ -73,7 +69,8 @@ const generateSeoAssetsFromTitleFlow = ai.defineFlow(
     outputSchema: GenerateSeoAssetsFromTitleOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

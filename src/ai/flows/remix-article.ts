@@ -137,10 +137,6 @@ const prompt = ai.definePrompt({
   name: 'remixArticlePrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: RemixArticleInputSchema},
-  output: {
-    format: 'json',
-    schema: RemixArticleOutputSchema,
-  },
   prompt: `You are an expert content writer whose only job is to rewrite text in a specific style.
 
 Your most important instruction is to synthesize the "Source Articles" into a single, cohesive article where the tone, style, sentence structure, and voice **PERFECTLY AND EXACTLY MATCH** the "Tone Reference Article".
@@ -161,7 +157,7 @@ Your most important instruction is to synthesize the "Source Articles" into a si
 {{{sourceArticles}}}
 \`\`\`
 
-Now, generate the new, remixed article in HTML format. Your output must be indistinguishable in style from the Tone Reference Article.`,
+Now, generate the new, remixed article in HTML format. Return the full output as a JSON object inside a \`\`\`json ... \`\`\` code block with the key "remixedArticleHtml".`,
 });
 
 const remixArticleFlow = ai.defineFlow(
@@ -171,7 +167,8 @@ const remixArticleFlow = ai.defineFlow(
     outputSchema: RemixArticleOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

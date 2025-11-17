@@ -54,10 +54,6 @@ const prompt = ai.definePrompt({
   name: 'analyzeContentOriginalityPrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: AnalyzeContentOriginalityInputSchema},
-  output: {
-    format: 'json',
-    schema: AnalyzeContentOriginalityOutputSchema,
-  },
   prompt: `You are an expert AI content detector. Your task is to analyze the following text and determine the probability that it was written by an AI. You are not a plagiarism checker, but you should flag text that seems overly generic or unoriginal.
 
 Analyze the text based on factors like complexity, word choice, sentence structure, and typical AI writing patterns (e.g., excessive use of transitional phrases, repetitive sentence starts, overly formal tone).
@@ -70,6 +66,8 @@ Based on your analysis, provide the following:
 2.  **analysis**: A brief, 1-2 sentence explanation of your reasoning for the score. Be concise and clear.
 3.  **plagiarismWarning**: If the text seems highly generic or lacks originality, provide a brief warning like "The text appears generic and may lack originality." Otherwise, state "No major originality concerns detected."
 4.  **highlightedText**: Return the original text. For every sentence or phrase that you strongly suspect is AI-generated, wrap it in <ai-detected> XML tags. For example: "This is human text. <ai-detected>This part seems AI-written.</ai-detected>". If no part is detected as AI-written, return the original text without any tags.
+
+Return the full output as a JSON object inside a \`\`\`json ... \`\`\` code block.
 `,
 });
 
@@ -80,7 +78,8 @@ const analyzeContentOriginalityFlow = ai.defineFlow(
     outputSchema: AnalyzeContentOriginalityOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

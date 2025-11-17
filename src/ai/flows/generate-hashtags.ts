@@ -31,10 +31,6 @@ const prompt = ai.definePrompt({
   name: 'generateHashtagsPrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateHashtagsInputSchema},
-  output: {
-    format: 'json',
-    schema: GenerateHashtagsOutputSchema,
-  },
   prompt: `You are a social media and SEO expert. Your task is to generate a list of hashtags and SEO tags based on a specific topic.
 
 **Instructions:**
@@ -46,9 +42,8 @@ const prompt = ai.definePrompt({
 
 **Topic/Category:** **{{{topic}}}**
 
-Return the full output as a JSON object with 'hashtags' and 'tags' keys.
-
-Generate the assets now.`,
+Return the full output as a JSON object inside a \`\`\`json ... \`\`\` code block with 'hashtags' and 'tags' keys.
+`,
 });
 
 const generateHashtagsFlow = ai.defineFlow(
@@ -58,7 +53,8 @@ const generateHashtagsFlow = ai.defineFlow(
     outputSchema: GenerateHashtagsOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

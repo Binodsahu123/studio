@@ -30,10 +30,6 @@ const prompt = ai.definePrompt({
   name: 'generateBlogFromOutlinePrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateBlogFromOutlineInputSchema},
-  output: {
-    format: 'json',
-    schema: GenerateBlogFromOutlineOutputSchema,
-  },
   prompt: `You are an expert SEO content writer. Your task is to write an in-depth, well-researched, and engaging article based on the provided title and HTML outline.
 
 **Article Title:** {{{title}}}
@@ -49,7 +45,9 @@ const prompt = ai.definePrompt({
 - Flesh out each section and sub-section with detailed, informative, and engaging content.
 - Use paragraphs (<p>), bold tags (<strong>) for important terms, and lists (<ul>, <li>) where appropriate.
 - The tone should be conversational yet expert.
-- The final output should be ONLY the HTML content for the article body. DO NOT include an <h1> tag for the title, as it will be added separately. Start directly with the first <h2> section.
+- The final output should be ONLY the HTML content for the article body. DO NOT include an <h1> tag for the title, as it will be added separately.
+
+Return the full output as a JSON object inside a \`\`\`json ... \`\`\` code block with the key "article".
 `,
 });
 
@@ -60,7 +58,8 @@ const generateBlogFromOutlineFlow = ai.defineFlow(
     outputSchema: GenerateBlogFromOutlineOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

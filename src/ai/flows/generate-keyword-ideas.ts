@@ -38,10 +38,6 @@ const prompt = ai.definePrompt({
   name: 'generateKeywordIdeasPrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateKeywordIdeasInputSchema},
-  output: {
-    format: 'json',
-    schema: GenerateKeywordIdeasOutputSchema,
-  },
   prompt: `You are an expert SEO keyword researcher. Your task is to generate 10-15 keyword ideas for the given topic.
 
 For each keyword, you must provide:
@@ -53,7 +49,7 @@ For each keyword, you must provide:
 
 Topic: {{{topic}}}
 
-Generate the keyword ideas now.`,
+Generate the keyword ideas now. Return the full output as a JSON object inside a \`\`\`json ... \`\`\` code block with the key "keywords".`,
 });
 
 const generateKeywordIdeasFlow = ai.defineFlow(
@@ -63,7 +59,8 @@ const generateKeywordIdeasFlow = ai.defineFlow(
     outputSchema: GenerateKeywordIdeasOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

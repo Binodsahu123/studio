@@ -39,10 +39,6 @@ const prompt = ai.definePrompt({
   name: 'convertTextToHtmlPrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: ConvertTextToHtmlInputSchema},
-  output: {
-    format: 'json',
-    schema: ConvertTextToHtmlOutputSchema,
-  },
   prompt: `You are an intelligent text-to-HTML converter. Your task is to take the provided plain text and transform it into well-structured, SEO-friendly HTML.
 
 **Instructions:**
@@ -57,7 +53,7 @@ const prompt = ai.definePrompt({
 {{{text}}}
 \`\`\`
 
-Generate the HTML content now.`,
+Generate the HTML content now. Return the full output as a JSON object inside a \`\`\`json ... \`\`\` code block with the key "htmlContent".`,
 });
 
 const convertTextToHtmlFlow = ai.defineFlow(
@@ -67,7 +63,8 @@ const convertTextToHtmlFlow = ai.defineFlow(
     outputSchema: ConvertTextToHtmlOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

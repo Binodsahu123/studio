@@ -36,10 +36,6 @@ const prompt = ai.definePrompt({
   name: 'generateWrittenContentPrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: GenerateWrittenContentInputSchema},
-  output: {
-    format: 'json',
-    schema: GenerateWrittenContentOutputSchema,
-  },
   prompt: `You are an expert content creator and SEO specialist. Your task is to write an in-depth, well-researched article that is Google Discover friendly, based on the provided title, description, and keywords.
 
 **Article Details:**
@@ -70,6 +66,8 @@ const prompt = ai.definePrompt({
     *   **Image Titles:** Create 8 SEO-friendly titles for images that could be used in the article. These titles should be related to the main topic and include relevant specifications if mentioned (e.g., RAM, ROM, camera, display for a phone review).
 
 The entire output, including all generated assets, must be in the specified language: **{{{language}}}**.
+
+Return the full output as a JSON object inside a \`\`\`json ... \`\`\` code block.
 `,
 });
 
@@ -80,7 +78,9 @@ const generateWrittenContentFlow = ai.defineFlow(
     outputSchema: GenerateWrittenContentOutputSchema,
   },
   async (input) => {
-    const {output} = await prompt(input);
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    const output = JSON.parse(jsonText);
     
     if (!output) {
       throw new Error("Content generation failed.");

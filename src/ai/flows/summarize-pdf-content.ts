@@ -42,11 +42,7 @@ const summarizePdfContentPrompt = ai.definePrompt({
   name: 'summarizePdfContentPrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: z.object({pdfContent: z.string()})},
-  output: {
-    format: 'json',
-    schema: SummarizePdfContentOutputSchema,
-  },
-  prompt: `Summarize the following PDF content. Be concise and focus on the main points.\n\nPDF Content: {{{pdfContent}}}`,
+  prompt: `Summarize the following PDF content. Be concise and focus on the main points.\n\nPDF Content: {{{pdfContent}}}\n\nReturn the full output as a JSON object inside a \`\`\`json ... \`\`\` code block with the key "summary".`,
 });
 
 const summarizePdfContentFlow = ai.defineFlow(
@@ -69,9 +65,10 @@ const summarizePdfContentFlow = ai.defineFlow(
     // Extract text content from the loaded PDF
     const pdfContent = docs.map(doc => doc.pageContent).join('\n');
 
-    const {output} = await summarizePdfContentPrompt({
+    const response = await summarizePdfContentPrompt({
       pdfContent,
     });
-    return output!;
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );

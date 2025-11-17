@@ -41,10 +41,6 @@ const prompt = ai.definePrompt({
   name: 'rewriteContentPrompt',
   model: 'googleai/gemini-1.0-pro',
   input: {schema: RewriteContentInputSchema},
-  output: {
-    format: 'json',
-    schema: RewriteContentOutputSchema,
-  },
   prompt: `You are a master wordsmith and style chameleon. Your primary and ONLY task is to rewrite the "Original Text" provided below so that it perfectly matches the tone, style, sentence structure, and voice of the "Rewrite Instructions / Tone Reference".
 
 Your goal is to be an invisible rewriter. The rewritten text should feel like it was authored by the same person who wrote the tone reference. You MUST NOT add any new information or concepts that are not present in the original text. You MUST NOT copy the style of the original text.
@@ -70,7 +66,9 @@ Your goal is to be an invisible rewriter. The rewritten text should feel like it
 
 ---
 
-Now, generate the rewritten content. The output **MUST** be clean HTML. Use appropriate tags like <p>, <h2>, <h3>, <strong>, and <ul> where necessary. DO NOT include <html> or <body> tags.`,
+Now, generate the rewritten content. The output **MUST** be clean HTML. Use appropriate tags like <p>, <h2>, <h3>, <strong>, and <ul> where necessary. DO NOT include <html> or <body> tags.
+
+Return the full output as a JSON object inside a \`\`\`json ... \`\`\` code block with the key "rewrittenText".`,
 });
 
 const rewriteContentFlow = ai.defineFlow(
@@ -80,7 +78,8 @@ const rewriteContentFlow = ai.defineFlow(
     outputSchema: RewriteContentOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    const response = await prompt(input);
+    const jsonText = response.text.replace(/^```json\n/, '').replace(/\n```$/, '');
+    return JSON.parse(jsonText);
   }
 );
