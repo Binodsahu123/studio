@@ -42,19 +42,19 @@ const prompt = ai.definePrompt({
   model: googleAI.model('gemini-pro'),
   input: {schema: RewriteContentInputSchema},
   output: {schema: RewriteContentOutputSchema},
-  prompt: `You are an expert content editor. Your primary task is to rewrite the "Original Text" to perfectly match the tone, style, and voice of the provided "Rewrite Instructions / Tone Reference".
+  prompt: `You are a master wordsmith and style chameleon. Your goal is to rewrite a given text to perfectly mimic a specific tone and style, without altering the core information.
+
+**Your task is to follow these steps:**
+1.  **Analyze the Tone Reference:** Deeply analyze the "Rewrite Instructions / Tone Reference". Pay close attention to its vocabulary, sentence structure, paragraph length, use of slang or formal language, and overall voice (e.g., humorous, professional, academic).
+2.  **Extract Core Information:** Read the "Original Text" only to understand its key facts, concepts, and message. DO NOT copy its style.
+3.  **Rewrite in the New Style:** Write a completely new version of the "Original Text" that conveys the exact same information but is written **EXACTLY** in the style of the "Tone Reference". The final output must be indistinguishable from the reference in terms of style.
+
+---
 
 **Original Text (The content to be rewritten):**
 \`\`\`
 {{{originalText}}}
-\`\`\`
-
-**Rewrite Instructions / Tone Reference (Adopt this style):**
-\`\`\`
-{{{instructions}}}
-\`\`\`
-
-Please now provide the rewritten text below, fully following the style of the reference. Format the output as clean HTML. Use appropriate tags like <p>, <h2>, <h3>, <strong>, and <ul> where necessary.`,
+\`\`\``,
 });
 
 const rewriteContentFlow = ai.defineFlow(
