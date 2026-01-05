@@ -9,11 +9,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
-import { Volume2, Wand2, Mic, Square } from 'lucide-react';
+import { Volume2, Mic, Square } from 'lucide-react';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 import { useToast } from "@/hooks/use-toast";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const formSchema = z.object({
@@ -27,25 +27,6 @@ export default function VoiceoverGeneratorPage() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const { toast } = useToast();
 
-  const populateVoiceList = useCallback(() => {
-    if ('speechSynthesis' in window) {
-      const newVoices = window.speechSynthesis.getVoices();
-      setVoices(newVoices);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!('speechSynthesis' in window)) {
-      setIsApiSupported(false);
-      return;
-    }
-    
-    populateVoiceList();
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = populateVoiceList;
-    }
-  }, [populateVoiceList]);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,6 +34,25 @@ export default function VoiceoverGeneratorPage() {
       voice: '',
     },
   });
+
+  const populateVoiceList = useCallback(() => {
+    if ('speechSynthesis' in window) {
+      const newVoices = window.speechSynthesis.getVoices();
+      setVoices(newVoices);
+      if (newVoices.length > 0 && !form.getValues('voice')) {
+        form.setValue('voice', newVoices[0].name);
+      }
+    } else {
+      setIsApiSupported(false);
+    }
+  }, [form]);
+
+  useEffect(() => {
+    populateVoiceList();
+    if (window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = populateVoiceList;
+    }
+  }, [populateVoiceList]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (!isApiSupported || isSpeaking) return;
@@ -62,6 +62,13 @@ export default function VoiceoverGeneratorPage() {
     
     if (selectedVoice) {
       utterance.voice = selectedVoice;
+    } else {
+        toast({
+            title: "Voice not found",
+            description: "The selected voice could not be loaded. Please try another one.",
+            variant: "destructive"
+        });
+        return;
     }
 
     utterance.onstart = () => {
@@ -81,7 +88,8 @@ export default function VoiceoverGeneratorPage() {
       });
       setIsSpeaking(false);
     };
-
+    
+    window.speechSynthesis.cancel(); // Clear any previous utterances
     window.speechSynthesis.speak(utterance);
   }
 
@@ -136,7 +144,7 @@ export default function VoiceoverGeneratorPage() {
                         render={({ field }) => (
                             <FormItem>
                             <FormLabel>Select a Voice</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={voices.length === 0}>
+                            <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value} disabled={voices.length === 0}>
                                 <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder={voices.length > 0 ? "Choose a voice..." : "Loading voices..."} />
