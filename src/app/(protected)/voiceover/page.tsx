@@ -36,26 +36,50 @@ export default function VoiceoverGeneratorPage() {
   });
 
   const populateVoiceList = useCallback(() => {
-    if ('speechSynthesis' in window) {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       const newVoices = window.speechSynthesis.getVoices();
       setVoices(newVoices);
-      if (newVoices.length > 0 && !form.getValues('voice')) {
-        form.setValue('voice', newVoices[0].name);
-      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      // The voices list is loaded asynchronously.
+      window.speechSynthesis.onvoiceschanged = populateVoiceList;
+      // Also call it directly in case the event has already fired.
+      populateVoiceList();
     } else {
       setIsApiSupported(false);
     }
-  }, [form]);
 
-  useEffect(() => {
-    populateVoiceList();
-    if (window.speechSynthesis.onvoiceschanged !== undefined) {
-      window.speechSynthesis.onvoiceschanged = populateVoiceList;
-    }
+    // Cleanup on component unmount
+    return () => {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = null;
+        window.speechSynthesis.cancel();
+      }
+    };
   }, [populateVoiceList]);
 
+  // Set default voice once the list is populated
+  useEffect(() => {
+    if (voices.length > 0 && !form.getValues('voice')) {
+      form.setValue('voice', voices[0].name);
+    }
+  }, [voices, form]);
+
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!isApiSupported || isSpeaking) return;
+    if (!isApiSupported) {
+        toast({ title: "Speech API not supported", description: "Your browser does not support this feature.", variant: "destructive"});
+        return;
+    }
+    if (isSpeaking) return;
+    if (voices.length === 0) {
+        toast({ title: "No voices available", description: "Could not find any voices on your system.", variant: "destructive"});
+        return;
+    }
+
 
     const utterance = new SpeechSynthesisUtterance(values.text);
     const selectedVoice = voices.find(v => v.name === values.voice);
@@ -83,7 +107,7 @@ export default function VoiceoverGeneratorPage() {
       console.error('SpeechSynthesisUtterance.onerror', event);
       toast({
         title: "Error Speaking Text",
-        description: "An unexpected error occurred while trying to speak.",
+        description: `An unexpected error occurred: ${event.error}`,
         variant: "destructive",
       });
       setIsSpeaking(false);
@@ -144,7 +168,7 @@ export default function VoiceoverGeneratorPage() {
                         render={({ field }) => (
                             <FormItem>
                             <FormLabel>Select a Voice</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value} disabled={voices.length === 0}>
+                            <Select onValueChange={field.onChange} value={field.value} disabled={voices.length === 0}>
                                 <FormControl>
                                 <SelectTrigger>
                                     <SelectValue placeholder={voices.length > 0 ? "Choose a voice..." : "Loading voices..."} />
@@ -158,12 +182,13 @@ export default function VoiceoverGeneratorPage() {
                                     ))}
                                 </SelectContent>
                             </Select>
+                             {voices.length === 0 && <p className="text-sm text-muted-foreground mt-2">Loading system voices. If this persists, your browser may not support this feature.</p>}
                             <FormMessage />
                             </FormItem>
                         )}
                     />
                     <div className="flex gap-4">
-                        <Button type="submit" disabled={isSpeaking || !isApiSupported} size="lg">
+                        <Button type="submit" disabled={isSpeaking || !isApiSupported || voices.length === 0} size="lg">
                             <Volume2 className="mr-2 h-4 w-4" />
                             {isSpeaking ? 'Speaking...' : 'Speak Text'}
                         </Button>
