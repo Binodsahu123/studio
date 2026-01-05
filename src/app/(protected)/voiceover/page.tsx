@@ -37,8 +37,11 @@ export default function VoiceoverGeneratorPage() {
 
   const populateVoiceList = useCallback(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      const newVoices = window.speechSynthesis.getVoices();
-      setVoices(newVoices);
+      const allVoices = window.speechSynthesis.getVoices();
+      // Filter for online, high-quality voices if possible, or just take the first few reliable ones.
+      // This reduces the list to more reliable options.
+      const filteredVoices = allVoices.filter(voice => voice.lang.startsWith('en') || voice.lang.startsWith('hi'));
+      setVoices(filteredVoices);
     }
   }, []);
 
@@ -64,7 +67,11 @@ export default function VoiceoverGeneratorPage() {
   // Set default voice once the list is populated
   useEffect(() => {
     if (voices.length > 0 && !form.getValues('voice')) {
-      form.setValue('voice', voices[0].name);
+      // Try to find a default 'Google US English' voice or fallback to the first one.
+      const defaultVoice = voices.find(v => v.name === 'Google US English') || voices[0];
+      if (defaultVoice) {
+        form.setValue('voice', defaultVoice.name);
+      }
     }
   }, [voices, form]);
 
@@ -89,10 +96,10 @@ export default function VoiceoverGeneratorPage() {
     } else {
         toast({
             title: "Voice not found",
-            description: "The selected voice could not be loaded. Please try another one.",
+            description: "The selected voice could not be loaded. Defaulting to the first available voice.",
             variant: "destructive"
         });
-        return;
+        utterance.voice = voices[0];
     }
 
     utterance.onstart = () => {
