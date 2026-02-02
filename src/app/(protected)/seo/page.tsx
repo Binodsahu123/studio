@@ -20,8 +20,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const formSchema = z.object({
-  originalKeywords: z.string().min(1, 'Please enter some keywords.'),
-  contentTopic: z.string().min(1, 'Please enter a content topic.'),
+  originalKeywords: z.string().optional(),
+  contentTopic: z.string().min(5, 'Please enter a topic with at least 5 characters.'),
 });
 
 type KeywordAnalysis = GenerateImprovedSeoKeywordsOutput['improvedKeywords'][0];
@@ -43,7 +43,10 @@ export default function SeoPage() {
     setIsLoading(true);
     setAnalysisResult(null);
     try {
-      const input: GenerateImprovedSeoKeywordsInput = values;
+      const input: GenerateImprovedSeoKeywordsInput = {
+        contentTopic: values.contentTopic,
+        originalKeywords: values.originalKeywords || '',
+      };
       const result = await generateImprovedSeoKeywords(input);
       setAnalysisResult(result);
     } catch (error) {
@@ -58,7 +61,7 @@ export default function SeoPage() {
     }
   }
 
-  const getBadgeVariant = (level: 'Low' | 'Medium' | 'High'): 'default' | 'secondary' | 'destructive' => {
+  const getBadgeVariant = (level: 'Low' | 'Medium' | 'High'): 'secondary' | 'default' | 'destructive' => {
     switch (level) {
       case 'Low':
         return 'secondary';
@@ -106,7 +109,7 @@ export default function SeoPage() {
                   name="originalKeywords"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Your Current Keywords</FormLabel>
+                      <FormLabel>Your Current Keywords (Optional)</FormLabel>
                       <FormControl>
                         <Textarea placeholder="Enter your current keywords, separated by commas..." {...field} />
                       </FormControl>
@@ -168,7 +171,7 @@ export default function SeoPage() {
                                     <CollapsibleContent>
                                         <Card className="mt-2 p-3 text-left">
                                             <ul className="space-y-2 list-disc list-inside">
-                                                {item.suggestedTitles.map(title => <li key={title}>{title}</li>)}
+                                                {item.suggestedTitles.map((title, index) => <li key={index}>{title}</li>)}
                                             </ul>
                                         </Card>
                                     </CollapsibleContent>

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
-import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2 } from "lucide-react";
+import { BotMessageSquare, ImageIcon, LayoutTemplate, TrendingUp, ShieldCheck, ArrowRight, Construction, FileText, Mic, Wand2, FileCode, Hash, Search, Combine } from "lucide-react";
 
 const tools = [
   {
@@ -24,12 +24,28 @@ const tools = [
     cta: "Rewrite Content",
     active: true,
   },
+    {
+    icon: <FileCode className="h-8 w-8 text-primary" />,
+    title: "Text to HTML Converter",
+    description: "Convert your plain text into SEO-friendly HTML for your WordPress articles.",
+    href: "/html-converter",
+    cta: "Convert Now",
+    active: true,
+  },
   {
     icon: <FileText className="h-8 w-8 text-primary" />,
     title: "Full Blog Post Workflow",
     description: "A step-by-step wizard to generate keywords, titles, outlines, and a full article.",
     href: "/blog",
     cta: "Start Workflow",
+    active: true,
+  },
+   {
+    icon: <Search className="h-8 w-8 text-primary" />,
+    title: "Keyword Ideas",
+    description: "Discover new keywords, analyze their competition, and check search volume.",
+    href: "/keywords",
+    cta: "Find Keywords",
     active: true,
   },
   {
@@ -54,6 +70,22 @@ const tools = [
     description: "Convert text into natural-sounding speech for your projects.",
     href: "/voiceover",
     cta: "Create Voiceover",
+    active: true,
+  },
+   {
+    icon: <Hash className="h-8 w-8 text-primary" />,
+    title: "AI Hashtag Generator",
+    description: "Generate viral and trending hashtags for Instagram, YouTube, and more.",
+    href: "/hashtag",
+    cta: "Get Hashtags",
+    active: true,
+  },
+   {
+    icon: <Combine className="h-8 w-8 text-primary" />,
+    title: "SEO Assets Generator",
+    description: "Enter a title to get SEO tags, hashtags, and a meta description all at once.",
+    href: "/seo-assets",
+    cta: "Generate Assets",
     active: true,
   },
   {
