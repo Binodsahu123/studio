@@ -1,3 +1,4 @@
+
 // src/app/voiceover/page.tsx
 'use client';
 
@@ -105,32 +106,35 @@ export default function VoiceoverGeneratorPage() {
       return;
     }
 
-    try {
-      const utterance = new SpeechSynthesisUtterance(values.text);
-      utterance.voice = selectedVoice;
-      utterance.lang = selectedVoice.lang;
+    // Add a tiny delay to ensure cancel is fully processed
+    setTimeout(() => {
+      try {
+        const utterance = new SpeechSynthesisUtterance(values.text);
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
 
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = (event) => {
-        // Check if error is not 'interrupted' which happens on manual stop
-        if (event.error !== 'interrupted') {
-          console.error('SpeechSynthesis error:', event);
-          toast({
-            title: "Speech Error",
-            description: `Reason: ${event.error || 'Unknown error occurred'}`,
-            variant: "destructive",
-          });
-        }
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => setIsSpeaking(false);
+        utterance.onerror = (event) => {
+          // Check if error is not 'interrupted' which happens on manual stop
+          if (event.error !== 'interrupted') {
+            console.error('SpeechSynthesis error:', event);
+            toast({
+              title: "Speech Error",
+              description: `Reason: ${event.error || 'Unknown error occurred'}`,
+              variant: "destructive",
+            });
+          }
+          setIsSpeaking(false);
+        };
+
+        utteranceRef.current = utterance;
+        window.speechSynthesis.speak(utterance);
+      } catch (error) {
+        console.error('Submission error:', error);
         setIsSpeaking(false);
-      };
-
-      utteranceRef.current = utterance;
-      window.speechSynthesis.speak(utterance);
-    } catch (error) {
-      console.error('Submission error:', error);
-      setIsSpeaking(false);
-    }
+      }
+    }, 100);
   }
 
   return (
